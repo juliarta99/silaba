@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 <!DOCTYPE html>
 <html lang="{{ str_replace('_', '-', app()->getLocale()) }}">
     <head>
@@ -175,3 +176,14 @@
         @endif
     </body>
 </html>
+=======
+@extends('layouts.app') 
+
+@section('content')
+    <div class="">
+        <h1>INi login</h1> 
+        {{-- cek lagi setelah ubah --}}
+        {{-- sudah lanjut ngoding --}}
+    </div>
+@endsection
+>>>>>>> fd5c9a713f5328bd12cbb06fde184acd0a8d398c
