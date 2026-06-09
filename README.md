@@ -3,8 +3,6 @@
 [![Laravel Version](https://img.shields.io/badge/Laravel-13.x-red.svg)](https://laravel.com)
 [![Livewire Version](https://img.shields.io/badge/Livewire-4.x-f06292.svg)](https://livewire.laravel.com)
 
-A premium digital product solution provider in Indonesia, dedicated to providing safe and affordable access to digital services. Our mission is to simplify digital access for everyone by prioritizing transparency, honesty, convenience, and security.
-
 ---
 
 ## Tech Stack
