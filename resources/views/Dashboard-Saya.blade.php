@@ -115,7 +115,7 @@
                         {{-- Item Laporan 1 --}}
                         <div class="border border-gray-100 rounded-xl p-4 flex gap-4 items-start">
                             <div class="w-20 h-20 bg-gray-100 rounded-lg overflow-hidden flex-shrink-0">
-                                <img src="https://images.unsplash.com/photo-1635068741358-ab1b9813623f?q=80&w=2060&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D" class="w-full h-full object-cover" alt="Jalan Berlubang">
+                                <img src="https://images.unsplash.com/photo-1515162816999-a0c47dc192f7?w=300&h=300&fit=crop" class="w-full h-full object-cover" alt="Jalan Berlubang">
                             </div>
                             <div class="flex-grow">
                                 <div class="flex justify-between items-center mb-1">
@@ -144,7 +144,7 @@
                         {{-- Item Laporan 2 --}}
                         <div class="border border-gray-100 rounded-xl p-4 flex gap-4 items-start">
                             <div class="w-20 h-20 bg-gray-100 rounded-lg overflow-hidden flex-shrink-0">
-                                <img src="https://images.unsplash.com/photo-1618477388954-7852f32655ec?w=150" class="w-full h-full object-cover" alt="Tumpukan Sampah">
+                                <img src="https://images.unsplash.com/photo-1526951521990-620dc14c214b?q=80&w=1074&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D" class="w-full h-full object-cover" alt="Tumpukan Sampah">
                             </div>
                             <div class="flex-grow">
                                 <div class="flex justify-between items-center mb-1">
@@ -173,7 +173,7 @@
                         {{-- Item Laporan 3 --}}
                         <div class="border border-gray-100 rounded-xl p-4 flex gap-4 items-start">
                             <div class="w-20 h-20 bg-gray-100 rounded-lg overflow-hidden flex-shrink-0">
-                                <img src="https://images.unsplash.com/photo-1509395062183-67c5ad6faff9?w=150" class="w-full h-full object-cover" alt="Lampu Jalan">
+                                <img src="https://images.unsplash.com/photo-1647678803694-a3bd223e4414?q=80&w=1170&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D" class="w-full h-full object-cover" alt="Lampu Jalan">
                             </div>
                             <div class="flex-grow">
                                 <div class="flex justify-between items-center mb-1">
