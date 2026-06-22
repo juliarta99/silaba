@@ -14,3 +14,6 @@ Route::view('/laporan', 'List-Laporan-SKC')->name('laporan');
 // parameter kedua itu nama filenya (karena ak buatnya login.blade.php jadi isiinya login)
 // untuk name sesuaiin aja jangan isi spasi
 // lanjutt coba buka dan akses link tersebut
+Route::view('verifikasi-otp-wa', 'verifikasi-otp-wa')->name('verifikasi-otp-wa');
+Route::view('verifikasi-otp-wa-berhasil', 'verifikasi-otp-wa-berhasil')->name('verifikasi-otp-wa-berhasil');
+Route::view('klaim-reward', 'klaim-reward')->name('klaim-reward');
