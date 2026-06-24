@@ -15,7 +15,7 @@ class District extends Model
 
     public function districtChiefs(): HasMany
     {
-        return $this->hasMany(DistrictChief::class);
+        return $this->hasMany(District_Chief::class);
     }
 
     public function reports(): HasMany
@@ -25,7 +25,7 @@ class District extends Model
 
     public function activeChief(): HasOne
     {
-        return $this->hasOne(DistrictChief::class)
+        return $this->hasOne(District_Chief::class)
                     ->where('status', 'active')
                     ->latestOfMany();
     }

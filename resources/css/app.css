@@ -15,6 +15,7 @@
     --color-secondary-500: #FFC400;
     --color-secondary-700: #CC9D00;
     --color-secondary-900: #7A5E00;
+    --color-gray-10: #f5f5f5;
     --color-gray-50: #E0E0E0;
     --color-gray-100: #BDBDBD;
     --color-gray-500: #828282;
@@ -26,7 +27,7 @@
     --color-blue-700: #1C54B2;
     --color-blue-900: #0E2A5C;
     --color-black: #111111;
-    --color-white: #F0F0F0;
+    --color-white: #FDFDFD;
     --color-info: #2F80ED;
     --color-success: #2F80ED;
     --color-warning: #E2B93B;

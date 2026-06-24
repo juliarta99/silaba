@@ -38,7 +38,7 @@ class User extends Authenticatable
 
     public function districtChief(): HasOne
     {
-        return $this->hasOne(DistrictChief::class);
+        return $this->hasOne(District_Chief::class);
     }
 
     public function regent(): HasOne
