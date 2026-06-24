@@ -2,44 +2,130 @@
 
 namespace App\Models;
 
-// use Illuminate\Contracts\Auth\MustVerifyEmail;
-use Database\Factories\UserFactory;
-use Illuminate\Database\Eloquent\Attributes\Fillable;
-use Illuminate\Database\Eloquent\Attributes\Hidden;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
+use Illuminate\Database\Eloquent\Relations\HasMany;
+use Illuminate\Database\Eloquent\Relations\HasOne;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
-use Illuminate\Support\Str;
 
-#[Fillable(['name', 'email', 'password'])]
-#[Hidden(['password', 'remember_token'])]
 class User extends Authenticatable
 {
-    /** @use HasFactory<UserFactory> */
     use HasFactory, Notifiable;
 
-    /**
-     * Get the attributes that should be cast.
-     *
-     * @return array<string, string>
-     */
+    // ── Fillable ──────────────────────────────────────────────────────────
+    protected $fillable = [
+        'name',
+        'identifier',
+        'identifier_type',
+        'password',
+        'picture',
+        'role',
+    ];
+
+    // ── Hidden ────────────────────────────────────────────────────────────
+    protected $hidden = [
+        'password',
+        'remember_token',
+    ];
+
+    // ── Casts ─────────────────────────────────────────────────────────────
     protected function casts(): array
     {
         return [
-            'email_verified_at' => 'datetime',
             'password' => 'hashed',
         ];
     }
 
-    /**
-     * Get the user's initials
-     */
-    public function initials(): string
+    // ── Auth: override field untuk login ──────────────────────────────────
+    // Laravel default pakai 'email', kita ganti ke 'identifier'
+    public function getAuthIdentifierName(): string
     {
-        return Str::of($this->name)
-            ->explode(' ')
-            ->take(2)
-            ->map(fn ($word) => Str::substr($word, 0, 1))
-            ->implode('');
+        return 'identifier';
+    }
+
+    // ── Relations ─────────────────────────────────────────────────────────
+
+    public function citizen(): HasOne
+    {
+        return $this->hasOne(Citizen::class);
+    }
+
+    public function employee(): HasOne
+    {
+        return $this->hasOne(Employee::class);
+    }
+
+    public function regent(): HasOne
+    {
+        return $this->hasOne(Regent::class);
+    }
+
+    public function reports(): HasMany
+    {
+        return $this->hasMany(Report::class);
+    }
+
+    public function rewardClaims(): HasMany
+    {
+        return $this->hasMany(RewardClaim::class);
+    }
+
+    // ── Role helpers ──────────────────────────────────────────────────────
+
+    public function isCitizen(): bool
+    {
+        return $this->role === 'citizen';
+    }
+
+    public function isEmployee(): bool
+    {
+        return $this->role === 'employee';
+    }
+
+    public function isRegent(): bool
+    {
+        return $this->role === 'regent';
+    }
+
+    public function isAdmin(): bool
+    {
+        return in_array($this->role, ['admin', 'super_admin']);
+    }
+
+    public function isSuperAdmin(): bool
+    {
+        return $this->role === 'super_admin';
+    }
+
+    // ── Employee position helpers ─────────────────────────────────────────
+
+    public function isFieldOfficer(): bool
+    {
+        return $this->role === 'employee'
+            && $this->employee?->position === 'field_officer';
+    }
+
+    public function isSupervisor(): bool
+    {
+        return $this->role === 'employee'
+            && $this->employee?->position === 'supervisor';
+    }
+
+    public function isHeadOfDepartment(): bool
+    {
+        return $this->role === 'employee'
+            && $this->employee?->position === 'head_of_department';
+    }
+
+    // ── Profile shortcut ──────────────────────────────────────────────────
+    // Mengembalikan relasi profil yang sesuai role
+    public function profile(): HasOne
+    {
+        return match ($this->role) {
+            'citizen'  => $this->citizen(),
+            'employee' => $this->employee(),
+            'regent'   => $this->regent(),
+            default    => $this->citizen(), // fallback (admin tidak punya tabel profil terpisah)
+        };
     }
 }

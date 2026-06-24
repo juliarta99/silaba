@@ -2,8 +2,6 @@
 
 @section('content')
     <div class="">
-        <h1>ini welcome</h1> 
-        {{-- cek lagi setelah ubah --}}
-        {{-- sudah lanjut ngoding --}}
+        <h1>Nama Halaman</h1>
     </div>
 @endsection
