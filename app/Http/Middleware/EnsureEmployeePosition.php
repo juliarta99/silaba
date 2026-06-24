@@ -4,6 +4,7 @@ namespace App\Http\Middleware;
 
 use Closure;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 use Symfony\Component\HttpFoundation\Response;
 
 /**
@@ -27,7 +28,7 @@ class EnsureEmployeePosition
 
     public function handle(Request $request, Closure $next, string ...$positions): Response
     {
-        $employee = auth()->user()?->employee;
+        $employee = Auth::user()?->employee;
 
         if (! $employee) {
             abort(403);

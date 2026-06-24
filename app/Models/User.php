@@ -2,7 +2,6 @@
 
 namespace App\Models;
 
-// use Illuminate\Contracts\Auth\MustVerifyEmail;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\Relations\HasOne;
@@ -13,19 +12,39 @@ class User extends Authenticatable
 {
     use HasFactory, Notifiable;
 
+    // ── Fillable ──────────────────────────────────────────────────────────
     protected $fillable = [
-        'name', 'identifier', 'identifier_type',
-        'password', 'picture', 'role',
+        'name',
+        'identifier',
+        'identifier_type',
+        'password',
+        'picture',
+        'role',
     ];
 
-    protected $hidden = ['password', 'remember_token'];
+    // ── Hidden ────────────────────────────────────────────────────────────
+    protected $hidden = [
+        'password',
+        'remember_token',
+    ];
 
+    // ── Casts ─────────────────────────────────────────────────────────────
     protected function casts(): array
     {
-        return ['password' => 'hashed'];
+        return [
+            'password' => 'hashed',
+        ];
     }
 
-    // ── Relations ──────────────────────────────────────────
+    // ── Auth: override field untuk login ──────────────────────────────────
+    // Laravel default pakai 'email', kita ganti ke 'identifier'
+    public function getAuthIdentifierName(): string
+    {
+        return 'identifier';
+    }
+
+    // ── Relations ─────────────────────────────────────────────────────────
+
     public function citizen(): HasOne
     {
         return $this->hasOne(Citizen::class);
@@ -34,11 +53,6 @@ class User extends Authenticatable
     public function employee(): HasOne
     {
         return $this->hasOne(Employee::class);
-    }
-
-    public function districtChief(): HasOne
-    {
-        return $this->hasOne(District_Chief::class);
     }
 
     public function regent(): HasOne
@@ -56,21 +70,62 @@ class User extends Authenticatable
         return $this->hasMany(RewardClaim::class);
     }
 
-    // ── Helpers ────────────────────────────────────────────
-    public function isCitizen(): bool       { return $this->role === 'citizen'; }
-    public function isEmployee(): bool      { return $this->role === 'employee'; }
-    public function isDistrictChief(): bool { return $this->role === 'district_chief'; }
-    public function isRegent(): bool        { return $this->role === 'regent'; }
-    public function isAdmin(): bool         { return in_array($this->role, ['admin', 'super_admin']); }
+    // ── Role helpers ──────────────────────────────────────────────────────
 
+    public function isCitizen(): bool
+    {
+        return $this->role === 'citizen';
+    }
+
+    public function isEmployee(): bool
+    {
+        return $this->role === 'employee';
+    }
+
+    public function isRegent(): bool
+    {
+        return $this->role === 'regent';
+    }
+
+    public function isAdmin(): bool
+    {
+        return in_array($this->role, ['admin', 'super_admin']);
+    }
+
+    public function isSuperAdmin(): bool
+    {
+        return $this->role === 'super_admin';
+    }
+
+    // ── Employee position helpers ─────────────────────────────────────────
+
+    public function isFieldOfficer(): bool
+    {
+        return $this->role === 'employee'
+            && $this->employee?->position === 'field_officer';
+    }
+
+    public function isSupervisor(): bool
+    {
+        return $this->role === 'employee'
+            && $this->employee?->position === 'supervisor';
+    }
+
+    public function isHeadOfDepartment(): bool
+    {
+        return $this->role === 'employee'
+            && $this->employee?->position === 'head_of_department';
+    }
+
+    // ── Profile shortcut ──────────────────────────────────────────────────
+    // Mengembalikan relasi profil yang sesuai role
     public function profile(): HasOne
     {
-        return match($this->role) {
-            'citizen'        => $this->citizen(),
-            'employee'       => $this->employee(),
-            'district_chief' => $this->districtChief(),
-            'regent'         => $this->regent(),
-            default          => $this->citizen(),
+        return match ($this->role) {
+            'citizen'  => $this->citizen(),
+            'employee' => $this->employee(),
+            'regent'   => $this->regent(),
+            default    => $this->citizen(), // fallback (admin tidak punya tabel profil terpisah)
         };
     }
 }
