@@ -1,32 +1,64 @@
 <?php
+
 namespace App\Http\Controllers;
-use App\Models\{Report, Category, District, ReportEvidence};
+
+use App\Models\Category;
+use App\Models\District;
+use App\Models\Report;
+use App\Models\ReportEvidence;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 
 class ReportController extends Controller
 {
     public function index(Request $request)
     {
-        $query = Report::where('status','!=','rejected')->with(['category','district','evidences']);
-        if ($request->status)   $query->where('status', $request->status);
-        if ($request->category) $query->where('category_id', $request->category);
-        if ($request->district) $query->where('district_id', $request->district);
-        $reports    = $query->latest()->paginate(12);
-        $categories = Category::all();
-        $districts  = District::all();
-        return view('public.reports.index', compact('reports','categories','districts'));
+        $query = Report::where('status', '!=', 'rejected')
+            ->with(['category', 'district', 'tags', 'evidences', 'citizen.user']);
+
+        // Filter: pencarian judul atau nomor tiket
+        if ($request->filled('search')) {
+            $search = $request->search;
+            $query->where(function ($q) use ($search) {
+                $q->where('title', 'like', "%{$search}%")
+                  ->orWhere('ticket_number', 'like', "%{$search}%");
+            });
+        }
+
+        // Filter: kategori
+        if ($request->filled('category')) {
+            $query->where('category_id', $request->category);
+        }
+
+        // Filter: kecamatan
+        if ($request->filled('district')) {
+            $query->where('district_id', $request->district);
+        }
+
+        // Filter: status
+        if ($request->filled('status')) {
+            $query->where('status', $request->status);
+        }
+
+        $reports    = $query->latest()->paginate(9)->withQueryString();
+        $categories = Category::orderBy('name')->get();
+        $districts  = District::orderBy('name')->get();
+
+        return view('public.reports.index', compact('reports', 'categories', 'districts'));
     }
 
     public function create()
     {
         $categories = Category::all();
         $districts  = District::all();
-        return view('public.reports.create', compact('categories','districts'));
+        return view('public.reports.create', compact('categories', 'districts'));
     }
 
     public function createStep2()
     {
-        if (! session()->has('report.category_id')) return redirect()->route('reports.create');
+        if (! session()->has('report.category_id')) {
+            return redirect()->route('reports.create');
+        }
         return view('public.reports.create_step2');
     }
 
@@ -42,24 +74,25 @@ class ReportController extends Controller
             'longitude'   => 'nullable|numeric',
             'photos'      => 'nullable|array',
             'photos.*'    => 'image|max:4096',
-            // Untuk tamu
             'guest_name'  => 'required_if:is_guest,1|nullable|max:100',
             'guest_phone' => 'required_if:is_guest,1|nullable|max:20',
         ]);
 
-        $citizenId = auth()->check() ? auth()->user()->citizen?->id : null;
+        $citizenId = Auth::check() ? Auth::user()->citizen?->id : null;
+
         $report = Report::create([
-            'citizen_id'  => $citizenId,
-            'category_id' => $request->category_id,
-            'district_id' => $request->district_id,
-            'title'       => $request->title,
-            'description' => $request->description,
-            'address'     => $request->address,
-            'latitude'    => $request->latitude,
-            'longitude'   => $request->longitude,
-            'guest_name'  => $request->guest_name,
-            'guest_phone' => $request->guest_phone,
-            'status'      => 'pending',
+            'ticket_number' => 'TKT-' . now()->format('Y') . '-' . str_pad(Report::count() + 1, 3, '0', STR_PAD_LEFT),
+            'citizen_id'    => $citizenId,
+            'category_id'   => $request->category_id,
+            'district_id'   => $request->district_id,
+            'title'         => $request->title,
+            'description'   => $request->description,
+            'address'       => $request->address,
+            'latitude'      => $request->latitude,
+            'longitude'     => $request->longitude,
+            'guest_name'    => $request->guest_name,
+            'guest_phone'   => $request->guest_phone,
+            'status'        => 'pending',
         ]);
 
         if ($request->hasFile('photos')) {
