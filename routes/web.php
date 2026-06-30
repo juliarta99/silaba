@@ -67,15 +67,12 @@ Route::get('/laporan/berhasil',    [ReportController::class, 'success'])->name('
 |=============================================================================
 */
 Route::middleware('guest')->group(function () {
-    Route::get('/masuk',                   [AuthController::class, 'showLogin'])->name('login');
-    Route::post('/masuk',                  [AuthController::class, 'login'])->name('login.post');
-    Route::get('/daftar',                  [AuthController::class, 'showRegister'])->name('register');
-    Route::post('/daftar',                 [AuthController::class, 'register'])->name('register.post');
-    Route::get('/daftar/langkah-2',        [AuthController::class, 'showRegisterStep2'])->name('register.step2');
-    Route::post('/daftar/langkah-2',       [AuthController::class, 'registerStep2'])->name('register.step2.post');
-    Route::get('/verifikasi-otp',          [AuthController::class, 'showVerifyOtp'])->name('verify.otp');
-    Route::post('/verifikasi-otp',         [AuthController::class, 'verifyOtp'])->name('verify.otp.post');
-    Route::get('/verifikasi-berhasil',     [AuthController::class, 'showVerifyOtpSuccess'])->name('verify.otp.success');
+    Route::get('/masuk', [AuthController::class, 'showLogin'])->name('login');
+    Route::post('/masuk', [AuthController::class, 'login'])->name('login.post');
+ 
+    Route::view('/daftar', 'auth.register')->name('register');
+    Route::view('/verifikasi-berhasil', 'auth.verify-otp-success')->name('verify.otp.success');
+
 });
 Route::post('/keluar', [AuthController::class, 'logout'])->name('logout')->middleware('auth');
 
