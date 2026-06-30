@@ -12,22 +12,19 @@ return Application::configure(basePath: dirname(__DIR__))
         health: '/up',
     )
     ->withMiddleware(function (Middleware $middleware): void {
-        // ── Alias middleware ──────────────────────────────────────────
+
+        // ── SATU panggilan alias() saja, gabungkan semuanya ──────────
         $middleware->alias([
             'role'              => \App\Http\Middleware\RoleMiddleware::class,
             'employee.position' => \App\Http\Middleware\EnsureEmployeePosition::class,
+            'field_officer'     => fn($req, $next) => (new \App\Http\Middleware\EnsureEmployeePosition)
+                                        ->handle($req, $next, 'field_officer'),
+            'supervisor'        => fn($req, $next) => (new \App\Http\Middleware\EnsureEmployeePosition)
+                                        ->handle($req, $next, 'supervisor'),
+            'head_of_dept'      => fn($req, $next) => (new \App\Http\Middleware\EnsureEmployeePosition)
+                                        ->handle($req, $next, 'head_of_department'),
         ]);
 
-        // ── Middleware groups (opsional) ──────────────────────────────
-        // Jika ingin shortcut per posisi:
-        $middleware->alias([
-            'field_officer' => fn($req, $next) => (new \App\Http\Middleware\EnsureEmployeePosition)
-                                    ->handle($req, $next, 'field_officer'),
-            'supervisor'    => fn($req, $next) => (new \App\Http\Middleware\EnsureEmployeePosition)
-                                    ->handle($req, $next, 'supervisor'),
-            'head_of_dept'  => fn($req, $next) => (new \App\Http\Middleware\EnsureEmployeePosition)
-                                    ->handle($req, $next, 'head_of_department'),
-        ]);
     })
     ->withExceptions(function (Exceptions $exceptions): void {
         $exceptions->shouldRenderJsonWhen(

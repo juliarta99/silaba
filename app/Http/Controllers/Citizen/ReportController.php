@@ -4,13 +4,14 @@ use App\Http\Controllers\Controller;
 use App\Models\Report;
 use App\Models\Review;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 
 class ReportController extends Controller
 {
     public function index()
     {
-        $citizen = auth()->user()->citizen;
-        $reports = Report::where('citizen_id', $citizen->id)
+        $userId = Auth::id();
+        $reports = Report::where('user_id', $userId)
             ->with(['category', 'district'])
             ->latest()->paginate(10);
         return view('citizen.reports.index', compact('reports'));
