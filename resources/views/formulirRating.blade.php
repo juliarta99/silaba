@@ -18,7 +18,7 @@
                 <div class="bg-white rounded-xl shadow-sm border border-gray-100 overflow-hidden">
                     <div class="p-6">
                         <div class="flex items-start gap-4 mb-6">
-                            <div class="w-10 h-10 rounded-full bg-[#E8F5E9] text-[#27AE60] flex items-center justify-center flex-shrink-0">
+                            <div class="w-10 h-10 rounded-full bg-[#E8F5E9] text-[#27AE60] flex items-center justify-center shrink-0">
                                 <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path></svg>
                             </div>
                             <div>
@@ -77,7 +77,7 @@
                 </div>
 
                 <div class="bg-primary-50 border border-primary-100 rounded-xl p-5 flex items-start sm:items-center gap-4">
-                    <div class="w-10 h-10 rounded-full bg-primary-500 text-white flex items-center justify-center flex-shrink-0 shadow-sm">
+                    <div class="w-10 h-10 rounded-full bg-primary-500 text-white flex items-center justify-center shrink-0 shadow-sm">
                         <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path></svg>
                     </div>
                     <div>

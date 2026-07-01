@@ -40,7 +40,7 @@
                         <input
                             type="text" id="search" name="search"
                             value="{{ request('search') }}"
-                            placeholder="Cari berdasarkan judul atau nomor tiket..."
+                            placeholder="Ketik & Tekan Enter..."
                             class="w-full pl-9 pr-3 py-2.5 rounded-lg border border-gray-200 bg-gray-10
                                    text-sm text-gray-900 placeholder-gray-400
                                    focus:bg-white focus:ring-2 focus:ring-primary-500 focus:border-primary-500
@@ -55,9 +55,9 @@
                         Kategori
                     </label>
                     <select
-                        id="category" name="category"
+                        id="category" name="category" onchange="this.form.submit()"
                         class="w-full px-3 py-2.5 rounded-lg border border-gray-200 bg-gray-10
-                               text-sm text-gray-900
+                               text-sm text-gray-900 cursor-pointer
                                focus:bg-white focus:ring-2 focus:ring-primary-500 focus:border-primary-500
                                outline-none transition-all duration-150"
                     >
@@ -76,9 +76,9 @@
                         Kecamatan
                     </label>
                     <select
-                        id="district" name="district"
+                        id="district" name="district" onchange="this.form.submit()"
                         class="w-full px-3 py-2.5 rounded-lg border border-gray-200 bg-gray-10
-                               text-sm text-gray-900
+                               text-sm text-gray-900 cursor-pointer
                                focus:bg-white focus:ring-2 focus:ring-primary-500 focus:border-primary-500
                                outline-none transition-all duration-150"
                     >
@@ -97,24 +97,25 @@
                         Status
                     </label>
                     <select
-                        id="status" name="status"
+                        id="status" name="status" onchange="this.form.submit()"
                         class="w-full px-3 py-2.5 rounded-lg border border-gray-200 bg-gray-10
-                               text-sm text-gray-900
+                               text-sm text-gray-900 cursor-pointer
                                focus:bg-white focus:ring-2 focus:ring-primary-500 focus:border-primary-500
                                outline-none transition-all duration-150"
                     >
                         <option value="">Semua Status</option>
                         <option value="pending"     {{ request('status') === 'pending' ? 'selected' : '' }}>Baru</option>
                         <option value="in_progress" {{ request('status') === 'in_progress' ? 'selected' : '' }}>Diproses</option>
+                        <option value="under_review"{{ request('status') === 'under_review' ? 'selected' : '' }}>Direview</option>
                         <option value="completed"   {{ request('status') === 'completed' ? 'selected' : '' }}>Selesai</option>
                         <option value="rejected"    {{ request('status') === 'rejected' ? 'selected' : '' }}>Ditolak</option>
                     </select>
                 </div>
 
             </div>
-
-            {{-- Auto-submit on change via Alpine (opsional) --}}
-            <button type="submit" class="sr-only">Terapkan Filter</button>
+            
+            {{-- Fallback submit button for enter key --}}
+            <button type="submit" class="hidden">Terapkan Filter</button>
         </form>
 
         {{-- Info hasil + Reset --}}
@@ -148,22 +149,23 @@
         <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
             @foreach ($reports as $report)
             <x-report-card
-                id="{{ $report->ticket_number }}"
+                id="{{ $report->code }}"
                 judul="{{ $report->title }}"
-                kategori="{{ $report->category->name ?? '' }}"
+                kategori="{{ $report->category->name ?? 'Tanpa Kategori' }}"
                 status="{{ match($report->status) {
                     'pending'     => 'Baru',
                     'in_progress' => 'Diproses',
+                    'under_review'=> 'Direview',
                     'completed'   => 'Selesai',
                     'rejected'    => 'Ditolak',
                     default       => 'Baru',
                 } }}"
                 :tags="$report->tags->pluck('name')->toArray() ?? []"
-                lokasi="Kec. {{ $report->district->name ?? '' }}"
+                lokasi="Kec. {{ $report->district->name ?? 'Tidak diketahui' }}"
                 tanggal="{{ $report->created_at->translatedFormat('j M Y') }}"
-                pelapor="{{ $report->citizen->user->name ?? $report->guest_name ?? 'Tamu' }}"
-                foto="{{ $report->evidences->first()->photo_url ?? null }}"
-                href="{{ route('reports.show', $report) }}"
+                pelapor="{{ $report->user->name ?? $report->guest_name ?? 'Tamu' }}"
+                foto="{{ $report->evidences->first()->file_path ?? null }}"
+                href="{{ route('reports.show', $report->code) }}"
             />
             @endforeach
         </div>
@@ -178,8 +180,8 @@
         @else
         {{-- Empty state --}}
         <div class="flex flex-col items-center justify-center py-20 text-center">
-            <div class="w-16 h-16 rounded-full bg-gray-50 flex items-center justify-center mb-4">
-                <svg class="w-8 h-8 text-gray-600" fill="none" viewBox="0 0 24 24" aria-hidden="true">
+            <div class="w-16 h-16 rounded-full bg-gray-100 flex items-center justify-center mb-4">
+                <svg class="w-8 h-8 text-gray-400" fill="none" viewBox="0 0 24 24" aria-hidden="true">
                     <path d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"
                           stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
                 </svg>

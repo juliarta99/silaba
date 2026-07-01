@@ -35,7 +35,7 @@ class ReportController extends Controller
     {
         $this->authorizeReport($report);
         $request->validate(['rating' => 'required|integer|min:1|max:5', 'comment' => 'nullable|string|max:500']);
-        Review::create(['report_id' => $report->id, 'citizen_id' => auth()->user()->citizen->id,
+        Review::create(['report_id' => $report->id, 'citizen_id' => Auth::user()->citizen->id,
                         'rating' => $request->rating, 'comment' => $request->comment]);
         return redirect()->route('citizen.reports.rating.success', $report);
     }
@@ -47,6 +47,16 @@ class ReportController extends Controller
 
     private function authorizeReport(Report $report): void
     {
-        abort_if($report->citizen_id !== auth()->user()->citizen->id, 403);
+        abort_if($report->citizen_id !== Auth::user()->citizen->id, 403);
+    }
+
+    public function create()
+    {
+
+    }
+
+    public function store()
+    {
+
     }
 }

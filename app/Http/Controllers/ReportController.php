@@ -14,14 +14,14 @@ class ReportController extends Controller
     public function index(Request $request)
     {
         $query = Report::where('status', '!=', 'rejected')
-            ->with(['category', 'district', 'tags', 'evidences', 'citizen.user']);
+            ->with(['category', 'district', 'tags', 'evidences', 'user']);
 
-        // Filter: pencarian judul atau nomor tiket
+        // Filter: pencarian judul atau nomor tiket (kolom di DB: code)
         if ($request->filled('search')) {
             $search = $request->search;
             $query->where(function ($q) use ($search) {
                 $q->where('title', 'like', "%{$search}%")
-                  ->orWhere('ticket_number', 'like', "%{$search}%");
+                  ->orWhere('code', 'like', "%{$search}%");
             });
         }
 
@@ -40,26 +40,11 @@ class ReportController extends Controller
             $query->where('status', $request->status);
         }
 
-        $reports    = $query->latest()->paginate(9)->withQueryString();
+        $reports    = $query->latest()->paginate(9)->onEachSide(0)->withQueryString();
         $categories = Category::orderBy('name')->get();
         $districts  = District::orderBy('name')->get();
 
         return view('public.reports.index', compact('reports', 'categories', 'districts'));
-    }
-
-    public function create()
-    {
-        $categories = Category::all();
-        $districts  = District::all();
-        return view('public.reports.create', compact('categories', 'districts'));
-    }
-
-    public function createStep2()
-    {
-        if (! session()->has('report.category_id')) {
-            return redirect()->route('reports.create');
-        }
-        return view('public.reports.create_step2');
     }
 
     public function store(Request $request)
@@ -67,9 +52,9 @@ class ReportController extends Controller
         $request->validate([
             'category_id' => 'required|exists:categories,id',
             'district_id' => 'required|exists:districts,id',
-            'title'       => 'required|max:200',
-            'description' => 'required',
-            'address'     => 'required',
+            'title'       => 'required|max:255',
+            'description' => 'required|min:20',
+            'location'    => 'required|max:255', // DB menggunakan 'location', bukan 'address'
             'latitude'    => 'nullable|numeric',
             'longitude'   => 'nullable|numeric',
             'photos'      => 'nullable|array',
@@ -78,27 +63,33 @@ class ReportController extends Controller
             'guest_phone' => 'required_if:is_guest,1|nullable|max:20',
         ]);
 
-        $citizenId = Auth::check() ? Auth::user()->citizen?->id : null;
+        // DB menggunakan 'user_id' pada tabel reports, bukan 'citizen_id'
+        $userId = Auth::check() ? Auth::id() : null;
 
         $report = Report::create([
-            'ticket_number' => 'TKT-' . now()->format('Y') . '-' . str_pad(Report::count() + 1, 3, '0', STR_PAD_LEFT),
-            'citizen_id'    => $citizenId,
-            'category_id'   => $request->category_id,
-            'district_id'   => $request->district_id,
-            'title'         => $request->title,
-            'description'   => $request->description,
-            'address'       => $request->address,
-            'latitude'      => $request->latitude,
-            'longitude'     => $request->longitude,
-            'guest_name'    => $request->guest_name,
-            'guest_phone'   => $request->guest_phone,
-            'status'        => 'pending',
+            'code'        => 'TKT-' . now()->format('Y') . '-' . str_pad(Report::count() + 1, 3, '0', STR_PAD_LEFT), // DB menggunakan 'code', bukan 'ticket_number'
+            'user_id'     => $userId,
+            'category_id' => $request->category_id,
+            'district_id' => $request->district_id,
+            'title'       => $request->title,
+            'description' => $request->description,
+            'location'    => $request->location,
+            'latitude'    => $request->latitude,
+            'longitude'   => $request->longitude,
+            'guest_name'  => $request->guest_name,
+            'guest_phone' => $request->guest_phone,
+            'status'      => 'pending',
+            'priority'    => 'medium', // Default priority sesuai struktur DB
         ]);
 
         if ($request->hasFile('photos')) {
             foreach ($request->file('photos') as $photo) {
-                $path = $photo->store('evidences', 'public');
-                ReportEvidence::create(['report_id' => $report->id, 'photo_url' => $path]);
+                $path = $photo->store('evidences/' . $report->id, 'public');
+                ReportEvidence::create([
+                    'report_id' => $report->id,
+                    'file_path' => $path, // DB menggunakan 'file_path', bukan 'photo_url'
+                    'file_type' => 'photo' // Menambahkan enum file_type sesuai DB
+                ]);
             }
         }
 
@@ -106,10 +97,24 @@ class ReportController extends Controller
         return redirect()->route('reports.success');
     }
 
+    public function show($code)
+    {
+        $report = Report::where('code', $code)
+            ->with(['category', 'district', 'evidences', 'user', 'progress'])
+            ->firstOrFail();
+
+        return view('public.reports.show', compact('report'));
+    }
+
     public function success()
     {
         $reportId = session('last_report_ticket');
         $report   = $reportId ? Report::find($reportId) : null;
+        
+        if (!$report) {
+            return redirect()->route('reports.index');
+        }
+
         return view('public.reports.success', compact('report'));
     }
 }
