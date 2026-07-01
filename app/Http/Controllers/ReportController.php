@@ -47,21 +47,6 @@ class ReportController extends Controller
         return view('public.reports.index', compact('reports', 'categories', 'districts'));
     }
 
-    public function create()
-    {
-        $categories = Category::all();
-        $districts  = District::all();
-        return view('public.reports.create', compact('categories', 'districts'));
-    }
-
-    public function createStep2()
-    {
-        if (! session()->has('report.category_id')) {
-            return redirect()->route('reports.create');
-        }
-        return view('public.reports.create_step2');
-    }
-
     public function store(Request $request)
     {
         $request->validate([

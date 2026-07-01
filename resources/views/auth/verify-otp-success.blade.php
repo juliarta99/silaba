@@ -16,7 +16,7 @@
             }, 1000);
         }
     }"
-    class="min-h-[calc(100vh-68px)] flex flex-col items-center justify-center py-12 px-4 sm:px-6 lg:px-8 bg-gray-50"
+    class="min-h-[calc(100vh-68px)] flex flex-col items-center justify-center pb-12 pt-34 px-4 sm:px-6 lg:px-8 bg-gray-10"
 >
     <div class="text-center mb-8">
         <div class="w-20 h-20 rounded-full bg-success/15 flex items-center justify-center mx-auto mb-5">

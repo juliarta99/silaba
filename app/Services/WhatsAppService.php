@@ -166,9 +166,9 @@ class WhatsAppService
     {
         $message = "🔔 *Tugas Baru — SILABU*\n\n"
                  . "Anda mendapat penugasan baru:\n\n"
-                 . "📋 Tiket: *{$ticketNumber}*\n"
-                 . "📝 Judul: {$title}\n"
-                 . "📍 Lokasi: {$location}\n\n"
+                 . "Tiket: *{$ticketNumber}*\n"
+                 . "Judul: {$title}\n"
+                 . "Lokasi: {$location}\n\n"
                  . "Silakan cek aplikasi SILABU untuk detail lengkap dan mulai penanganan.";
 
         return $this->send($phone, $message);
@@ -178,7 +178,7 @@ class WhatsAppService
 
     private function otpTemplate(string $otpCode, int $expiresInMinutes): string
     {
-        return "🔐 *Kode Verifikasi SILABU*\n\n"
+        return "*Kode Verifikasi SILABU*\n\n"
              . "Kode OTP Anda: *{$otpCode}*\n\n"
              . "Kode ini berlaku selama {$expiresInMinutes} menit. "
              . "Jangan bagikan kode ini kepada siapa pun, termasuk pihak yang mengaku dari SILABU.\n\n"

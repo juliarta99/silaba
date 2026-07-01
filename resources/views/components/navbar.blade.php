@@ -59,7 +59,7 @@
 
 <nav
     x-data="{ mobileOpen: false }"
-    class="fixed top-0 inset-x-0 z-50 bg-white border-b border-gray-100 shadow-sm font-plus-jakarta-sans"
+    class="fixed top-0 inset-x-0 z-9999 bg-white border-b border-gray-100 shadow-sm font-plus-jakarta-sans"
 >
     <div class="max-w-7xl mx-auto px-5 sm:px-6 h-17 flex items-center justify-between gap-3">
 

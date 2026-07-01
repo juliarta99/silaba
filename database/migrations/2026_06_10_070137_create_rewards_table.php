@@ -20,6 +20,7 @@ return new class extends Migration
             $table->integer('points_required');
             $table->integer('stock')->default(0);
             $table->text('description')->nullable();
+            $table->boolean('is_active')->default(true);
             $table->timestamps();
         });
     }
