@@ -14,8 +14,8 @@ return new class extends Migration
         Schema::create('reports', function (Blueprint $table) {
             $table->id();
             $table->foreignId('user_id')->nullable()->constrained()->cascadeOnDelete();
-            $table->string('guest_name', 100)->nullable()->after('status');
-            $table->string('guest_phone', 20)->nullable()->after('guest_name');
+            $table->string('guest_name', 100)->nullable();
+            $table->string('guest_phone', 20)->nullable();
             $table->foreignId('category_id')->constrained()->cascadeOnDelete();
             $table->string('code', 100)->unique();
             $table->string('title');
