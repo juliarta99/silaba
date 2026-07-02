@@ -56,9 +56,9 @@ use App\Http\Controllers\Regent\DepartmentController   as RegentDepartment;
 Route::get('/',                    [PublicController::class, 'index'])->name('home');
 Route::get('/tentang',             [PublicController::class, 'about'])->name('about');
 Route::get('/laporan',             [ReportController::class, 'index'])->name('reports.index');
-Route::get('/laporan/{report}',             [ReportController::class, 'show'])->name('reports.show');
 Route::get('/laporan/buat',     fn() => view('public.reports.create'))->name('reports.create');
 Route::get('/laporan/berhasil', [ReportController::class, 'success'])->name('reports.success');
+Route::get('/laporan/{code}',   [ReportController::class, 'show'])->name('reports.show');
 
 /*
 |=============================================================================

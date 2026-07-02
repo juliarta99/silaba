@@ -97,14 +97,34 @@ class ReportController extends Controller
         return redirect()->route('reports.success');
     }
 
-    public function show($code)
+    public function show(string $code)
     {
         $report = Report::where('code', $code)
-            ->with(['category', 'district', 'evidences', 'user', 'progress'])
+            ->with([
+                'user',
+                'category.department',
+                'district',
+                'tags',
+                'evidences',
+                'review',
+                'childReports.user',
+                'parentReport',
+                'progresses' => fn ($q) => $q->with(['employee.user', 'employee.department'])->latest(),
+                'assignments.employee.user',
+                'assignments.employee.department',
+            ])
             ->firstOrFail();
-
-        return view('public.reports.show', compact('report'));
+    
+        // Cek apakah visitor adalah pemilik laporan ini (atau laporan gabungannya)
+        $isOwner = false;
+        if (Auth::check()) {
+            $isOwner = $report->user_id === Auth::id()
+                || $report->childReports->contains('user_id', Auth::id());
+        }
+    
+        return view('public.reports.show', compact('report', 'isOwner'));
     }
+
 
     public function success()
     {
