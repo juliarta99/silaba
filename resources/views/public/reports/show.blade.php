@@ -68,7 +68,7 @@ $needsRating       = $isOwner && $report->status === 'completed' && !$report->re
       integrity="sha256-p4NxAoJBhIIN+hmNHrzRCf9tD/miZyoHS5obTRR9BMY=" crossorigin=""/>
 @endif
 
-<div class="bg-gray-50 min-h-[calc(100vh-68px)] pb-16">
+<div class="bg-gray-10 min-h-[calc(100vh-68px)] py-16">
     <div class="max-w-6xl mx-auto px-4 sm:px-6 pt-6">
 
         {{-- ════ BACK + HEADER ════ --}}
@@ -122,7 +122,7 @@ $needsRating       = $isOwner && $report->status === 'completed' && !$report->re
                         @csrf
                         <button type="submit"
                                 class="px-4 py-2.5 rounded-xl border border-gray-200 text-gray-700
-                                       text-sm font-semibold hover:bg-gray-50 transition-colors">
+                                       text-sm font-semibold hover:bg-gray-10 transition-colors">
                             Belum Selesai
                         </button>
                     </form>
