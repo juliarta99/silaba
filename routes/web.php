@@ -41,7 +41,6 @@ use App\Http\Controllers\Admin\DepartmentController    as AdminDepartment;
 use App\Http\Controllers\Admin\RewardController        as AdminReward;
 use App\Http\Controllers\Admin\NotificationController;
 use App\Http\Controllers\Admin\CategoryOpdController;
-
 // Regent (Camat / Bupati / Sekda)
 use App\Http\Controllers\Regent\DashboardController    as RegentDashboard;
 use App\Http\Controllers\Regent\ProfileController      as RegentProfile;
@@ -87,16 +86,22 @@ Route::middleware(['auth', 'role:citizen'])
     ->group(function () {
 
     Route::get('/dashboard',                    [CitizenDashboard::class,    'index'])->name('dashboard');
-    Route::get('/profil',                       [CitizenProfile::class,      'index'])->name('profile');
-    Route::get('/profil/edit',                  [CitizenProfile::class,      'edit'])->name('profile.edit');
-    Route::put('/profil',                       [CitizenProfile::class,      'update'])->name('profile.update');
+    Route::get('/profil',            [CitizenProfile::class, 'index'])->name('profile');
+    Route::patch('/profil',          [CitizenProfile::class, 'update'])->name('profile.update');
+    Route::patch('/profil/foto',     [CitizenProfile::class, 'updatePhoto'])->name('profile.photo');
+    Route::patch('/profil/password', [CitizenProfile::class, 'updatePassword'])->name('profile.password');
+
 
     // Laporan Saya
-    Route::get('/laporan',                      [CitizenReport::class,       'index'])->name('reports.index');
-    Route::get('/laporan/{report}',             [CitizenReport::class,       'show'])->name('reports.show');
-    Route::get('/laporan/{report}/rating',      [CitizenReport::class,       'rating'])->name('reports.rating');
-    Route::post('/laporan/{report}/rating',     [CitizenReport::class,       'storeRating'])->name('reports.rating.store');
-    Route::get('/laporan/{report}/rating/ok',   [CitizenReport::class,       'ratingSuccess'])->name('reports.rating.success');
+    Route::get('/laporan',                           [CitizenReport::class, 'index'])->name('reports.index');
+    Route::get('/laporan/{code}',                    [CitizenReport::class, 'show'])->name('reports.show');
+    Route::post('/laporan/{code}/konfirmasi',        [CitizenReport::class, 'confirm'])->name('reports.confirm');
+    Route::post('/laporan/{code}/belum-selesai',     [CitizenReport::class, 'rejectCompletion'])->name('reports.reject-completion');
+    Route::post('/laporan/{code}/dispute',           [CitizenReport::class, 'disputeDuplicate'])->name('reports.dispute');
+    Route::get('/laporan/{code}/rating',             [CitizenReport::class, 'rateForm'])->name('reports.rate');
+    Route::post('/laporan/{code}/rating',            [CitizenReport::class, 'storeRating'])->name('reports.rate.store');
+    Route::get('/laporan/{code}/rating/berhasil',    [CitizenReport::class, 'rateSuccess'])->name('reports.rate.success');
+
 
     // Reward & Klaim
     Route::get('/reward',                       [CitizenRewardClaim::class,  'index'])->name('reward-claims.index');

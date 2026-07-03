@@ -9,6 +9,15 @@
     <div class="max-w-5xl mx-auto px-5 sm:px-6 pt-24 pb-8
                 flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
         <div>
+            <a href="{{ route('citizen.dashboard') }}"
+               class="inline-flex items-center gap-1.5 text-sm text-gray-500
+                      hover:text-gray-800 mb-4 transition-colors">
+                <svg class="w-4 h-4" fill="none" viewBox="0 0 16 16" aria-hidden="true">
+                    <path d="M10 3L5 8l5 5" stroke="currentColor" stroke-width="1.5"
+                          stroke-linecap="round" stroke-linejoin="round"/>
+                </svg>
+                Kembali
+            </a>
             <h1 class="text-2xl sm:text-3xl font-bold text-gray-900">Laporan Saya</h1>
             <p class="text-sm text-gray-500 mt-1.5">Kelola dan lacak semua laporan Anda</p>
         </div>
@@ -24,18 +33,18 @@
 </section>
 
 {{-- ── Filter Bar ── --}}
-<section class="bg-gray-50">
+<section class="bg-gray-10">
     <div class="max-w-5xl mx-auto px-5 sm:px-6 pt-6">
         <form method="GET" action="{{ route('citizen.reports.index') }}"
-              class="bg-white rounded-2xl border border-gray-100 shadow-sm p-5 sm:p-6">
+            class="bg-white rounded-2xl border border-gray-100 shadow-sm p-5 sm:p-6">
             <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 items-end">
 
                 <div>
                     <label for="status" class="block text-xs font-semibold text-gray-700 mb-2">Filter Status</label>
-                    <select id="status" name="status"
-                            class="w-full px-3 py-2.5 rounded-lg border border-gray-200 bg-gray-50 text-sm
-                                   text-gray-900 focus:bg-white focus:ring-2 focus:ring-primary-500
-                                   focus:border-primary-500 outline-none transition-all">
+                    <select id="status" name="status" onchange="this.form.submit()"
+                            class="w-full px-3 py-2.5 rounded-lg border border-gray-200 bg-gray-10 text-sm
+                                text-gray-900 focus:bg-white focus:ring-2 focus:ring-primary-500
+                                focus:border-primary-500 outline-none transition-all">
                         <option value="">Semua Status</option>
                         <option value="pending"               {{ request('status') === 'pending' ? 'selected' : '' }}>Baru</option>
                         <option value="in_progress"           {{ request('status') === 'in_progress' ? 'selected' : '' }}>Diproses</option>
@@ -48,10 +57,10 @@
 
                 <div>
                     <label for="period" class="block text-xs font-semibold text-gray-700 mb-2">Periode</label>
-                    <select id="period" name="period"
-                            class="w-full px-3 py-2.5 rounded-lg border border-gray-200 bg-gray-50 text-sm
-                                   text-gray-900 focus:bg-white focus:ring-2 focus:ring-primary-500
-                                   focus:border-primary-500 outline-none transition-all">
+                    <select id="period" name="period" onchange="this.form.submit()"
+                            class="w-full px-3 py-2.5 rounded-lg border border-gray-200 bg-gray-10 text-sm
+                                text-gray-900 focus:bg-white focus:ring-2 focus:ring-primary-500
+                                focus:border-primary-500 outline-none transition-all">
                         <option value="">Semua Waktu</option>
                         <option value="7"  {{ request('period') === '7' ? 'selected' : '' }}>7 Hari Terakhir</option>
                         <option value="30" {{ request('period') === '30' ? 'selected' : '' }}>30 Hari Terakhir</option>
@@ -61,9 +70,9 @@
 
                 <div>
                     <a href="{{ route('citizen.reports.index') }}"
-                       class="flex items-center justify-center gap-2 w-full px-4 py-2.5 rounded-lg
-                              border border-gray-200 text-gray-700 text-sm font-semibold
-                              hover:bg-gray-50 transition-colors">
+                    class="flex items-center justify-center gap-2 w-full px-4 py-2.5 rounded-lg
+                            border border-gray-200 text-gray-700 text-sm font-semibold
+                            hover:bg-gray-10 transition-colors">
                         <svg class="w-4 h-4" fill="none" viewBox="0 0 16 16" aria-hidden="true">
                             <path d="M13 8H3m0 0l4-4M3 8l4 4" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
                         </svg>
@@ -86,9 +95,8 @@
 </section>
 
 {{-- ── List Laporan ── --}}
-<section class="bg-gray-50 pb-16">
+<section class="bg-gray-10 pb-16">
     <div class="max-w-5xl mx-auto px-5 sm:px-6 pt-6">
-
         @if ($reports->count() > 0)
         <div class="flex flex-col gap-5">
             @foreach ($reports as $report)
@@ -222,7 +230,7 @@
                     </div>
 
                     {{-- Actions --}}
-                    <div class="flex flex-col gap-2.5 w-full sm:w-44 shrink-0">
+                    <div class="flex flex-col gap-2.5 w-full sm:w-50 shrink-0">
 
                         <a href="{{ route('citizen.reports.show', $report->code) }}"
                            class="flex items-center justify-center px-4 py-2.5 rounded-lg bg-primary-500
@@ -231,19 +239,110 @@
                         </a>
 
                         @if ($needsVerification)
-                        <a href="{{ route('citizen.reports.confirm', $report->code) }}"
-                           class="flex items-center justify-center gap-1.5 px-4 py-2.5 rounded-lg bg-success
-                                  hover:opacity-90 text-white text-sm font-semibold transition-opacity">
-                            <svg class="w-4 h-4" fill="none" viewBox="0 0 16 16" aria-hidden="true">
-                                <path d="M3 8l3.5 3.5L13 5" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
-                            </svg>
-                            Konfirmasi Selesai
-                        </a>
-                        <a href="{{ route('citizen.reports.reject-completion', $report->code) }}"
-                           class="flex items-center justify-center px-4 py-2.5 rounded-lg border border-gray-200
-                                  text-gray-700 text-sm font-semibold hover:bg-gray-50 transition-colors">
-                            Laporkan Belum Selesai
-                        </a>
+                            <div x-data="{ openConfirm: false, openReject: false }" class="flex flex-col gap-2.5 w-full">
+                                
+                                {{-- ── Tombol Trigger ── --}}
+                                <button type="button" 
+                                        x-on:click="openConfirm = true"
+                                        class="flex items-center justify-center gap-1.5 px-4 py-2.5 w-full rounded-lg bg-success hover:opacity-90 text-white text-sm font-semibold transition-opacity">
+                                    <svg class="w-4 h-4" fill="none" viewBox="0 0 16 16" aria-hidden="true">
+                                        <path d="M3 8l3.5 3.5L13 5" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                                    </svg>
+                                    Konfirmasi Selesai
+                                </button>
+                                
+                                <button type="button" 
+                                        x-on:click="openReject = true"
+                                        class="flex items-center justify-center px-4 py-2.5 w-full rounded-lg border border-gray-200 text-gray-700 text-sm font-semibold hover:bg-gray-10 transition-colors">
+                                    Laporkan Belum Selesai
+                                </button>
+
+                                {{-- ── Modal Konfirmasi Selesai ── --}}
+                                <template x-teleport="body">
+                                    <div x-show="openConfirm" 
+                                        style="display: none;"
+                                        class="fixed inset-0 z-50 flex items-center justify-center p-4 bg-gray-900/50 backdrop-blur-sm"
+                                        x-transition:enter="transition ease-out duration-300"
+                                        x-transition:enter-start="opacity-0"
+                                        x-transition:enter-end="opacity-100"
+                                        x-transition:leave="transition ease-in duration-200"
+                                        x-transition:leave-start="opacity-100"
+                                        x-transition:leave-end="opacity-0">
+                                        
+                                        <div x-show="openConfirm"
+                                            x-on:click.away="openConfirm = false"
+                                            class="bg-white rounded-2xl shadow-xl w-full max-w-sm p-6"
+                                            x-transition:enter="transition ease-out duration-300"
+                                            x-transition:enter-start="opacity-0 translate-y-4 sm:translate-y-0 sm:scale-95"
+                                            x-transition:enter-end="opacity-100 translate-y-0 sm:scale-100"
+                                            x-transition:leave="transition ease-in duration-200"
+                                            x-transition:leave-start="opacity-100 translate-y-0 sm:scale-100"
+                                            x-transition:leave-end="opacity-0 translate-y-4 sm:translate-y-0 sm:scale-95">
+                                            
+                                            <h3 class="text-lg font-bold text-gray-900 mb-2">Konfirmasi Selesai</h3>
+                                            <p class="text-sm text-gray-500 mb-6">Apakah Anda yakin masalah pada laporan ini sudah benar-benar diselesaikan oleh petugas?</p>
+                                            
+                                            <div class="flex flex-col-reverse sm:flex-row justify-end gap-3">
+                                                <button type="button" x-on:click="openConfirm = false" 
+                                                        class="px-4 py-2.5 text-sm font-semibold text-gray-700 bg-gray-100 hover:bg-gray-200 rounded-lg transition-colors w-full sm:w-auto">
+                                                    Batal
+                                                </button>
+                                                {{-- Form Submit Standar --}}
+                                                <form method="POST" action="{{ route('citizen.reports.confirm', $report->code) }}" class="w-full sm:w-auto">
+                                                    @csrf
+                                                    <button type="submit" 
+                                                            class="px-4 py-2.5 text-sm font-semibold text-white bg-success hover:opacity-90 rounded-lg transition-opacity w-full">
+                                                        Ya, Sudah Selesai
+                                                    </button>
+                                                </form>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </template>
+
+                                {{-- ── Modal Laporkan Belum Selesai ── --}}
+                                <template x-teleport="body">
+                                    <div x-show="openReject" 
+                                        style="display: none;"
+                                        class="fixed inset-0 z-50 flex items-center justify-center p-4 bg-gray-900/50 backdrop-blur-sm"
+                                        x-transition:enter="transition ease-out duration-300"
+                                        x-transition:enter-start="opacity-0"
+                                        x-transition:enter-end="opacity-100"
+                                        x-transition:leave="transition ease-in duration-200"
+                                        x-transition:leave-start="opacity-100"
+                                        x-transition:leave-end="opacity-0">
+                                        
+                                        <div x-show="openReject"
+                                            x-on:click.away="openReject = false"
+                                            class="bg-white rounded-2xl shadow-xl w-full max-w-sm p-6"
+                                            x-transition:enter="transition ease-out duration-300"
+                                            x-transition:enter-start="opacity-0 translate-y-4 sm:translate-y-0 sm:scale-95"
+                                            x-transition:enter-end="opacity-100 translate-y-0 sm:scale-100"
+                                            x-transition:leave="transition ease-in duration-200"
+                                            x-transition:leave-start="opacity-100 translate-y-0 sm:scale-100"
+                                            x-transition:leave-end="opacity-0 translate-y-4 sm:translate-y-0 sm:scale-95">
+                                            
+                                            <h3 class="text-lg font-bold text-gray-900 mb-2">Masalah Belum Selesai?</h3>
+                                            <p class="text-sm text-gray-500 mb-6">Apakah Anda yakin ingin melaporkan bahwa masalah ini belum selesai? Laporan akan dikembalikan untuk ditinjau oleh petugas.</p>
+                                            
+                                            <div class="flex flex-col-reverse sm:flex-row justify-end gap-3">
+                                                <button type="button" x-on:click="openReject = false" 
+                                                        class="px-4 py-2.5 text-sm font-semibold text-gray-700 bg-gray-100 hover:bg-gray-200 rounded-lg transition-colors w-full sm:w-auto">
+                                                    Batal
+                                                </button>
+                                                {{-- Form Submit Standar --}}
+                                                <form method="POST" action="{{ route('citizen.reports.reject-completion', $report->code) }}" class="w-full sm:w-auto">
+                                                    @csrf
+                                                    <button type="submit" 
+                                                            class="px-4 py-2.5 text-sm font-semibold text-white bg-error hover:opacity-90 rounded-lg transition-opacity w-full">
+                                                        Ya, Belum Selesai
+                                                    </button>
+                                                </form>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </template>
+                            </div>
                         @endif
 
                         @if ($needsRating)

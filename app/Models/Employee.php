@@ -16,20 +16,21 @@ class Employee extends Model
         'status', 'position', 'department_id',
     ];
 
+    public function assignments(): HasMany
+    {
+        return $this->hasMany(Assignment::class);
+    }
+    
     public function user(): BelongsTo
     {
         return $this->belongsTo(User::class);
     }
-
+    
     public function department(): BelongsTo
     {
         return $this->belongsTo(Department::class);
     }
 
-    public function assignments(): HasMany
-    {
-        return $this->hasMany(Assignment::class);
-    }
 
     public function progresses(): HasMany
     {
