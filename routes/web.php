@@ -139,6 +139,7 @@ Route::middleware(['auth', 'role:employee', 'employee.position:field_officer'])
     ->group(function () {
 
     Route::get('/dashboard',           [FODashboard::class, 'index'])->name('dashboard');
+    Route::get('/dashboard/aktivitas', [FODashboard::class, 'activities'])->name('activities');
     Route::get('/tugas', [FOAssignment::class, 'index'])->name('assignments.index');
     Route::get('/tugas/{code}', [FOAssignment::class, 'show'])->name('assignments.show');
     Route::get('/tugas/{code}/progress/buat', [FOAssignment::class, 'createProgress'])->name('assignments.progress.create');

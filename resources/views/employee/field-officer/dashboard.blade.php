@@ -24,7 +24,7 @@ $priorityConfig = [
     </div>
 </div>
 
-<div class="bg-gray-50 min-h-[calc(100vh-68px)] pt-12 pb-24 sm:pb-16">
+<div class="bg-gray-10 min-h-[calc(100vh-68px)] pt-12 pb-24 sm:pb-16">
     <div class="max-w-5xl mx-auto px-4 sm:px-6">
 
         {{-- Tips --}}
@@ -46,7 +46,7 @@ $priorityConfig = [
             {{-- Total Tugas --}}
             <div class="bg-white rounded-2xl border border-gray-100 shadow-sm p-4 sm:p-5">
                 <div class="flex items-center justify-between mb-3">
-                    <div class="w-9 h-9 rounded-xl bg-gray-50 border border-gray-100
+                    <div class="w-9 h-9 rounded-xl bg-gray-10 border border-gray-100
                                 flex items-center justify-center shrink-0">
                         <svg class="w-5 h-5 text-gray-500" fill="none" viewBox="0 0 24 24">
                             <path d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2"
@@ -89,7 +89,7 @@ $priorityConfig = [
 
             {{-- Terlambat --}}
             <div class="bg-white rounded-2xl border {{ $terlambat > 0 ? 'border-red-100' : 'border-gray-100' }} shadow-sm p-4 sm:p-5">
-                <div class="w-9 h-9 rounded-xl {{ $terlambat > 0 ? 'bg-red-50 border-red-100' : 'bg-gray-50 border-gray-100' }}
+                <div class="w-9 h-9 rounded-xl {{ $terlambat > 0 ? 'bg-red-50 border-red-100' : 'bg-gray-10 border-gray-100' }}
                             border flex items-center justify-center mb-3">
                     <svg class="w-5 h-5 {{ $terlambat > 0 ? 'text-error' : 'text-gray-300' }}"
                          fill="none" viewBox="0 0 24 24">
@@ -201,7 +201,7 @@ $priorityConfig = [
 
                         <a href="{{ route('employee.field-officer.assignments.show', $report->code) }}"
                            class="flex items-start gap-3 sm:gap-4 py-4
-                                  hover:bg-gray-50 -mx-5 px-5 transition-colors">
+                                  hover:bg-gray-10 -mx-5 px-5 transition-colors">
 
                             {{-- Foto --}}
                             <div class="w-16 h-16 rounded-xl overflow-hidden bg-gray-100 shrink-0">
@@ -354,11 +354,11 @@ $priorityConfig = [
                         </div>
                         @endforeach
                     </div>
-                    <a href=""
-                    class="mt-6 block text-center text-sm font-semibold text-primary-500
-                            hover:text-primary-700 transition-colors">
-                        Lihat Semua Aktivitas
-                    </a>
+                        <a href="{{ route('employee.field-officer.activities') }}"
+                            class="mt-6 block text-center text-sm font-semibold text-primary-500
+                                hover:text-primary-700 transition-colors">
+                            Lihat Semua Aktivitas
+                        </a>
                     @else
                     <p class="text-sm text-gray-400 text-center py-4">Belum ada aktivitas</p>
                     @endif

@@ -6,6 +6,7 @@ use App\Http\Controllers\Controller;
 use App\Models\Assignment;
 use App\Models\ReportProgress;
 use Carbon\Carbon;
+use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 
 class DashboardController extends Controller
@@ -64,7 +65,7 @@ class DashboardController extends Controller
         $recentActivities = ReportProgress::where('employee_id', $empId)
             ->with(['report:id,code,title'])
             ->latest()
-            ->limit(5)
+            ->limit(3)
             ->get();
 
         // ── Tips ─────────────────────────────────────────────────────────
@@ -79,5 +80,39 @@ class DashboardController extends Controller
             'totalTugas', 'sedangDikerjakan', 'selesai', 'terlambat',
             'activeAssignments', 'recentActivities', 'tips'
         ));
+    }
+
+    public function activities(Request $request)
+    {
+        $user     = Auth::user();
+        $employee = $user->employee;
+
+        abort_if(! $employee, 403, 'Akun tidak terhubung ke data petugas.');
+
+        $query = ReportProgress::where('employee_id', $employee->id)
+            ->with(['report:id,code,title,status']);
+
+        // Filter Pencarian (Cari di judul progress, deskripsi, atau kode & judul laporan)
+        if ($request->filled('search')) {
+            $search = $request->search;
+            $query->where(function ($q) use ($search) {
+                $q->where('title', 'like', "%{$search}%")
+                  ->orWhere('description', 'like', "%{$search}%")
+                  ->orWhereHas('report', function ($qr) use ($search) {
+                      $qr->where('code', 'like', "%{$search}%")
+                         ->orWhere('title', 'like', "%{$search}%");
+                  });
+            });
+        }
+
+        // Filter Status Progress
+        if ($request->filled('status')) {
+            $query->where('status', $request->status);
+        }
+
+        // Ambil data dengan Pagination
+        $activities = $query->latest()->paginate(10)->withQueryString();
+
+        return view('employee.field-officer.activities', compact('user', 'employee', 'activities'));
     }
 }
