@@ -164,7 +164,7 @@
                 <x-navbar-link :href="route('employee.supervisor.dashboard')"  :active="request()->routeIs('employee.supervisor.dashboard')">Dashboard</x-navbar-link>
                 <x-navbar-link :href="route('employee.supervisor.reports.index')"  :active="request()->routeIs('employee.supervisor.reports.*') && !request()->routeIs('employee.supervisor.reports.map')">Daftar Laporan</x-navbar-link>
                 <x-navbar-link :href="route('employee.supervisor.assignments.index')" :active="request()->routeIs('employee.supervisor.assignments.*')">Penugasan Petugas</x-navbar-link>
-                {{-- <x-navbar-link :href="route('employee.supervisor.departments.index')" :active="request()->routeIs('employee.supervisor.departments.*')">Kelola Instansi</x-navbar-link> --}}
+                <x-navbar-link :href="route('employee.shared.departments.index')" :active="request()->routeIs('employee.shared.departments.*')">Kelola Instansi</x-navbar-link>
                 <x-navbar-link :href="route('employee.supervisor.reports.map')"    :active="request()->routeIs('employee.supervisor.reports.map')">Peta Sebaran</x-navbar-link>
                 <x-navbar-primary-btn :href="route('employee.supervisor.reviews.index')" class="ml-1">Performa</x-navbar-primary-btn>
             @endif
@@ -369,9 +369,9 @@
             <x-navbar-mobile-link :href="route('employee.supervisor.dashboard')">Dashboard</x-navbar-mobile-link>
             <x-navbar-mobile-link :href="route('employee.supervisor.reports.index')">Daftar Laporan</x-navbar-mobile-link>
             <x-navbar-mobile-link :href="route('employee.supervisor.assignments.index')">Penugasan Petugas</x-navbar-mobile-link>
-            {{-- <x-navbar-mobile-link :href="route('employee.supervisor.departments.index')">Kelola Instansi</x-navbar-mobile-link> --}}
+            <x-navbar-mobile-link :href="route('employee.shared.departments.index')">Kelola Instansi</x-navbar-mobile-link>
             <x-navbar-mobile-link :href="route('employee.supervisor.reports.map')">Peta Sebaran</x-navbar-mobile-link>
-            {{-- <x-navbar-mobile-btn  :href="route('employee.supervisor.reviews.index')">Performa</x-navbar-mobile-btn> --}}
+            <x-navbar-mobile-btn  :href="route('employee.supervisor.reviews.index')">Performa</x-navbar-mobile-btn>
         @endif
         @if ($isHoD)
             <x-navbar-mobile-link :href="route('employee.head.dashboard')">Dashboard</x-navbar-mobile-link>

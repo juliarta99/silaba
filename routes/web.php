@@ -227,7 +227,7 @@ Route::middleware(['auth', 'role:employee', 'employee.position:head_of_departmen
 | Prefix: /dinas  (netral, bukan milik salah satu)
 |=============================================================================
 */
-Route::middleware(['auth', 'role:employee', 'employee.position:supervisor|head_of_department'])
+Route::middleware(['auth', 'role:employee', 'employee.position:supervisor,head_of_department'])
     ->prefix('dinas')
     ->name('employee.shared.')
     ->group(function () {
@@ -238,6 +238,9 @@ Route::middleware(['auth', 'role:employee', 'employee.position:supervisor|head_o
     Route::post('/instansi',            [SupDepartment::class,  'store'])->name('departments.store');
     Route::put('/instansi/{department}',[SupDepartment::class,  'update'])->name('departments.update');
     Route::delete('/instansi/{department}',[SupDepartment::class,'destroy'])->name('departments.destroy');
+    Route::post('/pegawai', [SupDepartment::class, 'storeEmployee'])->name('employees.store');
+    Route::put('/pegawai/{employee}', [SupDepartment::class, 'updateEmployee'])->name('employees.update');
+    Route::delete('/pegawai/{employee}', [SupDepartment::class, 'destroyEmployee'])->name('employees.destroy');
 });
 
 /*
