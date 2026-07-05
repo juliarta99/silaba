@@ -31,7 +31,6 @@ class Employee extends Model
         return $this->belongsTo(Department::class);
     }
 
-
     public function progresses(): HasMany
     {
         return $this->hasMany(ReportProgress::class);

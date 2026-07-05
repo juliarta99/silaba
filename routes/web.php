@@ -128,17 +128,11 @@ Route::middleware(['auth', 'role:employee', 'employee.position:field_officer'])
     ->name('employee.field-officer.')
     ->group(function () {
 
-    Route::get('/dashboard',                        [FODashboard::class,  'index'])->name('dashboard');
-    Route::get('/profil',                           [FOProfile::class,    'index'])->name('profile');
-
-    // Daftar Tugas Saya → Assignment milik field officer ini
-    Route::get('/tugas',                            [FOAssignment::class, 'index'])->name('assignments.index');
-    Route::get('/tugas/{assignment}',               [FOAssignment::class, 'show'])->name('assignments.show');
-
-    // Update Progress / Add Progress
-    Route::get('/tugas/{assignment}/progress',      [FOAssignment::class, 'updateProgress'])->name('assignments.progress');
-    Route::post('/tugas/{assignment}/progress',     [FOAssignment::class, 'storeProgress'])->name('assignments.progress.store');
-    Route::put('/tugas/{assignment}',               [FOAssignment::class, 'update'])->name('assignments.update');
+    Route::get('/dashboard',           [FODashboard::class, 'index'])->name('dashboard');
+    Route::get('/profil',              [FOProfile::class, 'index'])->name('profile');
+    Route::get('/tugas',               [FOAssignment::class, 'index'])->name('assignments.index');
+    Route::get('/tugas/{code}',        [FOAssignment::class, 'show'])->name('assignments.show');
+    Route::post('/tugas/{code}/progress', [FOAssignment::class, 'storeProgress'])->name('assignments.progress');
 });
 
 /*
