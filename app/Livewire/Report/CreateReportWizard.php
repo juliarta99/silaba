@@ -131,7 +131,7 @@ class CreateReportWizard extends Component
             } while (Report::where('code', $code)->exists());
 
             // User ID: auth user atau null (tamu)
-            $userId = Auth::id() ?? null;
+            $userId = Auth::user()->id ?? null;
 
             $report = Report::create([
                 'user_id'     => $userId,

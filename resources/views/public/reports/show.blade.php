@@ -602,8 +602,8 @@ $needsRating       = $isOwner && $report->status === 'completed' && !$report->re
                             el.dataset.mapReady = '1';
 
                             var map = L.map(el, {
-                                zoomControl:        false,
-                                dragging:           false,
+                                zoomControl:        true,
+                                dragging:           true,
                                 scrollWheelZoom:    false,
                                 doubleClickZoom:    false,
                                 touchZoom:          false,
@@ -661,20 +661,30 @@ $needsRating       = $isOwner && $report->status === 'completed' && !$report->re
 
                 {{-- OPD Berwenang --}}
                 @if ($department)
-                <div class="bg-white rounded-2xl border border-gray-100 shadow-sm p-5">
-                    <h3 class="text-sm font-bold text-gray-900 mb-3">OPD Berwenang</h3>
-                    <div class="flex items-center gap-2.5">
-                        <div class="w-9 h-9 rounded-full bg-primary-50 flex items-center
-                                    justify-center shrink-0">
-                            <svg class="w-4 h-4 text-primary-500" fill="none" viewBox="0 0 16 16"
-                                 aria-hidden="true">
-                                <path d="M2 14V6a1 1 0 011-1h10a1 1 0 011 1v8M1 14h14M6 13V9h4v4"
-                                      stroke="currentColor" stroke-width="1.3"
-                                      stroke-linecap="round" stroke-linejoin="round"/>
-                            </svg>
+                <div class="bg-white rounded-2xl border border-gray-100 shadow-sm p-5 flex flex-col justify-between gap-4">
+                    <div>
+                        <h3 class="text-sm font-bold text-gray-900 mb-3">OPD Berwenang</h3>
+                        <div class="flex items-center gap-2.5">
+                            <div class="w-9 h-9 rounded-full bg-primary-50 flex items-center justify-center shrink-0">
+                                <svg class="w-4 h-4 text-primary-500" fill="none" viewBox="0 0 16 16" aria-hidden="true">
+                                    <path d="M2 14V6a1 1 0 011-1h10a1 1 0 011 1v8M1 14h14M6 13V9h4v4" stroke="currentColor" stroke-width="1.3" stroke-linecap="round" stroke-linejoin="round"/>
+                                </svg>
+                            </div>
+                            <div>
+                                <p class="text-sm font-semibold text-gray-800">{{ $department->name }}</p>
+                                <p class="text-xs text-gray-500">{{ $department->phone ?? 'Belum ada kontak' }}</p>
+                            </div>
                         </div>
-                        <p class="text-sm font-semibold text-gray-800">{{ $department->name }}</p>
                     </div>
+                    
+                    {{-- Tombol Lihat Detail --}}
+                    <a href="{{ route('departments.show', $department->id) }}" 
+                    class="inline-flex items-center justify-center px-4 py-2 text-sm font-medium text-primary-600 bg-primary-50 rounded-lg hover:bg-primary-100 transition-colors shrink-0">
+                        Lihat Detail OPD
+                        <svg class="w-4 h-4 ml-1.5" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                            <path stroke-linecap="round" stroke-linejoin="round" d="M9 5l7 7-7 7" />
+                        </svg>
+                    </a>
                 </div>
                 @endif
 

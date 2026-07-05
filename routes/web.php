@@ -41,6 +41,8 @@ use App\Http\Controllers\Admin\DepartmentController    as AdminDepartment;
 use App\Http\Controllers\Admin\RewardController        as AdminReward;
 use App\Http\Controllers\Admin\NotificationController;
 use App\Http\Controllers\Admin\CategoryOpdController;
+use App\Http\Controllers\Citizen\NotificationController as CitizenNotificationController;
+use App\Http\Controllers\DepartmentController;
 // Regent (Camat / Bupati / Sekda)
 use App\Http\Controllers\Regent\DashboardController    as RegentDashboard;
 use App\Http\Controllers\Regent\ProfileController      as RegentProfile;
@@ -58,6 +60,7 @@ Route::get('/laporan',             [ReportController::class, 'index'])->name('re
 Route::get('/laporan/buat',     fn() => view('public.reports.create'))->name('reports.create');
 Route::get('/laporan/berhasil', [ReportController::class, 'success'])->name('reports.success');
 Route::get('/laporan/{code}',   [ReportController::class, 'show'])->name('reports.show');
+Route::get('/departments/{department}', [DepartmentController::class, 'show'])->name('departments.show');
 
 /*
 |=============================================================================
@@ -104,11 +107,14 @@ Route::middleware(['auth', 'role:citizen'])
 
 
     // Reward & Klaim
-    Route::get('/reward',                       [CitizenRewardClaim::class,  'index'])->name('reward-claims.index');
-    Route::get('/reward/riwayat',               [CitizenRewardClaim::class,  'history'])->name('reward-claims.history');
-    Route::get('/reward/berhasil',              [CitizenRewardClaim::class,  'success'])->name('reward-claims.success');
-    Route::get('/reward/{reward}',              [CitizenRewardClaim::class,  'show'])->name('reward-claims.show');
-    Route::post('/reward/{reward}/klaim',       [CitizenRewardClaim::class,  'store'])->name('reward-claims.store');
+    Route::get('/reward', [CitizenRewardClaim::class, 'index'])->name('reward-claims.index');
+    Route::post('/reward/{reward}', [CitizenRewardClaim::class, 'store'])->name('reward-claims.store');
+    Route::get('/reward/riwayat', [CitizenRewardClaim::class, 'history'])->name('reward-claims.history');
+    Route::get('/reward/klaim/{rewardClaim}/berhasil', [CitizenRewardClaim::class, 'success'])->name('reward-claims.success');
+    Route::get('/reward/klaim/{rewardClaim}', [CitizenRewardClaim::class, 'show'])->name('reward-claims.show');
+
+    // Notification
+    Route::get('/notifikasi', [CitizenNotificationController::class, 'index'])->name('notifications.index');
 });
 
 /*

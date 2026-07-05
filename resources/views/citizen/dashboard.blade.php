@@ -242,7 +242,7 @@ $sisaPoin    = max(0, $nextRewardThreshold - $poinReward);
                         <div class="py-4 first:pt-0 last:pb-0">
                             <div class="flex gap-3">
                                 {{-- Foto --}}
-                                <a href="{{ route('reports.show', $laporan->code) }}"
+                                <a href="{{ route('citizen.reports.show', $laporan->code) }}"
                                    class="w-16 h-16 rounded-xl overflow-hidden bg-gray-100 shrink-0 block">
                                     @if ($cover)
                                     <img src="{{ Storage::url($cover->file_path) }}"
@@ -276,7 +276,7 @@ $sisaPoin    = max(0, $nextRewardThreshold - $poinReward);
                                             {{ $laporan->created_at->translatedFormat('j M Y') }}
                                         </span>
                                     </div>
-                                    <a href="{{ route('reports.show', $laporan->code) }}"
+                                    <a href="{{ route('citizen.reports.show', $laporan->code) }}"
                                        class="text-sm font-semibold text-gray-900 hover:text-primary-500
                                               transition-colors leading-snug block mb-1.5">
                                         {{ $laporan->title }}
@@ -348,7 +348,7 @@ $sisaPoin    = max(0, $nextRewardThreshold - $poinReward);
                     @if ($notifications->count() > 0)
                     <div class="flex flex-col gap-2">
                         @foreach ($notifications as $notif)
-                        <div class="px-3.5 py-3 rounded-xl bg-blue-50 border border-blue-50">
+                        <a href="{{ route('citizen.reports.show', $notif->report->code) }}" class="px-3.5 py-3 rounded-xl bg-blue-50 border border-blue-50">
                             {{-- Nomor tiket laporan --}}
                             @if ($notif->report)
                             <p class="text-xs font-semibold text-primary-500 mb-0.5">
@@ -363,11 +363,11 @@ $sisaPoin    = max(0, $nextRewardThreshold - $poinReward);
                             <p class="text-xs text-gray-400">
                                 {{ $notif->sent_at?->diffForHumans() ?? $notif->created_at->diffForHumans() }}
                             </p>
-                        </div>
+                        </a>
                         @endforeach
                     </div>
                 
-                    <a href="{{ route('citizen.reports.index') }}"
+                    <a href="{{ route('citizen.notifications.index') }}"
                     class="mt-3 block text-center text-sm font-semibold text-primary-500
                             hover:text-primary-700 transition-colors">
                         Lihat Semua Notifikasi
@@ -426,8 +426,7 @@ $sisaPoin    = max(0, $nextRewardThreshold - $poinReward);
                     @endif
 
                     <a href="{{ route('citizen.reward-claims.index') }}"
-                       class="block w-full py-2.5 rounded-xl bg-white hover:bg-primary-50
-                              text-primary-600 text-sm font-bold text-center transition-colors">
+                       class="block w-full py-2.5 rounded-xl bg-white hover:bg-primary-50 text-primary-500 text-sm font-bold text-center transition-colors">
                         Klaim Reward
                     </a>
                 </div>
