@@ -15,9 +15,9 @@
     $isLoggedIn     = ! $isGuest;
 
     $profileRoute = match(true) {
-        $isFieldOfficer => route('employee.field-officer.profile'),
-        $isSupervisor   => route('employee.supervisor.profile'),
-        $isHoD          => route('employee.head.profile'),
+        $isFieldOfficer => route('employee.profile'),
+        $isSupervisor   => route('employee.profile'),
+        $isHoD          => route('employee.profile'),
         $isRegent       => route('regent.profile'),
         default         => null,
     };

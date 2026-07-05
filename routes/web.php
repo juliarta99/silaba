@@ -16,7 +16,6 @@ use App\Http\Controllers\Citizen\RewardClaimController       as CitizenRewardCla
 // Employee — Field Officer (field_officer)
 use App\Http\Controllers\Employee\FieldOfficer\DashboardController    as FODashboard;
 use App\Http\Controllers\Employee\FieldOfficer\AssignmentController   as FOAssignment;
-use App\Http\Controllers\Employee\FieldOfficer\ProfileController      as FOProfile;
 
 // Employee — Supervisor (supervisor) + Head of Department (head_of_department)
 // Supervisor & Kepala Dinas berbagi controller yang sama — dibedakan scope datanya
@@ -43,6 +42,7 @@ use App\Http\Controllers\Admin\NotificationController;
 use App\Http\Controllers\Admin\CategoryOpdController;
 use App\Http\Controllers\Citizen\NotificationController as CitizenNotificationController;
 use App\Http\Controllers\DepartmentController;
+use App\Http\Controllers\Employee\ProfileController;
 // Regent (Camat / Bupati / Sekda)
 use App\Http\Controllers\Regent\DashboardController    as RegentDashboard;
 use App\Http\Controllers\Regent\ProfileController      as RegentProfile;
@@ -117,6 +117,16 @@ Route::middleware(['auth', 'role:citizen'])
     Route::get('/notifikasi', [CitizenNotificationController::class, 'index'])->name('notifications.index');
 });
 
+Route::middleware(['auth', 'role:employee'])
+    ->prefix('petugas')
+    ->name('employee.')
+    ->group(function () {
+    
+    Route::get('/profil',            [ProfileController::class, 'index'])->name('profile');
+    Route::patch('/profil',          [ProfileController::class, 'update'])->name('profile.update');
+    Route::patch('/profil/foto',     [ProfileController::class, 'updatePhoto'])->name('profile.photo');
+    Route::patch('/profil/password', [ProfileController::class, 'updatePassword'])->name('profile.password');
+});
 /*
 |=============================================================================
 | EMPLOYEE — FIELD OFFICER — /petugas
@@ -129,12 +139,10 @@ Route::middleware(['auth', 'role:employee', 'employee.position:field_officer'])
     ->group(function () {
 
     Route::get('/dashboard',           [FODashboard::class, 'index'])->name('dashboard');
-    Route::get('/profil',              [FOProfile::class, 'index'])->name('profile');
     Route::get('/tugas', [FOAssignment::class, 'index'])->name('assignments.index');
     Route::get('/tugas/{code}', [FOAssignment::class, 'show'])->name('assignments.show');
     Route::get('/tugas/{code}/progress/buat', [FOAssignment::class, 'createProgress'])->name('assignments.progress.create');
     Route::post('/tugas/{code}/progress', [FOAssignment::class, 'storeProgress'])->name('assignments.progress.store');
-
 });
 
 /*

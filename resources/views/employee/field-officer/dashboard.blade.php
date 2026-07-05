@@ -133,7 +133,7 @@ $priorityConfig = [
                                 <p class="text-xs text-gray-700 group-hover:text-white">Daftar tugas yang ditugaskan</p>
                             </div>
                         </a>
-                        <a href="{{ route('employee.field-officer.profile') }}"
+                        <a href="{{ route('employee.profile') }}"
                            class="flex items-center gap-3 px-4 py-3.5 rounded-xl border hover:border-primary-500
                                   hover:bg-primary-500 bg-primary-100 border-primary-100 transition-colors group">
                             <div class="w-9 h-9 rounded-xl bg-primary-50 border border-gray-200
