@@ -130,9 +130,11 @@ Route::middleware(['auth', 'role:employee', 'employee.position:field_officer'])
 
     Route::get('/dashboard',           [FODashboard::class, 'index'])->name('dashboard');
     Route::get('/profil',              [FOProfile::class, 'index'])->name('profile');
-    Route::get('/tugas',               [FOAssignment::class, 'index'])->name('assignments.index');
-    Route::get('/tugas/{code}',        [FOAssignment::class, 'show'])->name('assignments.show');
-    Route::post('/tugas/{code}/progress', [FOAssignment::class, 'storeProgress'])->name('assignments.progress');
+    Route::get('/tugas', [FOAssignment::class, 'index'])->name('assignments.index');
+    Route::get('/tugas/{code}', [FOAssignment::class, 'show'])->name('assignments.show');
+    Route::get('/tugas/{code}/progress/buat', [FOAssignment::class, 'createProgress'])->name('assignments.progress.create');
+    Route::post('/tugas/{code}/progress', [FOAssignment::class, 'storeProgress'])->name('assignments.progress.store');
+
 });
 
 /*

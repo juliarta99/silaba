@@ -377,6 +377,12 @@ $needsRating       = $isOwner && $report->status === 'completed' && !$report->re
                                         {{ $prog->description }}
                                     </p>
                                     @endif
+                                    @if ($prog->photo)
+                                        <a href="{{ Storage::url($prog->photo) }}" target="_blank"
+                                        class="block w-20 h-16 rounded-lg overflow-hidden mb-2 hover:opacity-90 transition-opacity">
+                                            <img src="{{ Storage::url($prog->photo) }}" class="w-full h-full object-cover" alt="">
+                                        </a>
+                                    @endif
                                     <p class="text-xs text-gray-400 flex items-center gap-1">
                                         <svg class="w-3 h-3 shrink-0" fill="none"
                                              viewBox="0 0 12 12" aria-hidden="true">
