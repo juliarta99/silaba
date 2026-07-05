@@ -48,6 +48,7 @@ use App\Http\Controllers\Regent\DashboardController    as RegentDashboard;
 use App\Http\Controllers\Regent\ProfileController      as RegentProfile;
 use App\Http\Controllers\Regent\ReportController       as RegentReport;
 use App\Http\Controllers\Regent\DepartmentController   as RegentDepartment;
+use App\Http\Controllers\Shared\MapController;
 
 /*
 |=============================================================================
@@ -144,6 +145,8 @@ Route::middleware(['auth', 'role:employee', 'employee.position:field_officer'])
     Route::get('/tugas/{code}', [FOAssignment::class, 'show'])->name('assignments.show');
     Route::get('/tugas/{code}/progress/buat', [FOAssignment::class, 'createProgress'])->name('assignments.progress.create');
     Route::post('/tugas/{code}/progress', [FOAssignment::class, 'storeProgress'])->name('assignments.progress.store');
+
+    Route::get('/peta', [MapController::class, 'index'])->name('reports.map');
 });
 
 /*
@@ -162,7 +165,22 @@ Route::middleware(['auth', 'role:employee', 'employee.position:supervisor'])
     ->group(function () {
 
     Route::get('/dashboard',  [SupDashboard::class, 'index'])->name('dashboard');
-    Route::get('/profil',     [SupProfile::class,   'index'])->name('profile');
+    Route::get('/peta', [MapController::class, 'index'])->name('reports.map');
+
+    // Daftar Laporan
+    Route::get('/laporan',         [SupReport::class, 'index']) ->name('reports.index');
+    Route::get('/laporan/export',  [SupReport::class, 'export'])->name('reports.export');
+    Route::get('/laporan/{code}',  [SupReport::class, 'show'])  ->name('reports.show');
+    Route::post('/laporan/{code}/tambah-petugas',  [SupReport::class, 'addOfficer'])   ->name('reports.add-officer');
+    Route::post('/laporan/{code}/hapus-petugas',   [SupReport::class, 'removeOfficer'])->name('reports.remove-officer');
+
+    // ── Penugasan ─────────────────────────────────────────────────────
+    Route::get('/penugasan',           [SupAssignment::class, 'index'])  ->name('assignments.index');
+    Route::post('/penugasan',          [SupAssignment::class, 'store'])  ->name('assignments.store');
+    Route::delete('/penugasan/hapus',  [SupAssignment::class, 'destroy'])->name('assignments.destroy');
+
+    Route::get('/performa',             [SupReview::class,      'index'])->name('reviews.index');
+    Route::get('/performa/export',      [SupReview::class,     'export'])->name('reviews.export');
 });
 
 /*
@@ -181,6 +199,22 @@ Route::middleware(['auth', 'role:employee', 'employee.position:head_of_departmen
 
     Route::get('/dashboard',  [HoDDashboard::class, 'index'])->name('dashboard');
     Route::get('/profil',     [HoDProfile::class,   'index'])->name('profile');
+
+    Route::get('/peta', [MapController::class, 'index'])->name('reports.map');
+
+    // Daftar Laporan
+    Route::get('/laporan',         [SupReport::class, 'index']) ->name('reports.index');
+    Route::get('/laporan/export',  [SupReport::class, 'export'])->name('reports.export');
+    Route::get('/laporan/{code}',  [SupReport::class, 'show'])  ->name('reports.show');
+    Route::post('/laporan/{code}/tambah-petugas',  [SupReport::class, 'addOfficer'])   ->name('reports.add-officer');
+    Route::post('/laporan/{code}/hapus-petugas',   [SupReport::class, 'removeOfficer'])->name('reports.remove-officer');
+
+    // ── Penugasan ─────────────────────────────────────────────────────
+    Route::get('/penugasan',           [SupAssignment::class, 'index'])  ->name('assignments.index');
+    Route::post('/penugasan',          [SupAssignment::class, 'store'])  ->name('assignments.store');
+    Route::delete('/penugasan/hapus',  [SupAssignment::class, 'destroy'])->name('assignments.destroy');
+
+    Route::get('/performa',             [SupReview::class,      'index'])->name('reviews.index');
 });
 
 /*
@@ -198,28 +232,12 @@ Route::middleware(['auth', 'role:employee', 'employee.position:supervisor|head_o
     ->name('employee.shared.')
     ->group(function () {
 
-    // Daftar Laporan
-    Route::get('/laporan',              [SupReport::class,      'index'])->name('reports.index');
-    Route::get('/laporan/peta',         [SupReport::class,      'map'])->name('reports.map');
-    Route::get('/laporan/{report}',     [SupReport::class,      'show'])->name('reports.show');
-
-    // Penugasan Petugas
-    Route::get('/penugasan',            [SupAssignment::class,  'index'])->name('assignments.index');
-    Route::post('/penugasan',           [SupAssignment::class,  'store'])->name('assignments.store');
-    Route::get('/penugasan/{assignment}', [SupAssignment::class,'show'])->name('assignments.show');
-    Route::put('/penugasan/{assignment}', [SupAssignment::class,'update'])->name('assignments.update');
-    Route::delete('/penugasan/{assignment}', [SupAssignment::class,'destroy'])->name('assignments.destroy');
-
     // Kelola Instansi (Department)
     Route::get('/instansi',             [SupDepartment::class,  'index'])->name('departments.index');
     Route::get('/instansi/{department}',[SupDepartment::class,  'show'])->name('departments.show');
     Route::post('/instansi',            [SupDepartment::class,  'store'])->name('departments.store');
     Route::put('/instansi/{department}',[SupDepartment::class,  'update'])->name('departments.update');
     Route::delete('/instansi/{department}',[SupDepartment::class,'destroy'])->name('departments.destroy');
-
-    // Performa Instansi
-    Route::get('/performa',             [SupReview::class,      'index'])->name('reviews.index');
-    Route::get('/performa/{review}',    [SupReview::class,      'show'])->name('reviews.show');
 });
 
 /*
@@ -321,7 +339,7 @@ Route::middleware(['auth', 'role:regent'])
     Route::get('/laporan/{report}',[RegentReport::class,    'show'])->name('reports.show');
 
     // Peta Sebaran
-    Route::get('/peta',           [RegentReport::class,     'map'])->name('reports.map');
+    Route::get('/peta', [MapController::class, 'index'])->name('reports.map');
 
     // Rekomendasi Prioritas
     Route::get('/rekomendasi',    [RegentReport::class,     'priority'])->name('reports.priority');

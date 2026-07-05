@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Employee;
 
 use App\Http\Controllers\Controller;
+use App\Models\Assignment;
 use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
@@ -19,9 +20,18 @@ class ProfileController extends Controller
         $user     = User::with('employee.department')->findOrFail(Auth::user()->id);
         $employee = $user->employee;
 
+        $sedangDikerjakan = 0;
+
+        if($employee->position == 'field_officer') {
+            $sedangDikerjakan = Assignment::where('employee_id', $employee->id)
+                                ->whereHas('report', fn ($q) =>
+                                    $q->whereIn('status', ['in_progress', 'under_review', 'waiting_for_materials'])
+                                )->count();
+        }
+
         abort_if(! $employee, 403, 'Data pegawai tidak ditemukan.');
 
-        return view('employee.profile', compact('user', 'employee'));
+        return view('employee.profile', compact('user', 'employee', 'sedangDikerjakan'));
     }
 
     // ── Update informasi kontak (email & phone di tabel employees) ────────

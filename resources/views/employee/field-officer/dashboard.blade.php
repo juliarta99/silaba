@@ -53,9 +53,6 @@ $priorityConfig = [
                                   stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"/>
                         </svg>
                     </div>
-                    <svg class="w-3.5 h-3.5 text-gray-300" fill="none" viewBox="0 0 14 14">
-                        <path d="M3 7h8M8 4l3 3-3 3" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
-                    </svg>
                 </div>
                 <p class="text-2xl sm:text-3xl font-bold text-gray-900 tabular-nums">{{ $totalTugas }}</p>
                 <p class="text-xs text-gray-400 mt-0.5">Total Tugas</p>

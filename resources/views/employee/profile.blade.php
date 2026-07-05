@@ -331,8 +331,10 @@ $positionLabel = match($employee?->position) {
     </div>
 </div>
 
-{{-- Navbar Bottom khusus Pegawai (Opsional, pastikan komponen ada) --}}
-<x-employee.bottom-nav active="profile" :badge="0" />
+@if ($employee->position == 'field_officer')
+    {{-- Navbar Bottom khusus Pegawai (Opsional, pastikan komponen ada) --}}
+    <x-employee.bottom-nav active="profile" :badge="$sedangDikerjakan" />
+@endif
 
 {{-- Preview foto sebelum upload --}}
 <script>

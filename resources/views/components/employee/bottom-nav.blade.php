@@ -20,6 +20,13 @@ $items = [
         'badge' => true,
     ],
     [
+        'key'   => 'map',
+        'label' => 'Peta',
+        'route' => 'employee.field-officer.reports.map',
+        'icon'  => 'M9 20l-5.447-2.724A1 1 0 013 16.382V5.618a1 1 0 011.447-.894L9 7m0 13l6-3m-6 3V7m6 10l4.553 2.276A1 1 0 0021 18.382V7.618a1 1 0 00-.553-.894L15 4m0 13V4m0 0L9 7',
+        'badge' => false,
+    ],
+    [
         'key'   => 'profile',
         'label' => 'Profil',
         'route' => 'employee.profile',
@@ -32,7 +39,7 @@ $items = [
 {{-- Bottom Nav — mobile only --}}
 <div class="fixed bottom-0 left-0 right-0 z-40 bg-white border-t border-gray-100 shadow-lg sm:hidden"
      style="padding-bottom: env(safe-area-inset-bottom, 0px);">
-    <div class="grid grid-cols-3">
+    <div class="grid grid-cols-4">
         @foreach ($items as $item)
         @php $isActive = $active === $item['key']; @endphp
 
