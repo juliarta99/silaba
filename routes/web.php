@@ -62,6 +62,12 @@ Route::get('/laporan/buat',     fn() => view('public.reports.create'))->name('re
 Route::get('/laporan/berhasil', [ReportController::class, 'success'])->name('reports.success');
 Route::get('/laporan/{code}',   [ReportController::class, 'show'])->name('reports.show');
 Route::get('/departments/{department}', [DepartmentController::class, 'show'])->name('departments.show');
+Route::get('/dashboardadmin', function(){
+    return view("DashboardAdmin");
+});
+Route::get('/manajemenpetugas', function(){
+    return view("ManajemenPetugas");
+});
 
 /*
 |=============================================================================
