@@ -151,7 +151,7 @@ $isFieldOfficer = ($role === 'employee' && $position === 'field_officer');
                     @endif
 
                     {{-- Kategori --}}
-                    <div class="col-span-2 sm:col-end-1">
+                    <div class="col-span-2 sm:col-span-1">
                         <label class="block text-xs font-medium text-gray-500 mb-1.5">Kategori</label>
                         <select name="category"
                                 class="w-full px-3 py-2.5 rounded-xl border border-gray-200 bg-gray-10 text-sm

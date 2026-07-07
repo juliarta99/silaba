@@ -171,10 +171,10 @@
 
             @if ($isHoD)
                 <x-navbar-link :href="route('employee.head.dashboard')"        :active="request()->routeIs('employee.head.dashboard')">Dashboard</x-navbar-link>
-                <x-navbar-link :href="route('employee.shared.reports.index')"  :active="request()->routeIs('employee.shared.reports.*') && !request()->routeIs('employee.shared.reports.map')">Daftar Laporan</x-navbar-link>
+                <x-navbar-link :href="route('employee.head.reports.index')"  :active="request()->routeIs('employee.head.reports.*') && !request()->routeIs('employee.head.reports.map')">Daftar Laporan</x-navbar-link>
                 <x-navbar-link :href="route('employee.shared.departments.index')" :active="request()->routeIs('employee.shared.departments.*')">Kelola Instansi</x-navbar-link>
-                <x-navbar-link :href="route('employee.shared.reports.map')"    :active="request()->routeIs('employee.shared.reports.map')">Peta Sebaran</x-navbar-link>
-                <x-navbar-primary-btn :href="route('employee.shared.reviews.index')" class="ml-1">Performa</x-navbar-primary-btn>
+                <x-navbar-link :href="route('employee.head.reports.map')"    :active="request()->routeIs('employee.head.reports.map')">Peta Sebaran</x-navbar-link>
+                <x-navbar-primary-btn :href="route('employee.head.reviews.index')" class="ml-1">Performa</x-navbar-primary-btn>
             @endif
 
             @if ($isRegent)
@@ -375,10 +375,10 @@
         @endif
         @if ($isHoD)
             <x-navbar-mobile-link :href="route('employee.head.dashboard')">Dashboard</x-navbar-mobile-link>
-            <x-navbar-mobile-link :href="route('employee.shared.reports.index')">Daftar Laporan</x-navbar-mobile-link>
+            <x-navbar-mobile-link :href="route('employee.head.reports.index')">Daftar Laporan</x-navbar-mobile-link>
             <x-navbar-mobile-link :href="route('employee.shared.departments.index')">Kelola Instansi</x-navbar-mobile-link>
-            <x-navbar-mobile-link :href="route('employee.shared.reports.map')">Peta Sebaran</x-navbar-mobile-link>
-            <x-navbar-mobile-btn  :href="route('employee.shared.reviews.index')">Performa</x-navbar-mobile-btn>
+            <x-navbar-mobile-link :href="route('employee.head.reports.map')">Peta Sebaran</x-navbar-mobile-link>
+            <x-navbar-mobile-btn  :href="route('employee.head.reviews.index')">Performa</x-navbar-mobile-btn>
         @endif
         @if ($isRegent)
             <x-navbar-mobile-link :href="route('regent.dashboard')">Dashboard</x-navbar-mobile-link>
