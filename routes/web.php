@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\Admin\AdminRewardController;
 use Illuminate\Support\Facades\Route;
 
 // ── Controllers ───────────────────────────────────────────────────────────────
@@ -33,11 +34,11 @@ use App\Http\Controllers\Admin\ProfileController       as AdminProfile;
 use App\Http\Controllers\Admin\UserController;
 use App\Http\Controllers\Admin\DistrictController;
 use App\Http\Controllers\Admin\CategoryController;
-use App\Http\Controllers\Admin\DepartmentController    as AdminDepartment;
-use App\Http\Controllers\Admin\RewardController        as AdminReward;
+use App\Http\Controllers\Admin\CategoryMappingController;
 use App\Http\Controllers\Admin\NotificationController;
-use App\Http\Controllers\Admin\CategoryOpdController;
 use App\Http\Controllers\Admin\DashboardController;
+use App\Http\Controllers\Admin\DepartmentController as AdminDepartmentController;
+use App\Http\Controllers\Admin\RewardController;
 use App\Http\Controllers\Citizen\NotificationController as CitizenNotificationController;
 use App\Http\Controllers\DepartmentController;
 use App\Http\Controllers\DistrictChief\CompareController;
@@ -73,6 +74,25 @@ Route::get('/manajemenpetugas', function(){
     return view("ManajemenPetugas");
 });
 
+
+
+Route::get('/manajemenKategoriAdmin', function() {
+return view('manajemenKategoriAdmin');
+})->name('manajemenKategoriAdmin.show');
+
+Route::get('/pemetaanKategoriOpd', function() {
+return view('pemetaanKategoriOpd');
+})->name('pemetaanKategoriOpd.show');
+
+Route::get('/manajemenKecamatanAdmin', function() {
+return view('manajemenKecamatanAdmin');
+})->name('manajemenKecamatanAdmin.show');
+
+Route::get('/manajemenOpdAdmin', function() {
+return view('manajemenOpdAdmin');
+})->name('manajemenOpdAdmin.show');
+
+
 /*
 |=============================================================================
 | AUTH ROUTES
@@ -81,7 +101,7 @@ Route::get('/manajemenpetugas', function(){
 Route::middleware('guest')->group(function () {
     Route::get('/masuk', [AuthController::class, 'showLogin'])->name('login');
     Route::post('/masuk', [AuthController::class, 'login'])->name('login.post');
- 
+
     Route::view('/daftar', 'auth.register')->name('register');
     Route::view('/verifikasi-berhasil', 'auth.verify-otp-success')->name('verify.otp.success');
 
@@ -132,7 +152,7 @@ Route::middleware(['auth', 'role:employee'])
     ->prefix('petugas')
     ->name('employee.')
     ->group(function () {
-    
+
     Route::get('/profil',            [ProfileController::class, 'index'])->name('profile');
     Route::patch('/profil',          [ProfileController::class, 'update'])->name('profile.update');
     Route::patch('/profil/foto',     [ProfileController::class, 'updatePhoto'])->name('profile.photo');
@@ -284,7 +304,7 @@ Route::middleware(['auth', 'role:district_chief'])
 |   super_admin → semua admin + tambah/hapus admin lain (UserController)
 |=============================================================================
 */
-Route::middleware(['auth', 'role:admin'])
+Route::middleware(['auth', 'role:admin|super_admin'])
     ->prefix('admin')
     ->name('admin.')
     ->group(function () {
@@ -301,44 +321,35 @@ Route::middleware(['auth', 'role:admin'])
     Route::delete('/pengguna/{user}',[UserController::class, 'destroy'])->name('users.destroy');
 
     // ── Manajemen Kecamatan ──
-    Route::get('/kecamatan',             [DistrictController::class, 'index'])->name('districts.index');
-    Route::get('/kecamatan/tambah',      [DistrictController::class, 'create'])->name('districts.create');
-    Route::post('/kecamatan',            [DistrictController::class, 'store'])->name('districts.store');
-    Route::get('/kecamatan/{district}',  [DistrictController::class, 'show'])->name('districts.show');
-    Route::get('/kecamatan/{district}/edit', [DistrictController::class, 'edit'])->name('districts.edit');
-    Route::put('/kecamatan/{district}',  [DistrictController::class, 'update'])->name('districts.update');
-    Route::delete('/kecamatan/{district}', [DistrictController::class, 'destroy'])->name('districts.destroy');
+    Route::get('/kecamatan',           [DistrictController::class, 'index'])  ->name('districts.index');
+    Route::post('/kecamatan',          [DistrictController::class, 'store'])  ->name('districts.store');
+    Route::put('/kecamatan/{district}',[DistrictController::class, 'update']) ->name('districts.update');
+    Route::delete('/kecamatan/{district}',[DistrictController::class,'destroy'])->name('districts.destroy');
 
     // ── Manajemen Kategori ──
-    Route::get('/kategori',              [CategoryController::class, 'index'])->name('categories.index');
-    Route::get('/kategori/tambah',       [CategoryController::class, 'create'])->name('categories.create');
-    Route::post('/kategori',             [CategoryController::class, 'store'])->name('categories.store');
-    Route::get('/kategori/{category}/edit', [CategoryController::class, 'edit'])->name('categories.edit');
-    Route::put('/kategori/{category}',   [CategoryController::class, 'update'])->name('categories.update');
-    Route::delete('/kategori/{category}',[CategoryController::class, 'destroy'])->name('categories.destroy');
+    Route::get('/kategori',             [CategoryController::class, 'index'])  ->name('categories.index');
+    Route::post('/kategori',            [CategoryController::class, 'store'])  ->name('categories.store');
+    Route::put('/kategori/{category}',  [CategoryController::class, 'update']) ->name('categories.update');
+    Route::delete('/kategori/{category}',[CategoryController::class,'destroy'])->name('categories.destroy');
 
     // ── Manajemen OPD (Department) ──
-    Route::get('/opd',                   [AdminDepartment::class, 'index'])->name('departments.index');
-    Route::get('/opd/tambah',            [AdminDepartment::class, 'create'])->name('departments.create');
-    Route::post('/opd',                  [AdminDepartment::class, 'store'])->name('departments.store');
-    Route::get('/opd/{department}',      [AdminDepartment::class, 'show'])->name('departments.show');
-    Route::get('/opd/{department}/edit', [AdminDepartment::class, 'edit'])->name('departments.edit');
-    Route::put('/opd/{department}',      [AdminDepartment::class, 'update'])->name('departments.update');
-    Route::delete('/opd/{department}',   [AdminDepartment::class, 'destroy'])->name('departments.destroy');
+    Route::get('/opd',                    [AdminDepartmentController::class, 'index'])     ->name('departments.index');
+    Route::post('/opd',                   [AdminDepartmentController::class, 'store'])     ->name('departments.store');
+    Route::put('/opd/{department}',       [AdminDepartmentController::class, 'update'])    ->name('departments.update');
+    Route::delete('/opd/{department}',    [AdminDepartmentController::class, 'destroy'])   ->name('departments.destroy');
+    Route::post('/opd/{department}/kadis',[AdminDepartmentController::class, 'assignHead'])->name('departments.assign-head');
 
     // ── Pemetaan Kategori OPD ──
-    Route::get('/pemetaan-kategori',     [CategoryOpdController::class, 'index'])->name('category-opd.index');
-    Route::post('/pemetaan-kategori',    [CategoryOpdController::class, 'store'])->name('category-opd.store');
-    Route::put('/pemetaan-kategori/{mapping}', [CategoryOpdController::class, 'update'])->name('category-opd.update');
-    Route::delete('/pemetaan-kategori/{mapping}', [CategoryOpdController::class, 'destroy'])->name('category-opd.destroy');
+    Route::get('/pemetaan',              [CategoryMappingController::class, 'index'])  ->name('mappings.index');
+    Route::post('/pemetaan',             [CategoryMappingController::class, 'store'])  ->name('mappings.store');
+    Route::delete('/pemetaan/{category}',[CategoryMappingController::class, 'destroy'])->name('mappings.destroy');
 
     // ── Manajemen Reward ──
-    Route::get('/reward',                [AdminReward::class, 'index'])->name('rewards.index');
-    Route::get('/reward/tambah',         [AdminReward::class, 'create'])->name('rewards.create');
-    Route::post('/reward',               [AdminReward::class, 'store'])->name('rewards.store');
-    Route::get('/reward/{reward}/edit',  [AdminReward::class, 'edit'])->name('rewards.edit');
-    Route::put('/reward/{reward}',       [AdminReward::class, 'update'])->name('rewards.update');
-    Route::delete('/reward/{reward}',    [AdminReward::class, 'destroy'])->name('rewards.destroy');
+    Route::get('/reward', [RewardController::class, 'index'])->name('rewards.index');
+    Route::post('/reward', [RewardController::class, 'store'])->name('rewards.store');
+    Route::put('/reward/{reward}', [RewardController::class, 'update'])->name('rewards.update'); // Rute Edit Baru
+    Route::post('/reward/voucher', [RewardController::class, 'storeVoucher'])->name('rewards.store_voucher');
+    Route::get('/reward/history', [RewardController::class, 'history'])->name('rewards.history');
 
     // ── Notifikasi ──
     Route::get('/notifikasi',            [NotificationController::class, 'index'])->name('notifications.index');

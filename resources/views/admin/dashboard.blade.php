@@ -72,7 +72,7 @@
                     <svg class="w-6 h-6 mb-2" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M19 21V5a2 2 0 00-2-2H7a2 2 0 00-2 2v16m14 0h2m-2 0h-5m-9 0H3m2 0h5M9 7h1m-1 4h1m4-4h1m-1 4h1m-5 10v-5a1 1 0 011-1h2a1 1 0 011 1v5m-4 0h4" /></svg>
                     <span class="text-xs font-bold">Kelola OPD</span>
                 </a>
-                <a href="{{ route('admin.category-opd.index') }}" class="flex flex-col items-center justify-center p-4 bg-teal-50 text-teal-600 rounded-xl hover:opacity-80 transition text-center">
+                <a href="{{ route('admin.mappings.index') }}" class="flex flex-col items-center justify-center p-4 bg-teal-50 text-teal-600 rounded-xl hover:opacity-80 transition text-center">
                     <svg class="w-6 h-6 mb-2" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M10.325 4.317c.426-1.756 2.924-1.756 3.35 0a1.724 1.724 0 002.573 1.066c1.543-.94 3.31.826 2.37 2.37a1.724 1.724 0 001.065 2.572c1.756.426 1.756 2.924 0 3.35a1.724 1.724 0 00-1.066 2.573c.94 1.543-.826 3.31-2.37 2.37a1.724 1.724 0 00-2.572 1.065c-.426 1.756-2.924 1.756-3.35 0a1.724 1.724 0 00-2.573-1.066c-1.543.94-3.31-.826-2.37-2.37a1.724 1.724 0 00-1.065-2.572c-1.756-.426-1.756-2.924 0-3.35a1.724 1.724 0 001.066-2.573c-.94-1.543.826-3.31 2.37-2.37.996.608 2.296.07 2.572-1.065z" /><path stroke-linecap="round" stroke-linejoin="round" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" /></svg>
                     <span class="text-xs font-bold">Pemetaan<br>Kategori</span>
                 </a>
@@ -122,35 +122,6 @@
                 </div>
             </div>
         </div>
-
-        {{-- ── Status Sistem ── --}}
-        <div class="bg-white p-6 rounded-xl shadow-sm border border-gray-50">
-            <h3 class="text-lg font-bold text-black mb-4">Status Sistem</h3>
-            <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
-                <div class="flex items-center gap-3">
-                    <div class="w-3 h-3 rounded-full bg-green-500"></div>
-                    <div>
-                        <p class="text-xs text-gray-500">Database</p>
-                        <p class="text-sm font-bold text-black">Aktif</p>
-                    </div>
-                </div>
-                <div class="flex items-center gap-3">
-                    <div class="w-3 h-3 rounded-full bg-green-500"></div>
-                    <div>
-                        <p class="text-xs text-gray-500">API Server</p>
-                        <p class="text-sm font-bold text-black">Aktif</p>
-                    </div>
-                </div>
-                <div class="flex items-center gap-3">
-                    <div class="w-3 h-3 rounded-full bg-green-500"></div>
-                    <div>
-                        <p class="text-xs text-gray-500">Storage</p>
-                        <p class="text-sm font-bold text-black">85% Available</p>
-                    </div>
-                </div>
-            </div>
-        </div>
-
     </main>
 </div>
 @endsection

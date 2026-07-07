@@ -1,36 +1,132 @@
 <?php
+
 namespace App\Http\Controllers\Admin;
+
 use App\Http\Controllers\Controller;
-use App\Models\Reward;
 use Illuminate\Http\Request;
+use App\Models\Reward;
+use App\Models\RewardVoucher;
+use App\Models\RewardClaim;
+use Illuminate\Support\Str;
+use Illuminate\Support\Facades\Storage;
 
 class RewardController extends Controller
 {
+    // ── 1. Halaman Manajemen Reward ──
     public function index()
     {
-        $rewards = Reward::withCount('claims')->latest()->paginate(15);
-        return view('admin.rewards.index', compact('rewards'));
+        // Hitung statistik untuk Dashboard Reward
+        $stats = [
+            'total_rewards' => Reward::count(),
+            'active_rewards' => Reward::where('is_active', true)->count(),
+            'total_vouchers' => RewardVoucher::where('is_claimed', false)->count(),
+            'total_claims' => RewardClaim::count(),
+        ];
+
+        // Ambil data reward beserta jumlah vouchernya
+        $rewards = Reward::withCount([
+            'vouchers as total_vouchers',
+            'vouchers as available_vouchers' => function ($query) {
+                $query->where('is_claimed', false);
+            }
+        ])->latest()->paginate(10);
+
+        return view('admin.rewards.index', compact('stats', 'rewards'));
     }
-    public function create() { return view('admin.rewards.create'); }
-    public function store(Request $r)
+
+    // ── 2. Halaman Riwayat Klaim Reward ──
+    public function history()
     {
-        $r->validate(['name'=>'required','points_required'=>'required|integer|min:1','stock'=>'required|integer|min:0']);
-        $data = $r->only('name','points_required','stock','description','is_active');
-        if ($r->hasFile('photo')) $data['photo'] = $r->file('photo')->store('rewards','public');
-        Reward::create($data);
-        return redirect()->route('admin.rewards.index')->with('success','Reward ditambahkan.');
+        $claims = RewardClaim::with(['user', 'reward', 'voucher'])
+            ->latest()
+            ->paginate(15);
+
+        return view('admin.rewards.history', compact('claims'));
     }
-    public function edit(Reward $reward) { return view('admin.rewards.edit', compact('reward')); }
-    public function update(Request $r, Reward $reward)
+
+    // ── 3. Proses Tambah Reward Baru ──
+    public function store(Request $request)
     {
-        $data = $r->only('name','points_required','stock','description','is_active');
-        if ($r->hasFile('photo')) $data['photo'] = $r->file('photo')->store('rewards','public');
-        $reward->update($data);
-        return redirect()->route('admin.rewards.index')->with('success','Reward diperbarui.');
+        $request->validate([
+            'name' => 'required|string|max:255',
+            'type' => 'required|string',
+            'points_required' => 'required|integer|min:0',
+            'description' => 'nullable|string',
+            'image' => 'nullable|image|mimes:jpeg,png,jpg|max:2048',
+        ]);
+
+        $imagePath = null;
+        if ($request->hasFile('image')) {
+            $imagePath = $request->file('image')->store('rewards', 'public');
+        }
+
+        Reward::create([
+            'name' => $request->name,
+            'slug' => Str::slug($request->name) . '-' . time(),
+            'type' => $request->type,
+            'points_required' => $request->points_required,
+            'description' => $request->description,
+            'image' => $imagePath,
+            'is_active' => true,
+        ]);
+
+        return redirect()->route('admin.rewards.index')->with('success', 'Reward baru berhasil ditambahkan.');
     }
-    public function destroy(Reward $reward)
+
+    // ── 4. Proses Tambah Voucher ke Reward ──
+    public function storeVoucher(Request $request)
     {
-        $reward->delete();
-        return redirect()->route('admin.rewards.index')->with('success','Reward dihapus.');
+        $request->validate([
+            'reward_id' => 'required|exists:rewards,id',
+            'code' => 'required|string|unique:reward_vouchers,code',
+            'valid_from' => 'nullable|date',
+            'valid_until' => 'nullable|date|after_or_equal:valid_from',
+        ]);
+
+        RewardVoucher::create([
+            'reward_id' => $request->reward_id,
+            'code' => strtoupper($request->code),
+            'valid_from' => $request->valid_from,
+            'valid_until' => $request->valid_until,
+            'is_claimed' => false,
+        ]);
+
+        return redirect()->route('admin.rewards.index')->with('success', 'Voucher ' . $request->code . ' berhasil ditambahkan.');
+    }
+
+    public function update(Request $request, Reward $reward)
+    {
+        $request->validate([
+            'name' => 'required|string|max:255',
+            'type' => 'required|string',
+            'points_required' => 'required|integer|min:0',
+            'description' => 'nullable|string',
+            'image' => 'nullable|image|mimes:jpeg,png,jpg|max:2048',
+            'is_active' => 'required|boolean', // Status aktif/inaktif
+        ]);
+
+        $imagePath = $reward->image; // Pertahankan gambar lama secara default
+        
+        // Jika ada upload gambar baru
+        if ($request->hasFile('image')) {
+            // Hapus gambar lama jika ada
+            if ($imagePath && Storage::disk('public')->exists($imagePath)) {
+                Storage::disk('public')->delete($imagePath);
+            }
+            // Simpan gambar baru
+            $imagePath = $request->file('image')->store('rewards', 'public');
+        }
+
+        // Lakukan update data
+        $reward->update([
+            'name' => $request->name,
+            'type' => $request->type,
+            'points_required' => $request->points_required,
+            'description' => $request->description,
+            'image' => $imagePath,
+            'is_active' => $request->is_active,
+        ]);
+
+        return redirect()->route('admin.rewards.index')->with('success', 'Data Reward berhasil diperbarui.');
     }
 }

@@ -486,17 +486,20 @@ $editUser = session('edit_user_id') ? $users->firstWhere('id', session('edit_use
                                 <div class="grid grid-cols-2 gap-3" x-show="editData.role === 'employee'">
                                     <div>
                                         <label class="label-sm">Posisi</label>
-                                        <select name="position" class="input-field">
-                                            <option value="field_officer"      :selected="editData.position === 'field_officer'">Petugas Lapangan</option>
-                                            <option value="supervisor"         :selected="editData.position === 'supervisor'">Supervisor</option>
-                                            <option value="head_of_department" :selected="editData.position === 'head_of_department'">Kepala Dinas</option>
+                                        <select name="position" class="input-field"
+                                                id="edit-position">
+                                            <option value="field_officer">Petugas Lapangan</option>
+                                            <option value="supervisor">Supervisor</option>
+                                            <option value="head_of_department">Kepala Dinas</option>
                                         </select>
                                     </div>
                                     <div>
                                         <label class="label-sm">Dinas/OPD</label>
-                                        <select name="department_id" class="input-field">
+                                        <select name="department_id" class="input-field"
+                                                id="edit-department-id">
+                                            <option value="">-- Pilih Dinas --</option>
                                             @foreach ($departments as $d)
-                                            <option value="{{ $d->id }}" :selected="editData.department_id == {{ $d->id }}">{{ $d->name }}</option>
+                                            <option value="{{ $d->id }}">{{ $d->name }}</option>
                                             @endforeach
                                         </select>
                                     </div>
@@ -504,9 +507,11 @@ $editUser = session('edit_user_id') ? $users->firstWhere('id', session('edit_use
 
                                 <div x-show="editData.role === 'district_chief'">
                                     <label class="label-sm">Kecamatan</label>
-                                    <select name="district_id" class="input-field">
+                                    <select name="district_id" class="input-field"
+                                            id="edit-district-id">
+                                        <option value="">-- Pilih Kecamatan --</option>
                                         @foreach ($districts as $d)
-                                        <option value="{{ $d->id }}" :selected="editData.district_id == {{ $d->id }}">{{ $d->name }}</option>
+                                        <option value="{{ $d->id }}">{{ $d->name }}</option>
                                         @endforeach
                                     </select>
                                 </div>
@@ -524,10 +529,11 @@ $editUser = session('edit_user_id') ? $users->firstWhere('id', session('edit_use
 
                                 <div>
                                     <label class="label-sm">Status</label>
-                                    <select name="status" class="input-field">
-                                        <option value="active"   :selected="editData.status === 'active'">Aktif</option>
-                                        <option value="on_leave" :selected="editData.status === 'on_leave'">Cuti</option>
-                                        <option value="inactive" :selected="editData.status === 'inactive'">Nonaktif</option>
+                                    <select name="status" class="input-field"
+                                            id="edit-status">
+                                        <option value="active">Aktif</option>
+                                        <option value="on_leave">Cuti</option>
+                                        <option value="inactive">Nonaktif</option>
                                     </select>
                                 </div>
                             </div>
@@ -633,6 +639,21 @@ function userModal() {
             this.editData = data;
             this.open = true;
             document.body.style.overflow = 'hidden';
+
+            // Set select values setelah Alpine render template x-if
+            // Butuh dua $nextTick: pertama untuk x-if render, kedua untuk DOM update
+            this.$nextTick(() => {
+                this.$nextTick(() => {
+                    const setVal = (id, val) => {
+                        const el = document.getElementById(id);
+                        if (el && val !== undefined && val !== null) el.value = val;
+                    };
+                    setVal('edit-position',      data.position);
+                    setVal('edit-department-id', data.department_id);
+                    setVal('edit-district-id',   data.district_id);
+                    setVal('edit-status',        data.status);
+                });
+            });
         },
 
         openEditById(id) {

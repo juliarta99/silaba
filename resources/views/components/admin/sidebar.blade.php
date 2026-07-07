@@ -98,9 +98,9 @@
             </a>
 
             {{-- Pemetaan Kategori OPD --}}
-            <a href="{{ route('admin.category-opd.index') }}" 
-               class="flex items-center gap-3 px-4 py-3.5 rounded-xl font-semibold transition-all {{ request()->routeIs('admin.category-opd.*') ? 'bg-secondary-500 text-gray-900 font-bold shadow-sm' : 'text-primary-50 hover:bg-primary-700 hover:text-white' }}">
-                <svg class="w-5 h-5 {{ request()->routeIs('admin.category-opd.*') ? '' : 'opacity-80' }}" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+            <a href="{{ route('admin.mappings.index') }}" 
+               class="flex items-center gap-3 px-4 py-3.5 rounded-xl font-semibold transition-all {{ request()->routeIs('admin.mappings.*') ? 'bg-secondary-500 text-gray-900 font-bold shadow-sm' : 'text-primary-50 hover:bg-primary-700 hover:text-white' }}">
+                <svg class="w-5 h-5 {{ request()->routeIs('admin.mappings.*') ? '' : 'opacity-80' }}" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
                     <path stroke-linecap="round" stroke-linejoin="round" d="M8 7h12m0 0l-4-4m4 4l-4 4m0 6H4m0 0l4 4m-4-4l4-4" />
                 </svg>
                 Pemetaan Kategori OPD

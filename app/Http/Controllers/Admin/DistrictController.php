@@ -1,37 +1,98 @@
 <?php
+
 namespace App\Http\Controllers\Admin;
+
 use App\Http\Controllers\Controller;
 use App\Models\District;
 use Illuminate\Http\Request;
+use Illuminate\Support\Str;
+use Illuminate\Validation\Rule;
 
 class DistrictController extends Controller
 {
-    public function index()
+    public function index(Request $request)
     {
-        $districts = District::withCount('reports')->get();
-        return view('admin.districts.index', compact('districts'));
+        $query = District::withCount(['reports','districtChiefs as chief_count'])
+            ->with(['activeChief.user']);
+
+        if ($request->filled('search')) {
+            $s = $request->search;
+            $query->where(fn ($q) =>
+                $q->where('name',  'like', "%{$s}%")
+                  ->orWhere('email','like', "%{$s}%")
+                  ->orWhereHas('districtChiefs', fn ($r) =>
+                      $r->whereHas('user', fn ($u) => $u->where('name','like',"%{$s}%"))
+                  )
+            );
+        }
+
+        $districts = $query->orderBy('name')->get();
+
+        $stats = [
+            'total'     => $districts->count(),
+            'total_reports' => $districts->sum('reports_count'),
+        ];
+
+        return view('admin.districts.index', compact('districts','stats'));
     }
-    public function create()  { return view('admin.districts.create'); }
+
     public function store(Request $request)
     {
-        $request->validate(['name'=>'required|unique:districts','code'=>'required|unique:districts']);
-        District::create($request->only('name','code','regent_name','area_km2'));
-        return redirect()->route('admin.districts.index')->with('success','Kecamatan ditambahkan.');
+        $request->validate([
+            'name'  => 'required|string|max:50|unique:districts,name',
+            'email' => 'required|email|max:255|unique:districts,email',
+            'phone' => 'required|string|max:20',
+        ], [
+            'name.required'  => 'Nama kecamatan wajib diisi.',
+            'name.unique'    => 'Nama kecamatan sudah terdaftar.',
+            'email.required' => 'Email wajib diisi.',
+            'email.unique'   => 'Email sudah digunakan.',
+            'phone.required' => 'Nomor telepon wajib diisi.',
+        ]);
+
+        District::create([
+            'name'  => $request->name,
+            'slug'  => Str::slug($request->name),
+            'email' => $request->email,
+            'phone' => $request->phone,
+        ]);
+
+        return back()->with('success', "Kecamatan {$request->name} berhasil ditambahkan.");
     }
-    public function show(District $district)
+
+    public function update(Request $request, District $district)
     {
-        $district->loadCount('reports');
-        return view('admin.districts.show', compact('district'));
+        $request->validate([
+            'name'  => ['required','string','max:50', Rule::unique('districts','name')->ignore($district->id)],
+            'email' => ['required','email','max:255',  Rule::unique('districts','email')->ignore($district->id)],
+            'phone' => 'required|string|max:20',
+        ]);
+
+        $district->update([
+            'name'  => $request->name,
+            'slug'  => Str::slug($request->name),
+            'email' => $request->email,
+            'phone' => $request->phone,
+        ]);
+
+        return back()->with('success', "Kecamatan {$district->name} berhasil diperbarui.");
     }
-    public function edit(District $district)  { return view('admin.districts.edit', compact('district')); }
-    public function update(Request $r, District $district)
-    {
-        $district->update($r->only('name','code','regent_name','area_km2'));
-        return redirect()->route('admin.districts.index')->with('success','Kecamatan diperbarui.');
-    }
+
     public function destroy(District $district)
     {
+        // Cek apakah ada laporan aktif
+        $activeReports = $district->reports()
+            ->whereNotIn('status',['completed','rejected'])->count();
+
+        if ($activeReports > 0) {
+            return back()->withErrors([
+                'delete' => "Tidak dapat menghapus Kecamatan {$district->name} karena masih ada {$activeReports} laporan aktif.",
+            ]);
+        }
+
+        $name = $district->name;
         $district->delete();
-        return redirect()->route('admin.districts.index')->with('success','Kecamatan dihapus.');
+
+        return back()->with('success', "Kecamatan {$name} berhasil dihapus.");
     }
 }

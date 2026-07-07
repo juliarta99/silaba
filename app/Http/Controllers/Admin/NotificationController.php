@@ -1,26 +1,36 @@
 <?php
+
 namespace App\Http\Controllers\Admin;
+
 use App\Http\Controllers\Controller;
-use App\Models\Notification;
 use Illuminate\Http\Request;
+use App\Models\Notification;
+use Carbon\Carbon;
 
 class NotificationController extends Controller
 {
-    public function index()
+    public function index(Request $request)
     {
-        $notifications = Notification::latest()->paginate(20);
-        return view('admin.notifications.index', compact('notifications'));
-    }
-    public function store(Request $r)
-    {
-        $r->validate(['title'=>'required','message'=>'required','target_role'=>'nullable']);
-        Notification::create($r->only('title','message','target_role','target_user_id'));
-        // TODO: broadcast via WA / push notification
-        return back()->with('success','Notifikasi dikirim.');
-    }
-    public function destroy(Notification $notification)
-    {
-        $notification->delete();
-        return back()->with('success','Notifikasi dihapus.');
+        // 1. Hitung Statistik Notifikasi
+        $stats = [
+            'total'   => Notification::count(),
+            'sent'    => Notification::where('is_sent', true)->count(),
+            'pending' => Notification::where('is_sent', false)->count(),
+            'today'   => Notification::whereDate('created_at', Carbon::today())->count(),
+        ];
+
+        // 2. Query Data dengan Pencarian
+        // Asumsi: Model Notification memiliki relasi belongTo ke model Report
+        $query = Notification::with('report')->latest();
+
+        if ($request->has('search') && $request->search != '') {
+            $search = $request->search;
+            $query->where('phone', 'like', "%{$search}%")
+                  ->orWhere('message', 'like', "%{$search}%");
+        }
+
+        $notifications = $query->paginate(15);
+
+        return view('admin.notifications.index', compact('stats', 'notifications'));
     }
 }
