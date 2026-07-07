@@ -41,7 +41,7 @@ $isFieldOfficer = ($role === 'employee' && $position === 'field_officer');
 }
 </style>
 
-<div class="bg-gray-10 min-h-[calc(100vh-68px)] py-16"
+<div class="bg-gray-50 min-h-[calc(100vh-68px)] pb-10 pb-24 sm:pb-10"
      x-data="{ view: 'map' }">
 
     <div class="max-w-5xl mx-auto px-4 sm:px-6 pt-6">
@@ -59,15 +59,15 @@ $isFieldOfficer = ($role === 'employee' && $position === 'field_officer');
                 <h1 class="text-2xl font-bold text-gray-900">Peta Sebaran Laporan</h1>
                 <p class="text-sm text-gray-500 mt-0.5">
                     {{ $scopeNote }}
-                    <span class="inline-flex items-center gap-1 ml-1.5 text-xs font-medium text-gray-700
-                                 bg-gray-100 px-2 py-1 rounded-full">
+                    <span class="inline-flex items-center gap-1 ml-1.5 text-xs font-medium text-gray-400
+                                 bg-gray-100 px-2 py-0.5 rounded-full">
                         {{ $roleLabel }}
                     </span>
                 </p>
             </div>
 
             {{-- Toggle Peta/List --}}
-            <div class="flex items-center gap-1 bg-gray-50 rounded-xl p-1 shrink-0">
+            <div class="flex items-center gap-1 bg-gray-100 rounded-xl p-1 shrink-0">
                 <button type="button" @@click="view = 'map'"
                         class="px-4 py-2 rounded-lg text-sm font-semibold transition-all"
                         :class="view === 'map'
@@ -86,7 +86,7 @@ $isFieldOfficer = ($role === 'employee' && $position === 'field_officer');
         </div>
 
         {{-- ── Stat Cards ── --}}
-        <div class="grid grid-cols-2 sm:grid-cols-4 gap-2.5 mb-5">
+        <div class="grid grid-cols-4 gap-2.5 mb-5">
             @foreach ([
                 ['label' => 'Total Laporan', 'val' => $stats['total'],      'clr' => 'text-gray-900'],
                 ['label' => 'Menunggu',      'val' => $stats['pending'],    'clr' => 'text-error'],
@@ -108,14 +108,16 @@ $isFieldOfficer = ($role === 'employee' && $position === 'field_officer');
                 </svg>
                 Filter Peta
             </h2>
-            <form method="GET" action="{{ request()->url() }}">
+            <form method="GET" action="{{ request()->url() }}" x-data="{ expanded: {{ request()->hasAny(['date_from','date_to']) ? 'true' : 'false' }} }">
+
+                {{-- Baris 1: Status + Kecamatan + Kategori --}}
                 <div class="grid grid-cols-2 sm:grid-cols-3 gap-3 mb-3">
 
                     {{-- Status --}}
                     <div>
                         <label class="block text-xs font-medium text-gray-500 mb-1.5">Status</label>
                         <select name="status"
-                                class="w-full px-3 py-2.5 rounded-xl border border-gray-200 bg-gray-10 text-sm
+                                class="w-full px-3 py-2.5 rounded-xl border border-gray-200 bg-gray-50 text-sm
                                        text-gray-700 focus:bg-white focus:border-primary-500 focus:ring-1
                                        focus:ring-primary-500 outline-none transition-all"
                                 onchange="this.form.submit()">
@@ -133,12 +135,12 @@ $isFieldOfficer = ($role === 'employee' && $position === 'field_officer');
                         </select>
                     </div>
 
-                    {{-- Kecamatan (tidak untuk camat — sudah fixed) --}}
+                    {{-- Kecamatan (tidak untuk camat) --}}
                     @if ($showDistrictFilter)
                     <div>
                         <label class="block text-xs font-medium text-gray-500 mb-1.5">Kecamatan</label>
                         <select name="district"
-                                class="w-full px-3 py-2.5 rounded-xl border border-gray-200 bg-gray-10 text-sm
+                                class="w-full px-3 py-2.5 rounded-xl border border-gray-200 bg-gray-50 text-sm
                                        text-gray-700 focus:bg-white focus:border-primary-500 focus:ring-1
                                        focus:ring-primary-500 outline-none transition-all"
                                 onchange="this.form.submit()">
@@ -151,10 +153,10 @@ $isFieldOfficer = ($role === 'employee' && $position === 'field_officer');
                     @endif
 
                     {{-- Kategori --}}
-                    <div class="col-span-2 sm:col-span-1">
+                    <div class="{{ $showDistrictFilter ? '' : 'col-span-2 sm:col-span-1' }}">
                         <label class="block text-xs font-medium text-gray-500 mb-1.5">Kategori</label>
                         <select name="category"
-                                class="w-full px-3 py-2.5 rounded-xl border border-gray-200 bg-gray-10 text-sm
+                                class="w-full px-3 py-2.5 rounded-xl border border-gray-200 bg-gray-50 text-sm
                                        text-gray-700 focus:bg-white focus:border-primary-500 focus:ring-1
                                        focus:ring-primary-500 outline-none transition-all"
                                 onchange="this.form.submit()">
@@ -167,18 +169,148 @@ $isFieldOfficer = ($role === 'employee' && $position === 'field_officer');
 
                 </div>
 
+                {{-- Baris 2: Date Range (collapsible) --}}
+                <div class="border-t border-gray-50 pt-3 mb-3">
+                    <button type="button" @@click="expanded = !expanded"
+                            class="flex items-center gap-2 text-xs font-semibold text-gray-500
+                                   hover:text-gray-800 transition-colors mb-3">
+                        <svg class="w-3.5 h-3.5 transition-transform duration-200"
+                             :class="expanded ? 'rotate-180' : ''"
+                             fill="none" viewBox="0 0 14 14">
+                            <path d="M3 5l4 4 4-4" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+                        </svg>
+                        Filter Rentang Tanggal
+                        @if (request()->hasAny(['date_from','date_to']))
+                        <span class="inline-flex items-center gap-1 px-2 py-0.5 rounded-full
+                                     bg-primary-100 text-primary-600 text-[10px] font-bold">
+                            Aktif
+                        </span>
+                        @endif
+                    </button>
+
+                    <div x-show="expanded"
+                         x-transition:enter="transition ease-out duration-150"
+                         x-transition:enter-start="opacity-0 -translate-y-1"
+                         x-transition:enter-end="opacity-100 translate-y-0"
+                         x-transition:leave="transition ease-in duration-100"
+                         x-transition:leave-start="opacity-100"
+                         x-transition:leave-end="opacity-0"
+                         style="display:none;">
+                        <div class="grid grid-cols-1 sm:grid-cols-3 gap-3">
+
+                            {{-- Shortcut periode --}}
+                            <div>
+                                <label class="block text-xs font-medium text-gray-500 mb-1.5">Periode Cepat</label>
+                                <select x-data
+                                        @@change="
+                                            const v = $event.target.value;
+                                            const today = new Date();
+                                            const fmt = d => d.toISOString().split('T')[0];
+                                            const from = document.getElementById('date_from');
+                                            const to   = document.getElementById('date_to');
+                                            if (v === '7')       { const d = new Date(); d.setDate(d.getDate()-7);  from.value = fmt(d); to.value = fmt(today); }
+                                            else if (v === '30') { const d = new Date(); d.setDate(d.getDate()-30); from.value = fmt(d); to.value = fmt(today); }
+                                            else if (v === 'month') {
+                                                const d = new Date(today.getFullYear(), today.getMonth(), 1);
+                                                from.value = fmt(d); to.value = fmt(today);
+                                            }
+                                            else if (v === 'lastmonth') {
+                                                const s = new Date(today.getFullYear(), today.getMonth()-1, 1);
+                                                const e = new Date(today.getFullYear(), today.getMonth(), 0);
+                                                from.value = fmt(s); to.value = fmt(e);
+                                            }
+                                            else if (v === 'year') {
+                                                const d = new Date(today.getFullYear(), 0, 1);
+                                                from.value = fmt(d); to.value = fmt(today);
+                                            }
+                                            else { from.value = ''; to.value = ''; }
+                                        "
+                                        class="w-full px-3 py-2.5 rounded-xl border border-gray-200 bg-gray-50 text-sm
+                                               text-gray-700 focus:bg-white focus:border-primary-500 focus:ring-1
+                                               focus:ring-primary-500 outline-none transition-all">
+                                    <option value="">Pilih periode...</option>
+                                    <option value="7">7 hari terakhir</option>
+                                    <option value="30">30 hari terakhir</option>
+                                    <option value="month">Bulan ini</option>
+                                    <option value="lastmonth">Bulan lalu</option>
+                                    <option value="year">Tahun ini</option>
+                                </select>
+                            </div>
+
+                            {{-- Dari tanggal --}}
+                            <div>
+                                <label for="date_from" class="block text-xs font-medium text-gray-500 mb-1.5">
+                                    Dari Tanggal
+                                </label>
+                                <input type="date" id="date_from" name="date_from"
+                                       value="{{ request('date_from') }}"
+                                       max="{{ date('Y-m-d') }}"
+                                       class="w-full px-3 py-2.5 rounded-xl border border-gray-200 bg-gray-50 text-sm
+                                              text-gray-900 focus:bg-white focus:border-primary-500 focus:ring-1
+                                              focus:ring-primary-500 outline-none transition-all">
+                            </div>
+
+                            {{-- Sampai tanggal --}}
+                            <div>
+                                <label for="date_to" class="block text-xs font-medium text-gray-500 mb-1.5">
+                                    Sampai Tanggal
+                                </label>
+                                <input type="date" id="date_to" name="date_to"
+                                       value="{{ request('date_to') }}"
+                                       max="{{ date('Y-m-d') }}"
+                                       class="w-full px-3 py-2.5 rounded-xl border border-gray-200 bg-gray-50 text-sm
+                                              text-gray-900 focus:bg-white focus:border-primary-500 focus:ring-1
+                                              focus:ring-primary-500 outline-none transition-all">
+                            </div>
+
+                        </div>
+
+                        {{-- Tombol apply date filter --}}
+                        <div class="flex items-center gap-2 mt-3">
+                            <button type="submit"
+                                    class="px-4 py-2 rounded-xl bg-primary-500 hover:bg-primary-700
+                                           text-white text-xs font-semibold transition-colors">
+                                Terapkan Filter Tanggal
+                            </button>
+                            @if (request()->hasAny(['date_from','date_to']))
+                            <a href="{{ request()->url() . '?' . http_build_query(request()->except(['date_from','date_to'])) }}"
+                               class="px-4 py-2 rounded-xl border border-gray-200 text-gray-600
+                                      text-xs font-semibold hover:bg-gray-50 transition-colors">
+                                Hapus Filter Tanggal
+                            </a>
+                            @endif
+                        </div>
+                    </div>
+                </div>
+
+                {{-- Info & Reset --}}
                 <div class="flex items-center justify-between">
-                    <p class="text-xs text-gray-500">
-                        Menampilkan
-                        <span class="font-semibold text-gray-800">{{ $markers->count() }}</span>
-                        dari
-                        <span class="font-semibold">{{ $stats['total'] }}</span>
-                        laporan
-                    </p>
-                    @if (request()->hasAny(['status','district','category']))
+                    <div class="flex items-center gap-2">
+                        <p class="text-xs text-gray-500">
+                            Menampilkan
+                            <span class="font-semibold text-gray-800">{{ $markers->count() }}</span>
+                            dari
+                            <span class="font-semibold">{{ $stats['total'] }}</span>
+                            laporan
+                        </p>
+                        @if (request()->hasAny(['date_from','date_to']))
+                        <span class="text-xs text-gray-400">
+                            |
+                            @if (request('date_from') && request('date_to'))
+                                {{ \Carbon\Carbon::parse(request('date_from'))->translatedFormat('j M Y') }}
+                                — {{ \Carbon\Carbon::parse(request('date_to'))->translatedFormat('j M Y') }}
+                            @elseif (request('date_from'))
+                                sejak {{ \Carbon\Carbon::parse(request('date_from'))->translatedFormat('j M Y') }}
+                            @else
+                                s/d {{ \Carbon\Carbon::parse(request('date_to'))->translatedFormat('j M Y') }}
+                            @endif
+                        </span>
+                        @endif
+                    </div>
+                    @if (request()->hasAny(['status','district','category','date_from','date_to']))
                     <a href="{{ request()->url() }}"
                        class="text-xs font-semibold text-primary-500 hover:text-primary-700 transition-colors">
-                        Reset Filter
+                        Reset Semua Filter
                     </a>
                     @endif
                 </div>
@@ -282,7 +414,7 @@ $isFieldOfficer = ($role === 'employee' && $position === 'field_officer');
 
 {{-- Petugas lapangan: bottom nav --}}
 @if ($isFieldOfficer)
-<x-employee.bottom-nav active="map" :badge="$stats['inProgress']"/>
+<x-employee.bottom-nav active="assignments" :badge="0" />
 @endif
 
 {{-- ══════ LEAFLET + CLUSTER SCRIPTS ══════ --}}

@@ -55,10 +55,18 @@ class MapController extends Controller
         // else: tidak ada where tambahan
 
         // ── User filters ──────────────────────────────────────────────────
-        if ($request->filled('status'))   $query->where('status',      $request->status);
-        if ($request->filled('priority')) $query->where('priority',    $request->priority);
-        if ($request->filled('district')) $query->where('district_id', $request->district);
-        if ($request->filled('category')) $query->where('category_id', $request->category);
+        if ($request->filled('status'))    $query->where('status',      $request->status);
+        if ($request->filled('priority'))  $query->where('priority',    $request->priority);
+        if ($request->filled('district'))  $query->where('district_id', $request->district);
+        if ($request->filled('category'))  $query->where('category_id', $request->category);
+
+        // Date range filter
+        if ($request->filled('date_from')) {
+            $query->whereDate('created_at', '>=', $request->date_from);
+        }
+        if ($request->filled('date_to')) {
+            $query->whereDate('created_at', '<=', $request->date_to);
+        }
 
         $reports = $query->orderByDesc('created_at')->get();
 
@@ -83,7 +91,7 @@ class MapController extends Controller
                 'officer'      => $allOfficers[0] ?? '-',
                 'color'        => $this->statusColor($r->status),
                 'created_at'   => $r->created_at->translatedFormat('j M Y'),
-                'url'          => route('reports.show', $r->code),
+                'url'          => $this->detailUrl($r->code),
             ];
         });
 
@@ -132,6 +140,30 @@ class MapController extends Controller
             'completed'             => 'green',
             'rejected'              => 'gray',
             default                 => 'red',
+        };
+    }
+
+    // ── URL detail laporan sesuai role ────────────────────────────────────
+    private function detailUrl(string $code): string
+    {
+        $user     = Auth::user();
+        $role     = $user->role;
+        $position = $user->employee?->position;
+
+        return match(true) {
+            $role === 'regent'
+                => route('regent.reports.show', $code),
+
+            $role === 'district_chief'
+                => route('district-chief.reports.show', $code),
+
+            $role === 'employee' && $position === 'field_officer'
+                => route('employee.field-officer.assignments.show', $code),
+
+            $role === 'employee' && in_array($position, ['supervisor','head_of_department'])
+                => route('employee.supervisor.reports.show', $code),
+
+            default => route('reports.show', $code),
         };
     }
 
