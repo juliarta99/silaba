@@ -46,13 +46,13 @@ use App\Http\Controllers\DistrictChief\PriorityController;
 use App\Http\Controllers\DistrictChief\ProfileController as DistrictChiefProfileController;
 use App\Http\Controllers\DistrictChief\ReportController as DistrictChiefReportController;
 use App\Http\Controllers\Employee\ProfileController;
+use App\Http\Controllers\Regent\CompareController as RegentCompareController;
 // Regent ( Bupati / Sekda)
 use App\Http\Controllers\Regent\DashboardController    as RegentDashboard;
-use App\Http\Controllers\Regent\ProfileController      as RegentProfile;
-use App\Http\Controllers\Regent\ReportController       as RegentReport;
-use App\Http\Controllers\Regent\DepartmentController   as RegentDepartment;
+use App\Http\Controllers\Regent\PriorityController as RegentPriorityController;
+use App\Http\Controllers\Regent\ProfileController as RegentProfileController;
+use App\Http\Controllers\Regent\ReportController as RegentReportController;
 use App\Http\Controllers\Shared\MapController;
-use App\Services\GeminiInsightService;
 
 /*
 |=============================================================================
@@ -359,19 +359,20 @@ Route::middleware(['auth', 'role:regent'])
     ->name('regent.')
     ->group(function () {
 
-    Route::get('/dashboard',      [RegentDashboard::class,  'index'])->name('dashboard');
-    Route::get('/profil',         [RegentProfile::class,    'index'])->name('profile');
+    Route::get('/dashboard',        [RegentDashboard::class, 'index'])->name('dashboard');
+    Route::get('/peta',             [MapController::class,  'index'])->name('reports.map');
 
-    // Daftar Laporan (read-only)
-    Route::get('/laporan',        [RegentReport::class,     'index'])->name('reports.index');
-    Route::get('/laporan/{report}',[RegentReport::class,    'show'])->name('reports.show');
+    Route::get('/laporan',         [RegentReportController::class, 'index']) ->name('reports.index');
+    Route::get('/komparasi',        [RegentCompareController::class, 'index'])->name('reports.compare');
+    Route::get('/komparasi/export', [RegentCompareController::class, 'export'])->name('reports.compare.export');
 
-    // Peta Sebaran
-    Route::get('/peta', [MapController::class, 'index'])->name('reports.map');
+    // profile
+    Route::get('/profil',           [RegentProfileController::class, 'index'])->name('profile');
+    Route::patch('/profil/update',  [RegentProfileController::class, 'update'])->name('profile.update');
+    Route::patch('/profil/foto',    [RegentProfileController::class, 'updatePhoto'])->name('profile.photo');
+    Route::patch('/profil/password',[RegentProfileController::class, 'updatePassword'])->name('profile.password');
 
-    // Rekomendasi Prioritas
-    Route::get('/rekomendasi',    [RegentReport::class,     'priority'])->name('reports.priority');
-
-    // Komparasi Instansi
-    Route::get('/komparasi',      [RegentDepartment::class, 'compare'])->name('departments.compare');
+    // priority
+    Route::get('/prioritas',        [RegentPriorityController::class, 'index']) ->name('reports.priority');
+    Route::get('/prioritas/export', [RegentPriorityController::class, 'export'])->name('reports.priority.export');
 });

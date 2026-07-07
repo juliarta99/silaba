@@ -186,9 +186,9 @@
             @if ($isRegent)
                 <x-navbar-link :href="route('regent.dashboard')"            :active="request()->routeIs('regent.dashboard')">Dashboard</x-navbar-link>
                 <x-navbar-link :href="route('regent.reports.index')"        :active="request()->routeIs('regent.reports.index')">Daftar Laporan</x-navbar-link>
-                {{-- <x-navbar-link :href="route('regent.departments.compare')"  :active="request()->routeIs('regent.departments.compare')">Komparasi Instansi</x-navbar-link> --}}
+                <x-navbar-link :href="route('regent.reports.compare')"  :active="request()->routeIs('regent.reports.compare')">Komparasi Instansi</x-navbar-link>
                 <x-navbar-link :href="route('regent.reports.map')"          :active="request()->routeIs('regent.reports.map')">Peta Sebaran</x-navbar-link>
-                {{-- <x-navbar-primary-btn :href="route('regent.reports.priority')" class="ml-1">Rekomendasi Prioritas</x-navbar-primary-btn> --}}
+                <x-navbar-primary-btn :href="route('regent.reports.priority')" class="ml-1">Rekomendasi Prioritas</x-navbar-primary-btn>
             @endif
 
             @if ($isDistrictChief)
@@ -397,9 +397,9 @@
         @if ($isRegent)
             <x-navbar-mobile-link :href="route('regent.dashboard')">Dashboard</x-navbar-mobile-link>
             <x-navbar-mobile-link :href="route('regent.reports.index')">Daftar Laporan</x-navbar-mobile-link>
-            {{-- <x-navbar-mobile-link :href="route('regent.departments.compare')">Komparasi Instansi</x-navbar-mobile-link> --}}
+            <x-navbar-mobile-link :href="route('regent.reports.compare')">Komparasi Instansi</x-navbar-mobile-link>
             <x-navbar-mobile-link :href="route('regent.reports.map')">Peta Sebaran</x-navbar-mobile-link>
-            {{-- <x-navbar-mobile-btn  :href="route('regent.reports.priority')">Rekomendasi Prioritas</x-navbar-mobile-btn> --}}
+            <x-navbar-mobile-btn  :href="route('regent.reports.priority')">Rekomendasi Prioritas</x-navbar-mobile-btn>
         @endif
 
         @if ($isDistrictChief)

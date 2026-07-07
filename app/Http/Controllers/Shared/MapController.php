@@ -152,7 +152,7 @@ class MapController extends Controller
 
         return match(true) {
             $role === 'regent'
-                => route('regent.reports.show', $code),
+                => route('reports.show', $code),
 
             $role === 'district_chief'
                 => route('reports.show', $code),
