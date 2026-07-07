@@ -29,7 +29,6 @@ use App\Http\Controllers\Employee\Supervisor\ReviewController         as SupRevi
 use App\Http\Controllers\Employee\HeadOfDepartment\DashboardController as HoDDashboard;
 
 // Admin / Super Admin
-use App\Http\Controllers\Admin\DashboardController     as AdminDashboard;
 use App\Http\Controllers\Admin\ProfileController       as AdminProfile;
 use App\Http\Controllers\Admin\UserController;
 use App\Http\Controllers\Admin\DistrictController;
@@ -38,6 +37,7 @@ use App\Http\Controllers\Admin\DepartmentController    as AdminDepartment;
 use App\Http\Controllers\Admin\RewardController        as AdminReward;
 use App\Http\Controllers\Admin\NotificationController;
 use App\Http\Controllers\Admin\CategoryOpdController;
+use App\Http\Controllers\Admin\DashboardController;
 use App\Http\Controllers\Citizen\NotificationController as CitizenNotificationController;
 use App\Http\Controllers\DepartmentController;
 use App\Http\Controllers\DistrictChief\CompareController;
@@ -66,6 +66,12 @@ Route::get('/laporan/buat',     fn() => view('public.reports.create'))->name('re
 Route::get('/laporan/berhasil', [ReportController::class, 'success'])->name('reports.success');
 Route::get('/laporan/{code}',   [ReportController::class, 'show'])->name('reports.show');
 Route::get('/departments/{department}', [DepartmentController::class, 'show'])->name('departments.show');
+Route::get('/dashboardadmin', function(){
+    return view("DashboardAdmin");
+});
+Route::get('/manajemenpetugas', function(){
+    return view("ManajemenPetugas");
+});
 
 /*
 |=============================================================================
@@ -278,26 +284,21 @@ Route::middleware(['auth', 'role:district_chief'])
 |   super_admin → semua admin + tambah/hapus admin lain (UserController)
 |=============================================================================
 */
-Route::middleware(['auth'])
+Route::middleware(['auth', 'role:admin'])
     ->prefix('admin')
     ->name('admin.')
     ->group(function () {
 
-    Route::get('/dashboard',  [AdminDashboard::class, 'index'])->name('dashboard');
+    Route::get('/dashboard',  [DashboardController::class, 'index'])->name('dashboard');
     Route::get('/profil',     [AdminProfile::class,   'index'])->name('profile');
 
     // ── Manajemen Pengguna (semua user: warga, petugas, supervisor, dll) ──
-    Route::get('/pengguna',              [UserController::class, 'index'])->name('users.index');
-    Route::get('/pengguna/{user}',       [UserController::class, 'show'])->name('users.show');
-    Route::get('/pengguna/{user}/edit',  [UserController::class, 'edit'])->name('users.edit');
-    Route::put('/pengguna/{user}',       [UserController::class, 'update'])->name('users.update');
-    Route::delete('/pengguna/{user}',    [UserController::class, 'destroy'])->name('users.destroy');
-
-    // Hanya super_admin yang bisa tambah admin baru
-    Route::middleware('role:super_admin')->group(function () {
-        Route::get('/pengguna/tambah',   [UserController::class, 'create'])->name('users.create');
-        Route::post('/pengguna',         [UserController::class, 'store'])->name('users.store');
-    });
+    Route::get('/pengguna',          [UserController::class, 'index'])  ->name('users.index');
+    Route::get('/pengguna/tambah',   [UserController::class, 'create']) ->name('users.create');
+    Route::post('/pengguna',         [UserController::class, 'store'])  ->name('users.store');
+    Route::get('/pengguna/{user}/edit', [UserController::class, 'edit'])->name('users.edit');
+    Route::put('/pengguna/{user}',   [UserController::class, 'update']) ->name('users.update');
+    Route::delete('/pengguna/{user}',[UserController::class, 'destroy'])->name('users.destroy');
 
     // ── Manajemen Kecamatan ──
     Route::get('/kecamatan',             [DistrictController::class, 'index'])->name('districts.index');

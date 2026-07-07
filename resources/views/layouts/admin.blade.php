@@ -28,17 +28,6 @@
     ════════════════════════════════════════════════════════════ --}}
     <main class="md:ml-[280px] min-h-screen flex flex-col transition-all duration-300">
         <div class="p-6 sm:p-8 flex-1">
-            
-            {{-- Header Halaman --}}
-            <div class="mb-8">
-                <h1 class="text-2xl sm:text-3xl font-extrabold text-gray-900">
-                    @yield('page_title', 'Dashboard Admin Sistem')
-                </h1>
-                <p class="text-sm text-gray-500 mt-1">
-                    @yield('page_subtitle', 'Kelola seluruh konfigurasi sistem, pengguna, dan data master')
-                </p>
-            </div>
-
             {{-- Tempat Konten Dynamic Laravel --}}
             @yield('content')
 
