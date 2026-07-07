@@ -278,7 +278,7 @@ Route::middleware(['auth', 'role:district_chief'])
 |   super_admin → semua admin + tambah/hapus admin lain (UserController)
 |=============================================================================
 */
-Route::middleware(['auth', 'role:admin|super_admin'])
+Route::middleware(['auth'])
     ->prefix('admin')
     ->name('admin.')
     ->group(function () {

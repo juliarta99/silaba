@@ -36,9 +36,15 @@ class User extends Authenticatable
         ];
     }
 
-    // ── Auth: override field untuk login ──────────────────────────────────
-    // Laravel default pakai 'email', kita ganti ke 'identifier'
     public function getAuthIdentifierName(): string
+    {
+        return 'id';
+    }
+
+    /**
+     * Shortcut buatan sendiri (opsional) untuk tahu field login yang dipakai
+     */
+    public function getLoginFieldName(): string
     {
         return 'identifier';
     }

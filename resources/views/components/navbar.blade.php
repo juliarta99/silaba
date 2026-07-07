@@ -13,6 +13,7 @@
     $isHoD          = $role === 'employee' && $position === 'head_of_department';
     $isRegent        = $role === 'regent';
     $isDistrictChief = $role === 'district_chief';
+    $isAdmin = $role === 'admin' || $role === 'super_admin';
     $isLoggedIn      = ! $isGuest;
 
     $profileRoute = match(true) {
@@ -164,6 +165,10 @@
                 <x-navbar-link :href="route('employee.field-officer.dashboard')"
                                :active="request()->routeIs('employee.field-officer.dashboard')">Dashboard</x-navbar-link>
                 <x-navbar-primary-btn :href="route('employee.field-officer.assignments.index')" class="ml-1">Tugas Saya</x-navbar-primary-btn>
+            @endif
+
+            @if ($isAdmin)
+                <x-navbar-primary-btn :href="route('admin.dashboard')">Dashboard</x-navbar-primary-btn>
             @endif
 
             @if ($isSupervisor)
@@ -378,6 +383,9 @@
         @if ($isFieldOfficer)
             <x-navbar-mobile-link :href="route('employee.field-officer.dashboard')">Dashboard</x-navbar-mobile-link>
             <x-navbar-mobile-btn  :href="route('employee.field-officer.assignments.index')">Tugas Saya</x-navbar-mobile-btn>
+        @endif
+        @if ($isAdmin)
+            <x-navbar-mobile-btn :href="route('admin.dashboard')">Dashboard</x-navbar-mobile-btn>
         @endif
         @if ($isSupervisor)
             <x-navbar-mobile-link :href="route('employee.supervisor.dashboard')">Dashboard</x-navbar-mobile-link>
