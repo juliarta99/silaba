@@ -63,6 +63,25 @@ Route::get('/laporan/berhasil', [ReportController::class, 'success'])->name('rep
 Route::get('/laporan/{code}',   [ReportController::class, 'show'])->name('reports.show');
 Route::get('/departments/{department}', [DepartmentController::class, 'show'])->name('departments.show');
 
+
+
+Route::get('/manajemenKategoriAdmin', function() {
+return view('manajemenKategoriAdmin');
+})->name('manajemenKategoriAdmin.show');
+
+Route::get('/pemetaanKategoriOpd', function() {
+return view('pemetaanKategoriOpd');
+})->name('pemetaanKategoriOpd.show');
+
+Route::get('/manajemenKecamatanAdmin', function() {
+return view('manajemenKecamatanAdmin');
+})->name('manajemenKecamatanAdmin.show');
+
+Route::get('/manajemenOpdAdmin', function() {
+return view('manajemenOpdAdmin');
+})->name('manajemenOpdAdmin.show');
+
+
 /*
 |=============================================================================
 | AUTH ROUTES
@@ -71,7 +90,7 @@ Route::get('/departments/{department}', [DepartmentController::class, 'show'])->
 Route::middleware('guest')->group(function () {
     Route::get('/masuk', [AuthController::class, 'showLogin'])->name('login');
     Route::post('/masuk', [AuthController::class, 'login'])->name('login.post');
- 
+
     Route::view('/daftar', 'auth.register')->name('register');
     Route::view('/verifikasi-berhasil', 'auth.verify-otp-success')->name('verify.otp.success');
 
@@ -122,7 +141,7 @@ Route::middleware(['auth', 'role:employee'])
     ->prefix('petugas')
     ->name('employee.')
     ->group(function () {
-    
+
     Route::get('/profil',            [ProfileController::class, 'index'])->name('profile');
     Route::patch('/profil',          [ProfileController::class, 'update'])->name('profile.update');
     Route::patch('/profil/foto',     [ProfileController::class, 'updatePhoto'])->name('profile.photo');
