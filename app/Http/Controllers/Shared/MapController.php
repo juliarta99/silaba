@@ -155,7 +155,7 @@ class MapController extends Controller
                 => route('regent.reports.show', $code),
 
             $role === 'district_chief'
-                => route('district-chief.reports.show', $code),
+                => route('reports.show', $code),
 
             $role === 'employee' && $position === 'field_officer'
                 => route('employee.field-officer.assignments.show', $code),

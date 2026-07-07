@@ -41,7 +41,7 @@ $isFieldOfficer = ($role === 'employee' && $position === 'field_officer');
 }
 </style>
 
-<div class="bg-gray-50 min-h-[calc(100vh-68px)] pb-10 pb-24 sm:pb-10"
+<div class="bg-gray-10 min-h-[calc(100vh-68px)] py-16"
      x-data="{ view: 'map' }">
 
     <div class="max-w-5xl mx-auto px-4 sm:px-6 pt-6">
@@ -117,7 +117,7 @@ $isFieldOfficer = ($role === 'employee' && $position === 'field_officer');
                     <div>
                         <label class="block text-xs font-medium text-gray-500 mb-1.5">Status</label>
                         <select name="status"
-                                class="w-full px-3 py-2.5 rounded-xl border border-gray-200 bg-gray-50 text-sm
+                                class="w-full px-3 py-2.5 rounded-xl border border-gray-200 bg-gray-10 text-sm
                                        text-gray-700 focus:bg-white focus:border-primary-500 focus:ring-1
                                        focus:ring-primary-500 outline-none transition-all"
                                 onchange="this.form.submit()">
@@ -140,7 +140,7 @@ $isFieldOfficer = ($role === 'employee' && $position === 'field_officer');
                     <div>
                         <label class="block text-xs font-medium text-gray-500 mb-1.5">Kecamatan</label>
                         <select name="district"
-                                class="w-full px-3 py-2.5 rounded-xl border border-gray-200 bg-gray-50 text-sm
+                                class="w-full px-3 py-2.5 rounded-xl border border-gray-200 bg-gray-10 text-sm
                                        text-gray-700 focus:bg-white focus:border-primary-500 focus:ring-1
                                        focus:ring-primary-500 outline-none transition-all"
                                 onchange="this.form.submit()">
@@ -156,7 +156,7 @@ $isFieldOfficer = ($role === 'employee' && $position === 'field_officer');
                     <div class="{{ $showDistrictFilter ? '' : 'col-span-2 sm:col-span-1' }}">
                         <label class="block text-xs font-medium text-gray-500 mb-1.5">Kategori</label>
                         <select name="category"
-                                class="w-full px-3 py-2.5 rounded-xl border border-gray-200 bg-gray-50 text-sm
+                                class="w-full px-3 py-2.5 rounded-xl border border-gray-200 bg-gray-10 text-sm
                                        text-gray-700 focus:bg-white focus:border-primary-500 focus:ring-1
                                        focus:ring-primary-500 outline-none transition-all"
                                 onchange="this.form.submit()">
@@ -225,7 +225,7 @@ $isFieldOfficer = ($role === 'employee' && $position === 'field_officer');
                                             }
                                             else { from.value = ''; to.value = ''; }
                                         "
-                                        class="w-full px-3 py-2.5 rounded-xl border border-gray-200 bg-gray-50 text-sm
+                                        class="w-full px-3 py-2.5 rounded-xl border border-gray-200 bg-gray-10 text-sm
                                                text-gray-700 focus:bg-white focus:border-primary-500 focus:ring-1
                                                focus:ring-primary-500 outline-none transition-all">
                                     <option value="">Pilih periode...</option>
@@ -245,7 +245,7 @@ $isFieldOfficer = ($role === 'employee' && $position === 'field_officer');
                                 <input type="date" id="date_from" name="date_from"
                                        value="{{ request('date_from') }}"
                                        max="{{ date('Y-m-d') }}"
-                                       class="w-full px-3 py-2.5 rounded-xl border border-gray-200 bg-gray-50 text-sm
+                                       class="w-full px-3 py-2.5 rounded-xl border border-gray-200 bg-gray-10 text-sm
                                               text-gray-900 focus:bg-white focus:border-primary-500 focus:ring-1
                                               focus:ring-primary-500 outline-none transition-all">
                             </div>
@@ -258,7 +258,7 @@ $isFieldOfficer = ($role === 'employee' && $position === 'field_officer');
                                 <input type="date" id="date_to" name="date_to"
                                        value="{{ request('date_to') }}"
                                        max="{{ date('Y-m-d') }}"
-                                       class="w-full px-3 py-2.5 rounded-xl border border-gray-200 bg-gray-50 text-sm
+                                       class="w-full px-3 py-2.5 rounded-xl border border-gray-200 bg-gray-10 text-sm
                                               text-gray-900 focus:bg-white focus:border-primary-500 focus:ring-1
                                               focus:ring-primary-500 outline-none transition-all">
                             </div>
@@ -275,7 +275,7 @@ $isFieldOfficer = ($role === 'employee' && $position === 'field_officer');
                             @if (request()->hasAny(['date_from','date_to']))
                             <a href="{{ request()->url() . '?' . http_build_query(request()->except(['date_from','date_to'])) }}"
                                class="px-4 py-2 rounded-xl border border-gray-200 text-gray-600
-                                      text-xs font-semibold hover:bg-gray-50 transition-colors">
+                                      text-xs font-semibold hover:bg-gray-10 transition-colors">
                                 Hapus Filter Tanggal
                             </a>
                             @endif

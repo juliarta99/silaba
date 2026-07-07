@@ -24,11 +24,9 @@ use App\Http\Controllers\Employee\Supervisor\ReportController         as SupRepo
 use App\Http\Controllers\Employee\Supervisor\AssignmentController     as SupAssignment;
 use App\Http\Controllers\Employee\Supervisor\DepartmentController     as SupDepartment;
 use App\Http\Controllers\Employee\Supervisor\ReviewController         as SupReview;
-use App\Http\Controllers\Employee\Supervisor\ProfileController        as SupProfile;
 
 // Employee — Head of Department (head_of_department) hanya untuk halaman eksklusif HoD
 use App\Http\Controllers\Employee\HeadOfDepartment\DashboardController as HoDDashboard;
-use App\Http\Controllers\Employee\HeadOfDepartment\ProfileController   as HoDProfile;
 
 // Admin / Super Admin
 use App\Http\Controllers\Admin\DashboardController     as AdminDashboard;
@@ -42,8 +40,12 @@ use App\Http\Controllers\Admin\NotificationController;
 use App\Http\Controllers\Admin\CategoryOpdController;
 use App\Http\Controllers\Citizen\NotificationController as CitizenNotificationController;
 use App\Http\Controllers\DepartmentController;
+use App\Http\Controllers\DistrictChief\CompareController;
+use App\Http\Controllers\DistrictChief\DashboardController as CamatDashboardController;
+use App\Http\Controllers\DistrictChief\ProfileController as DistrictChiefProfileController;
+use App\Http\Controllers\DistrictChief\ReportController as DistrictChiefReportController;
 use App\Http\Controllers\Employee\ProfileController;
-// Regent (Camat / Bupati / Sekda)
+// Regent ( Bupati / Sekda)
 use App\Http\Controllers\Regent\DashboardController    as RegentDashboard;
 use App\Http\Controllers\Regent\ProfileController      as RegentProfile;
 use App\Http\Controllers\Regent\ReportController       as RegentReport;
@@ -198,7 +200,6 @@ Route::middleware(['auth', 'role:employee', 'employee.position:head_of_departmen
     ->group(function () {
 
     Route::get('/dashboard',  [HoDDashboard::class, 'index'])->name('dashboard');
-    Route::get('/profil',     [HoDProfile::class,   'index'])->name('profile');
 
     Route::get('/peta', [MapController::class, 'index'])->name('reports.map');
 
@@ -241,6 +242,27 @@ Route::middleware(['auth', 'role:employee', 'employee.position:supervisor,head_o
     Route::post('/pegawai', [SupDepartment::class, 'storeEmployee'])->name('employees.store');
     Route::put('/pegawai/{employee}', [SupDepartment::class, 'updateEmployee'])->name('employees.update');
     Route::delete('/pegawai/{employee}', [SupDepartment::class, 'destroyEmployee'])->name('employees.destroy');
+});
+
+
+// CAMAT
+Route::middleware(['auth', 'role:district_chief'])
+    ->prefix('camat')
+    ->name('district-chief.')
+    ->group(function () {
+ 
+    Route::get('/dashboard',        [CamatDashboardController::class, 'index'])->name('dashboard');
+    Route::get('/peta',             [MapController::class,  'index'])->name('reports.map');
+
+    Route::get('/laporan',         [DistrictChiefReportController::class, 'index']) ->name('reports.index');
+    Route::get('/komparasi',        [CompareController::class, 'index'])->name('reports.compare');
+    Route::get('/komparasi/export', [CompareController::class, 'export'])->name('reports.compare.export');
+
+    // profile
+    Route::get('/profil',           [DistrictChiefProfileController::class, 'index'])->name('profile');
+    Route::patch('/profil/update',  [DistrictChiefProfileController::class, 'update'])->name('profile.update');
+    Route::patch('/profil/foto',    [DistrictChiefProfileController::class, 'updatePhoto'])->name('profile.photo');
+    Route::patch('/profil/password',[DistrictChiefProfileController::class, 'updatePassword'])->name('profile.password');
 });
 
 /*
@@ -322,7 +344,7 @@ Route::middleware(['auth', 'role:admin|super_admin'])
 
 /*
 |=============================================================================
-| REGENT (Camat / Bupati / Sekda) — /pejabat
+| REGENT (Bupati / Sekda) — /pejabat
 | user.role = regent
 |
 | Halaman: Dashboard ESS, Komparasi Instansi, Rekomendasi Prioritas,

@@ -5,12 +5,10 @@ namespace App\Http\Controllers\Employee\Supervisor;
 use App\Http\Controllers\Controller;
 use App\Models\Category;
 use App\Models\District;
-use App\Models\Employee;
 use App\Models\Report;
 use App\Models\Assignment;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
-use Illuminate\Support\Facades\DB;
 use Carbon\Carbon;
 
 class ReportController extends Controller

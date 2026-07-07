@@ -11,24 +11,31 @@
     $isFieldOfficer = $role === 'employee' && $position === 'field_officer';
     $isSupervisor   = $role === 'employee' && $position === 'supervisor';
     $isHoD          = $role === 'employee' && $position === 'head_of_department';
-    $isRegent       = $role === 'regent';
-    $isLoggedIn     = ! $isGuest;
+    $isRegent        = $role === 'regent';
+    $isDistrictChief = $role === 'district_chief';
+    $isLoggedIn      = ! $isGuest;
 
     $profileRoute = match(true) {
-        $isFieldOfficer => route('employee.profile'),
-        $isSupervisor   => route('employee.profile'),
-        $isHoD          => route('employee.profile'),
-        $isRegent       => route('regent.profile'),
-        default         => null,
+        $isFieldOfficer  => route('employee.profile'),
+        $isSupervisor    => route('employee.profile'),
+        $isHoD           => route('employee.profile'),
+        $isRegent        => route('regent.profile'),
+        $isDistrictChief => route('district-chief.profile'),
+        default          => null,
     };
 
+    $districtName = $isDistrictChief
+        ? ($user->districtChief?->district?->name ?? '')
+        : '';
+
     $roleLabel = match(true) {
-        $isCitizen      => 'Warga',
-        $isFieldOfficer => 'Petugas Lapangan',
-        $isSupervisor   => 'Supervisor',
-        $isHoD          => 'Kepala Dinas',
-        $isRegent       => 'Pejabat',
-        default         => '',
+        $isCitizen       => 'Warga',
+        $isFieldOfficer  => 'Petugas Lapangan',
+        $isSupervisor    => 'Supervisor',
+        $isHoD           => 'Kepala Dinas',
+        $isRegent        => 'Bupati/Pejabat',
+        $isDistrictChief => 'Camat' . ($districtName ? ' ' . $districtName : ''),
+        default          => '',
     };
 @endphp
 
@@ -156,33 +163,39 @@
             @if ($isFieldOfficer)
                 <x-navbar-link :href="route('employee.field-officer.dashboard')"
                                :active="request()->routeIs('employee.field-officer.dashboard')">Dashboard</x-navbar-link>
-                <x-navbar-link :href="route('employee.field-officer.reports.map')"    :active="request()->routeIs('employee.field-officer.reports.map')">Peta Sebaran</x-navbar-link>
                 <x-navbar-primary-btn :href="route('employee.field-officer.assignments.index')" class="ml-1">Tugas Saya</x-navbar-primary-btn>
             @endif
 
             @if ($isSupervisor)
                 <x-navbar-link :href="route('employee.supervisor.dashboard')"  :active="request()->routeIs('employee.supervisor.dashboard')">Dashboard</x-navbar-link>
-                <x-navbar-link :href="route('employee.supervisor.reports.index')"  :active="request()->routeIs('employee.supervisor.reports.*') && !request()->routeIs('employee.supervisor.reports.map')">Daftar Laporan</x-navbar-link>
-                <x-navbar-link :href="route('employee.supervisor.assignments.index')" :active="request()->routeIs('employee.supervisor.assignments.*')">Penugasan Petugas</x-navbar-link>
+                <x-navbar-link :href="route('employee.shared.reports.index')"  :active="request()->routeIs('employee.shared.reports.*') && !request()->routeIs('employee.shared.reports.map')">Daftar Laporan</x-navbar-link>
+                <x-navbar-link :href="route('employee.shared.assignments.index')" :active="request()->routeIs('employee.shared.assignments.*')">Penugasan Petugas</x-navbar-link>
                 <x-navbar-link :href="route('employee.shared.departments.index')" :active="request()->routeIs('employee.shared.departments.*')">Kelola Instansi</x-navbar-link>
-                <x-navbar-link :href="route('employee.supervisor.reports.map')"    :active="request()->routeIs('employee.supervisor.reports.map')">Peta Sebaran</x-navbar-link>
-                <x-navbar-primary-btn :href="route('employee.supervisor.reviews.index')" class="ml-1">Performa</x-navbar-primary-btn>
+                <x-navbar-primary-btn :href="route('employee.shared.reviews.index')" class="ml-1">Performa</x-navbar-primary-btn>
+                <x-navbar-link :href="route('employee.shared.reports.map')"    :active="request()->routeIs('employee.shared.reports.map')">Peta Sebaran</x-navbar-link>
             @endif
 
             @if ($isHoD)
                 <x-navbar-link :href="route('employee.head.dashboard')"        :active="request()->routeIs('employee.head.dashboard')">Dashboard</x-navbar-link>
-                <x-navbar-link :href="route('employee.head.reports.index')"  :active="request()->routeIs('employee.head.reports.*') && !request()->routeIs('employee.head.reports.map')">Daftar Laporan</x-navbar-link>
+                <x-navbar-link :href="route('employee.shared.reports.index')"  :active="request()->routeIs('employee.shared.reports.*') && !request()->routeIs('employee.shared.reports.map')">Daftar Laporan</x-navbar-link>
                 <x-navbar-link :href="route('employee.shared.departments.index')" :active="request()->routeIs('employee.shared.departments.*')">Kelola Instansi</x-navbar-link>
-                <x-navbar-link :href="route('employee.head.reports.map')"    :active="request()->routeIs('employee.head.reports.map')">Peta Sebaran</x-navbar-link>
-                <x-navbar-primary-btn :href="route('employee.head.reviews.index')" class="ml-1">Performa</x-navbar-primary-btn>
+                <x-navbar-primary-btn :href="route('employee.shared.reviews.index')" class="ml-1">Performa</x-navbar-primary-btn>
+                <x-navbar-link :href="route('employee.shared.reports.map')"    :active="request()->routeIs('employee.shared.reports.map')">Peta Sebaran</x-navbar-link>
             @endif
 
             @if ($isRegent)
                 <x-navbar-link :href="route('regent.dashboard')"            :active="request()->routeIs('regent.dashboard')">Dashboard</x-navbar-link>
                 <x-navbar-link :href="route('regent.reports.index')"        :active="request()->routeIs('regent.reports.index')">Daftar Laporan</x-navbar-link>
-                <x-navbar-link :href="route('regent.departments.compare')"  :active="request()->routeIs('regent.departments.compare')">Komparasi Instansi</x-navbar-link>
+                {{-- <x-navbar-link :href="route('regent.departments.compare')"  :active="request()->routeIs('regent.departments.compare')">Komparasi Instansi</x-navbar-link> --}}
                 <x-navbar-link :href="route('regent.reports.map')"          :active="request()->routeIs('regent.reports.map')">Peta Sebaran</x-navbar-link>
-                <x-navbar-primary-btn :href="route('regent.reports.priority')" class="ml-1">Rekomendasi Prioritas</x-navbar-primary-btn>
+                {{-- <x-navbar-primary-btn :href="route('regent.reports.priority')" class="ml-1">Rekomendasi Prioritas</x-navbar-primary-btn> --}}
+            @endif
+
+            @if ($isDistrictChief)
+                <x-navbar-link :href="route('district-chief.dashboard')"       :active="request()->routeIs('district-chief.dashboard')">Dashboard</x-navbar-link>
+                <x-navbar-link :href="route('district-chief.reports.index')"   :active="request()->routeIs('district-chief.reports.*') && !request()->routeIs('district-chief.reports.map')">Daftar Laporan</x-navbar-link>
+                <x-navbar-link :href="route('district-chief.reports.map')"     :active="request()->routeIs('district-chief.reports.map')">Peta Sebaran</x-navbar-link>
+                <x-navbar-primary-btn :href="route('district-chief.reports.compare')" class="ml-1">Komparasi Instansi</x-navbar-primary-btn>
             @endif
 
             {{-- Avatar + Dropdown desktop --}}
@@ -362,30 +375,36 @@
         @endif
         @if ($isFieldOfficer)
             <x-navbar-mobile-link :href="route('employee.field-officer.dashboard')">Dashboard</x-navbar-mobile-link>
-            <x-navbar-mobile-link :href="route('employee.field-officer.reports.map')">Peta Sebaran</x-navbar-mobile-link>
             <x-navbar-mobile-btn  :href="route('employee.field-officer.assignments.index')">Tugas Saya</x-navbar-mobile-btn>
         @endif
         @if ($isSupervisor)
             <x-navbar-mobile-link :href="route('employee.supervisor.dashboard')">Dashboard</x-navbar-mobile-link>
-            <x-navbar-mobile-link :href="route('employee.supervisor.reports.index')">Daftar Laporan</x-navbar-mobile-link>
-            <x-navbar-mobile-link :href="route('employee.supervisor.assignments.index')">Penugasan Petugas</x-navbar-mobile-link>
+            <x-navbar-mobile-link :href="route('employee.shared.reports.index')">Daftar Laporan</x-navbar-mobile-link>
+            <x-navbar-mobile-link :href="route('employee.shared.assignments.index')">Penugasan Petugas</x-navbar-mobile-link>
             <x-navbar-mobile-link :href="route('employee.shared.departments.index')">Kelola Instansi</x-navbar-mobile-link>
-            <x-navbar-mobile-link :href="route('employee.supervisor.reports.map')">Peta Sebaran</x-navbar-mobile-link>
-            <x-navbar-mobile-btn  :href="route('employee.supervisor.reviews.index')">Performa</x-navbar-mobile-btn>
+            <x-navbar-mobile-btn  :href="route('employee.shared.reviews.index')">Performa</x-navbar-mobile-btn>
+            <x-navbar-mobile-link :href="route('employee.shared.reports.map')">Peta Sebaran</x-navbar-mobile-link>
         @endif
         @if ($isHoD)
             <x-navbar-mobile-link :href="route('employee.head.dashboard')">Dashboard</x-navbar-mobile-link>
-            <x-navbar-mobile-link :href="route('employee.head.reports.index')">Daftar Laporan</x-navbar-mobile-link>
+            <x-navbar-mobile-link :href="route('employee.shared.reports.index')">Daftar Laporan</x-navbar-mobile-link>
             <x-navbar-mobile-link :href="route('employee.shared.departments.index')">Kelola Instansi</x-navbar-mobile-link>
-            <x-navbar-mobile-link :href="route('employee.head.reports.map')">Peta Sebaran</x-navbar-mobile-link>
-            <x-navbar-mobile-btn  :href="route('employee.head.reviews.index')">Performa</x-navbar-mobile-btn>
+            <x-navbar-mobile-btn  :href="route('employee.shared.reviews.index')">Performa</x-navbar-mobile-btn>
+            <x-navbar-mobile-link :href="route('employee.shared.reports.map')">Peta Sebaran</x-navbar-mobile-link>
         @endif
         @if ($isRegent)
             <x-navbar-mobile-link :href="route('regent.dashboard')">Dashboard</x-navbar-mobile-link>
             <x-navbar-mobile-link :href="route('regent.reports.index')">Daftar Laporan</x-navbar-mobile-link>
-            <x-navbar-mobile-link :href="route('regent.departments.compare')">Komparasi Instansi</x-navbar-mobile-link>
+            {{-- <x-navbar-mobile-link :href="route('regent.departments.compare')">Komparasi Instansi</x-navbar-mobile-link> --}}
             <x-navbar-mobile-link :href="route('regent.reports.map')">Peta Sebaran</x-navbar-mobile-link>
-            <x-navbar-mobile-btn  :href="route('regent.reports.priority')">Rekomendasi Prioritas</x-navbar-mobile-btn>
+            {{-- <x-navbar-mobile-btn  :href="route('regent.reports.priority')">Rekomendasi Prioritas</x-navbar-mobile-btn> --}}
+        @endif
+
+        @if ($isDistrictChief)
+            <x-navbar-mobile-link :href="route('district-chief.dashboard')">Dashboard</x-navbar-mobile-link>
+            <x-navbar-mobile-link :href="route('district-chief.reports.index')">Daftar Laporan</x-navbar-mobile-link>
+            <x-navbar-mobile-link :href="route('district-chief.reports.map')">Peta Sebaran</x-navbar-mobile-link>
+            <x-navbar-mobile-btn  :href="route('district-chief.reports.compare')">Komparasi Instansi</x-navbar-mobile-btn>
         @endif
 
     </div>
