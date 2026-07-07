@@ -211,7 +211,7 @@ $priorityConfig = [
                         {{-- Baris 1: Judul + Tugaskan btn --}}
                         <div class="flex items-start justify-between gap-2 mb-1.5">
                             <div class="min-w-0">
-                                <a href="{{ route('employee.supervisor.reports.show', $report->code) }}"
+                                <a href="{{ route('reports.show', $report->code) }}"
                                    class="text-sm font-bold text-gray-900 hover:text-primary-600 transition-colors leading-snug line-clamp-2">
                                     {{ $report->title }}
                                 </a>

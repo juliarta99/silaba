@@ -232,7 +232,7 @@ $needsRating       = $isOwner && $report->status === 'completed' && !$report->re
                         </div>
                     </div>
 
-                    @if ($isOwner)
+                    {{-- @if ($isOwner)
                     <div class="bg-white rounded-xl border border-orange-100 p-4">
                         <div class="flex items-center gap-2 mb-2">
                             <svg class="w-4 h-4 text-orange-400 shrink-0" fill="none"
@@ -265,7 +265,7 @@ $needsRating       = $isOwner && $report->status === 'completed' && !$report->re
                             </button>
                         </form>
                     </div>
-                    @endif
+                    @endif --}}
                 </div>
                 @endif
 

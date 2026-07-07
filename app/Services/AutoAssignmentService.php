@@ -6,6 +6,7 @@ use App\Models\Assignment;
 use App\Models\Employee;
 use App\Models\Report;
 use Carbon\Carbon;
+use Carbon\CarbonInterface;
 
 class AutoAssignmentService
 {
@@ -71,9 +72,9 @@ class AutoAssignmentService
      * Hitung SLA deadline berdasarkan prioritas (hari kerja Senin–Jumat).
      *
      * @param  string $priority  low|medium|high|critical
-     * @return Carbon
+     * @return CarbonInterface
      */
-    public function calculateSlaDeadline(string $priority): Carbon
+    public function calculateSlaDeadline(string $priority): CarbonInterface
     {
         $workingDays = match($priority) {
             'critical' => 1,
@@ -90,19 +91,22 @@ class AutoAssignmentService
      * Tambah N hari kerja ke tanggal awal, lewati Sabtu & Minggu.
      * Deadline = jam 17:00 hari kerja terakhir.
      */
-    private function addWorkingDays(Carbon $start, int $days): Carbon
+    private function addWorkingDays(CarbonInterface $start, int $days): CarbonInterface
     {
         $date  = $start->copy();
         $added = 0;
 
         while ($added < $days) {
-            $date->addDay();
+            // Re-assign untuk mengakomodasi CarbonImmutable
+            $date = $date->addDay(); 
+            
             if ($date->dayOfWeek !== Carbon::SATURDAY
                 && $date->dayOfWeek !== Carbon::SUNDAY) {
                 $added++;
             }
         }
 
-        return $date->setTime(17, 0, 0);
+        // Re-assign untuk mengakomodasi CarbonImmutable
+        return $date->setTime(17, 0, 0); 
     }
 }

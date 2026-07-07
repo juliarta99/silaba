@@ -87,6 +87,9 @@ window.reportMap = window.reportMap || function () {
         DEFAULT_LNG:  115.1667,
 
         init() {
+            // FIX 1: Sinkronisasi nilai awal dari Livewire ke input Alpine saat halaman dimuat
+            this.locationText = this.$wire.location || '';
+            
             this.$nextTick(() => this.initMap());
 
             // Pantau perubahan step dari Livewire, agar map langsung dirender saat masuk Step 2
@@ -190,6 +193,9 @@ window.reportMap = window.reportMap || function () {
                 );
                 const d = await r.json();
                 if (d?.display_name) {
+                    // FIX 2: Update variabel Alpine agar teks di input berubah secara visual
+                    this.locationText = d.display_name; 
+                    
                     this.$wire.set('location', d.display_name);
                     window.dispatchEvent(new CustomEvent('location-updated', { detail: d.display_name }));
                 }

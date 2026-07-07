@@ -42,6 +42,7 @@ use App\Http\Controllers\Citizen\NotificationController as CitizenNotificationCo
 use App\Http\Controllers\DepartmentController;
 use App\Http\Controllers\DistrictChief\CompareController;
 use App\Http\Controllers\DistrictChief\DashboardController as CamatDashboardController;
+use App\Http\Controllers\DistrictChief\PriorityController;
 use App\Http\Controllers\DistrictChief\ProfileController as DistrictChiefProfileController;
 use App\Http\Controllers\DistrictChief\ReportController as DistrictChiefReportController;
 use App\Http\Controllers\Employee\ProfileController;
@@ -51,6 +52,7 @@ use App\Http\Controllers\Regent\ProfileController      as RegentProfile;
 use App\Http\Controllers\Regent\ReportController       as RegentReport;
 use App\Http\Controllers\Regent\DepartmentController   as RegentDepartment;
 use App\Http\Controllers\Shared\MapController;
+use App\Services\GeminiInsightService;
 
 /*
 |=============================================================================
@@ -172,7 +174,6 @@ Route::middleware(['auth', 'role:employee', 'employee.position:supervisor'])
     // Daftar Laporan
     Route::get('/laporan',         [SupReport::class, 'index']) ->name('reports.index');
     Route::get('/laporan/export',  [SupReport::class, 'export'])->name('reports.export');
-    Route::get('/laporan/{code}',  [SupReport::class, 'show'])  ->name('reports.show');
     Route::post('/laporan/{code}/tambah-petugas',  [SupReport::class, 'addOfficer'])   ->name('reports.add-officer');
     Route::post('/laporan/{code}/hapus-petugas',   [SupReport::class, 'removeOfficer'])->name('reports.remove-officer');
 
@@ -206,7 +207,6 @@ Route::middleware(['auth', 'role:employee', 'employee.position:head_of_departmen
     // Daftar Laporan
     Route::get('/laporan',         [SupReport::class, 'index']) ->name('reports.index');
     Route::get('/laporan/export',  [SupReport::class, 'export'])->name('reports.export');
-    Route::get('/laporan/{code}',  [SupReport::class, 'show'])  ->name('reports.show');
     Route::post('/laporan/{code}/tambah-petugas',  [SupReport::class, 'addOfficer'])   ->name('reports.add-officer');
     Route::post('/laporan/{code}/hapus-petugas',   [SupReport::class, 'removeOfficer'])->name('reports.remove-officer');
 
@@ -244,7 +244,6 @@ Route::middleware(['auth', 'role:employee', 'employee.position:supervisor,head_o
     Route::delete('/pegawai/{employee}', [SupDepartment::class, 'destroyEmployee'])->name('employees.destroy');
 });
 
-
 // CAMAT
 Route::middleware(['auth', 'role:district_chief'])
     ->prefix('camat')
@@ -263,6 +262,10 @@ Route::middleware(['auth', 'role:district_chief'])
     Route::patch('/profil/update',  [DistrictChiefProfileController::class, 'update'])->name('profile.update');
     Route::patch('/profil/foto',    [DistrictChiefProfileController::class, 'updatePhoto'])->name('profile.photo');
     Route::patch('/profil/password',[DistrictChiefProfileController::class, 'updatePassword'])->name('profile.password');
+
+    // priority
+    Route::get('/prioritas',        [PriorityController::class, 'index']) ->name('reports.priority');
+    Route::get('/prioritas/export', [PriorityController::class, 'export'])->name('reports.priority.export');
 });
 
 /*
