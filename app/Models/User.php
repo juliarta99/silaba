@@ -36,9 +36,15 @@ class User extends Authenticatable
         ];
     }
 
-    // ── Auth: override field untuk login ──────────────────────────────────
-    // Laravel default pakai 'email', kita ganti ke 'identifier'
     public function getAuthIdentifierName(): string
+    {
+        return 'id';
+    }
+
+    /**
+     * Shortcut buatan sendiri (opsional) untuk tahu field login yang dipakai
+     */
+    public function getLoginFieldName(): string
     {
         return 'identifier';
     }
@@ -58,6 +64,11 @@ class User extends Authenticatable
     public function regent(): HasOne
     {
         return $this->hasOne(Regent::class);
+    }
+
+    public function districtChief(): HasOne
+    {
+        return $this->hasOne(District_Chief::class);
     }
 
     public function reports(): HasMany

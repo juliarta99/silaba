@@ -16,7 +16,7 @@
             }, 1000);
         }
     }"
-    class="min-h-[calc(100vh-68px)] flex flex-col items-center justify-center py-12 px-4 sm:px-6 lg:px-8 bg-gray-50"
+    class="min-h-[calc(100vh-68px)] flex flex-col items-center justify-center pb-12 pt-34 px-4 sm:px-6 lg:px-8 bg-gray-10"
 >
     <div class="text-center mb-8">
         <div class="w-20 h-20 rounded-full bg-success/15 flex items-center justify-center mx-auto mb-5">
@@ -27,7 +27,7 @@
         </div>
         <h2 class="text-2xl sm:text-3xl font-bold text-gray-900 mb-2">Verifikasi Berhasil!</h2>
         <p class="text-sm text-gray-500 mb-1">Akun Anda telah berhasil diverifikasi</p>
-        <p class="text-sm text-gray-400">Selamat datang di SILABU</p>
+        <p class="text-sm text-gray-400">Selamat datang di SILABA</p>
     </div>
 
     <div class="bg-white p-6 sm:p-7 rounded-2xl shadow-sm border border-gray-100 w-full max-w-md mb-5">
@@ -75,7 +75,7 @@
     <div class="w-full max-w-md px-4 py-3.5 rounded-xl bg-blue-50 border border-blue-100 mb-4">
         <p class="text-sm text-blue-700 text-center leading-relaxed">
             <span class="font-semibold">Langkah selanjutnya:</span>
-            Login dengan NIK atau nomor HP dan password yang telah Anda buat untuk mulai menggunakan SILABU.
+            Login dengan NIK atau nomor HP dan password yang telah Anda buat untuk mulai menggunakan SILABA.
         </p>
     </div>
 

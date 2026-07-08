@@ -10,7 +10,7 @@
 <section class="relative min-h-125 lg:min-h-145 flex items-center">
 
     <div class="absolute inset-0 bg-cover bg-center"
-         style="background-image: url('https://images.unsplash.com/photo-1558618666-fcd25c85cd64?w=1400&q=80')">
+         style="background-image: url('{{ asset('assets/images/bg.jpg') }}')">
     </div>
     <div class="absolute inset-0"
          style="background:linear-gradient(160deg,rgba(77,10,10,.82) 0%,rgba(154,19,19,.80) 40%,rgba(192,24,24,.88) 100%)">
@@ -45,9 +45,9 @@
 <section class="bg-white border-b border-gray-10">
     <div class="max-w-7xl mx-auto px-5 sm:px-6 py-8 sm:py-10">
         <div class="grid grid-cols-3 divide-x divide-gray-50">
-            <x-stat-card nilai="1,234"  label="Laporan Terselesaikan" />
-            <x-stat-card nilai="98%"    label="Tingkat Kepuasan"      />
-            <x-stat-card nilai="7 Hari" label="Rata-rata Penyelesaian"/>
+            <x-stat-card nilai="{{ $stats['completed'] }}"  label="Laporan Terselesaikan" />
+            <x-stat-card nilai="{{ $stats['satisfaction'] }}"    label="Tingkat Kepuasan"      />
+            <x-stat-card nilai="{{ $stats['avg_days'] }}" label="Rata-rata Penyelesaian"/>
         </div>
     </div>
 </section>
@@ -63,54 +63,31 @@
             <p class="text-sm text-gray-500 mt-2">Transparansi penuh terhadap laporan masyarakat</p>
         </div>
 
-        @php
-        $reports = [
-            [
-                'id'      => 'TKT-2024-001',
-                'judul'   => 'Infrastruktur',
-                'status'  => 'Diproses',
-                'tags'    => ['Jalan Rusak', 'Lubang Aspal'],
-                'lokasi'  => 'Kecamatan Kuta',
-                'tanggal' => '2 Jun 2026',
-                'foto'    => 'https://images.unsplash.com/photo-1503376780353-7e6692767b70?w=600&q=70',
-                'href'    => '#',
-            ],
-            [
-                'id'      => 'TKT-2024-002',
-                'judul'   => 'Kebersihan',
-                'status'  => 'Selesai',
-                'tags'    => ['Sampah', 'Pantai'],
-                'lokasi'  => 'Kecamatan Mengwi',
-                'tanggal' => '1 Jun 2026',
-                'foto'    => 'https://images.unsplash.com/photo-1604187351574-c75ca79f5807?w=600&q=70',
-                'href'    => '#',
-            ],
-            [
-                'id'      => 'TKT-2024-003',
-                'judul'   => 'Ketertiban',
-                'status'  => 'Baru',
-                'tags'    => ['Parkir Liar', 'Trotoar'],
-                'lokasi'  => 'Kecamatan Kuta Selatan',
-                'tanggal' => '31 Mei 2026',
-                'foto'    => 'https://images.unsplash.com/photo-1477959858617-67f85cf4f1df?w=600&q=70',
-                'href'    => '#',
-            ],
-        ];
-        @endphp
-
         <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-5">
-            @foreach ($reports as $r)
+            @forelse ($latestReports as $r)
+                @php
+                    // Ambil foto pertama (jika ada), jika tidak gunakan fallback gambar default
+                    $fotoPath = $r->evidences->firstWhere('file_type', 'photo')?->file_path;
+                    $fotoUrl  = $fotoPath ? Storage::url($fotoPath) : 'https://images.unsplash.com/photo-1558618666-fcd25c85cd64?w=600&q=80';
+                    
+                    // Ambil maksimal 2 nama tag untuk ditampilkan
+                    $tagsArray = $r->tags->pluck('name')->take(2)->toArray();
+                @endphp
                 <x-report-card
-                    :id="$r['id']"
-                    :judul="$r['judul']"
-                    :status="$r['status']"
-                    :tags="$r['tags']"
-                    :lokasi="$r['lokasi']"
-                    :tanggal="$r['tanggal']"
-                    :foto="$r['foto']"
-                    :href="$r['href']"
+                    :id="$r->code"
+                    :judul="$r->category->name ?? 'Umum'"
+                    :status="$r->status_label"
+                    :tags="$tagsArray"
+                    :lokasi="($r->district ? 'Kecamatan ' . $r->district->name : 'Kabupaten Badung')"
+                    :tanggal="$r->created_at->translatedFormat('j M Y')"
+                    :foto="$fotoUrl"
+                    :href="route('reports.show', $r->code)"
                 />
-            @endforeach
+            @empty
+                <div class="col-span-1 sm:col-span-2 lg:col-span-3 text-center py-10">
+                    <p class="text-gray-500 text-sm">Belum ada laporan terbaru saat ini.</p>
+                </div>
+            @endforelse
         </div>
 
         <div class="text-center mt-10">

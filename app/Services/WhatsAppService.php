@@ -140,7 +140,7 @@ class WhatsAppService
     }
 
     /**
-     * Kirim kode OTP dengan template pesan standar SILABU.
+     * Kirim kode OTP dengan template pesan standar SILABA.
      */
     public function sendOtp(string $phone, string $otpCode, int $expiresInMinutes = 2): array
     {
@@ -164,12 +164,12 @@ class WhatsAppService
      */
     public function sendAssignmentNotification(string $phone, string $ticketNumber, string $title, string $location): array
     {
-        $message = "🔔 *Tugas Baru — SILABU*\n\n"
+        $message = "🔔 *Tugas Baru — SILABA*\n\n"
                  . "Anda mendapat penugasan baru:\n\n"
-                 . "📋 Tiket: *{$ticketNumber}*\n"
-                 . "📝 Judul: {$title}\n"
-                 . "📍 Lokasi: {$location}\n\n"
-                 . "Silakan cek aplikasi SILABU untuk detail lengkap dan mulai penanganan.";
+                 . "Tiket: *{$ticketNumber}*\n"
+                 . "Judul: {$title}\n"
+                 . "Lokasi: {$location}\n\n"
+                 . "Silakan cek aplikasi SILABA untuk detail lengkap dan mulai penanganan.";
 
         return $this->send($phone, $message);
     }
@@ -178,16 +178,16 @@ class WhatsAppService
 
     private function otpTemplate(string $otpCode, int $expiresInMinutes): string
     {
-        return "🔐 *Kode Verifikasi SILABU*\n\n"
+        return "*Kode Verifikasi SILABA*\n\n"
              . "Kode OTP Anda: *{$otpCode}*\n\n"
              . "Kode ini berlaku selama {$expiresInMinutes} menit. "
-             . "Jangan bagikan kode ini kepada siapa pun, termasuk pihak yang mengaku dari SILABU.\n\n"
+             . "Jangan bagikan kode ini kepada siapa pun, termasuk pihak yang mengaku dari SILABA.\n\n"
              . "Jika Anda tidak meminta kode ini, abaikan pesan ini.";
     }
 
     private function statusUpdateTemplate(string $ticketNumber, string $status, ?string $note): string
     {
-        $msg = "📢 *Update Laporan SILABU*\n\n"
+        $msg = "📢 *Update Laporan SILABA*\n\n"
              . "Tiket: *{$ticketNumber}*\n"
              . "Status terbaru: *{$status}*\n";
 
@@ -195,7 +195,7 @@ class WhatsAppService
             $msg .= "\nCatatan: {$note}\n";
         }
 
-        $msg .= "\nCek detail lengkap di aplikasi SILABU.";
+        $msg .= "\nCek detail lengkap di aplikasi SILABA.";
 
         return $msg;
     }

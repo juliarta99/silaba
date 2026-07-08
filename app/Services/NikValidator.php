@@ -10,7 +10,7 @@ namespace App\Services;
  *
  * Ini adalah pendekatan MVP/development. Dukcapil tidak menyediakan API
  * publik untuk developer umum; akses resmi (Web Service Dukcapil) hanya
- * lewat Perjanjian Kerja Sama institusional. Untuk SILABU saat ini, kita
+ * lewat Perjanjian Kerja Sama institusional. Untuk SILABA saat ini, kita
  * cukup validasi format agar mencegah typo & NIK asal-asalan — TANPA
  * memastikan identitas pelapor benar-benar valid secara nasional.
  *

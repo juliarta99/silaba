@@ -1,22 +1,118 @@
 <?php
+
 namespace App\Http\Controllers\Employee\FieldOfficer;
+
 use App\Http\Controllers\Controller;
 use App\Models\Assignment;
+use App\Models\ReportProgress;
+use Carbon\Carbon;
+use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 
 class DashboardController extends Controller
 {
     public function index()
     {
-        $employee    = auth()->user()->employee;
-        $activeCount = Assignment::where('employee_id', $employee->id)->whereIn('status',['assigned','in_progress'])->count();
-        $doneToday   = Assignment::where('employee_id', $employee->id)->where('status','completed')
-                          ->whereDate('updated_at', today())->count();
-        $prioritized = Assignment::where('employee_id', $employee->id)
-                          ->whereIn('status',['assigned','in_progress'])
-                          ->with(['report.category','report.district'])
-                          ->orderByDesc('created_at')->take(3)->get();
-        $recent      = Assignment::where('employee_id', $employee->id)
-                          ->with(['report'])->latest()->take(5)->get();
-        return view('employee.field-officer.dashboard', compact('employee','activeCount','doneToday','prioritized','recent'));
+        /** @var \App\Models\User $user */
+        $user     = Auth::user();
+        $employee = $user->employee;
+
+        abort_if(! $employee, 403, 'Akun tidak terhubung ke data petugas.');
+
+        $empId = $employee->id;
+
+        // ── Stat cards ──────────────────────────────────────────────────
+        $totalTugas = Assignment::where('employee_id', $empId)->count();
+
+        $sedangDikerjakan = Assignment::where('employee_id', $empId)
+            ->whereHas('report', fn ($q) =>
+                $q->whereIn('status', ['in_progress', 'under_review', 'waiting_for_materials'])
+            )->count();
+
+        $selesai = Assignment::where('employee_id', $empId)
+            ->whereHas('report', fn ($q) => $q->where('status', 'completed'))
+            ->count();
+
+        $terlambat = Assignment::where('employee_id', $empId)
+            ->whereHas('report', fn ($q) =>
+                $q->whereNotIn('status', ['completed', 'rejected'])
+                  ->whereNotNull('sla_deadline')
+                  ->where('sla_deadline', '<', now())
+            )->count();
+
+        // ── Tugas aktif (urut SLA terdekat) ─────────────────────────────
+        $activeAssignments = Assignment::where('employee_id', $empId)
+            ->whereHas('report', fn ($q) =>
+                $q->whereNotIn('status', ['completed', 'rejected'])
+            )
+            ->with([
+                'report' => fn ($q) => $q->with([
+                    'category',
+                    'district',
+                    'user',
+                    'evidences' => fn ($e) => $e->where('file_type', 'photo')->limit(1),
+                ]),
+            ])
+            ->get()
+            ->sortBy(fn ($a) =>
+                $a->report?->sla_deadline
+                    ? Carbon::parse($a->report->sla_deadline)->timestamp
+                    : PHP_INT_MAX
+            )
+            ->take(5);
+
+        // ── Aktivitas terbaru ────────────────────────────────────────────
+        $recentActivities = ReportProgress::where('employee_id', $empId)
+            ->with(['report:id,code,title'])
+            ->latest()
+            ->limit(3)
+            ->get();
+
+        // ── Tips ─────────────────────────────────────────────────────────
+        $tips = match(true) {
+            $terlambat > 0        => "Anda memiliki {$terlambat} laporan yang melewati batas SLA. Segera tindaklanjuti.",
+            $sedangDikerjakan > 0 => 'Prioritaskan tugas dengan SLA yang hampir habis untuk menghindari keterlambatan.',
+            default               => 'Semua tugas aktif tertangani dengan baik. Tetap semangat!',
+        };
+
+        return view('employee.field-officer.dashboard', compact(
+            'user', 'employee',
+            'totalTugas', 'sedangDikerjakan', 'selesai', 'terlambat',
+            'activeAssignments', 'recentActivities', 'tips'
+        ));
+    }
+
+    public function activities(Request $request)
+    {
+        $user     = Auth::user();
+        $employee = $user->employee;
+
+        abort_if(! $employee, 403, 'Akun tidak terhubung ke data petugas.');
+
+        $query = ReportProgress::where('employee_id', $employee->id)
+            ->with(['report:id,code,title,status']);
+
+        // Filter Pencarian (Cari di judul progress, deskripsi, atau kode & judul laporan)
+        if ($request->filled('search')) {
+            $search = $request->search;
+            $query->where(function ($q) use ($search) {
+                $q->where('title', 'like', "%{$search}%")
+                  ->orWhere('description', 'like', "%{$search}%")
+                  ->orWhereHas('report', function ($qr) use ($search) {
+                      $qr->where('code', 'like', "%{$search}%")
+                         ->orWhere('title', 'like', "%{$search}%");
+                  });
+            });
+        }
+
+        // Filter Status Progress
+        if ($request->filled('status')) {
+            $query->where('status', $request->status);
+        }
+
+        // Ambil data dengan Pagination
+        $activities = $query->latest()->paginate(10)->withQueryString();
+
+        return view('employee.field-officer.activities', compact('user', 'employee', 'activities'));
     }
 }
