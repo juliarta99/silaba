@@ -15,10 +15,9 @@ return new class extends Migration
             $table->id();
             $table->string('name');
             $table->string('slug')->unique();
-            $table->string('type');
+            $table->string('type');         
             $table->string('image')->nullable();
             $table->integer('points_required');
-            $table->integer('stock')->default(0);
             $table->text('description')->nullable();
             $table->boolean('is_active')->default(true);
             $table->timestamps();

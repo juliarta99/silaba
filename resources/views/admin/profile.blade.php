@@ -1,6 +1,6 @@
 @extends('layouts.app')
 
-@section('title', 'Profil Admin — SILABU')
+@section('title', 'Profil Admin — SILABA')
 
 @section('content')
 {{-- Data akun admin yang sedang login --}}

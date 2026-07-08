@@ -18,7 +18,7 @@
     ════════════════════════════════════════════ --}}
     @if ($step !== 3)
     <div class="text-center mb-8">
-        <a href="{{ route('home') }}" wire:navigate aria-label="SILABU" class="inline-block mb-5">
+        <a href="{{ route('home') }}" wire:navigate aria-label="SILABA" class="inline-block mb-5">
             <svg class="h-9 w-auto mx-auto" viewBox="0 0 159 40" fill="none" xmlns="http://www.w3.org/2000/svg">
                 <path d="M105.952 4.83771C109.752 4.82264 113.845 4.63145 117.59 5.12775C124.732 6.07393 127.108 14.7249 120.885 18.7967C124.914 20.7549 126.358 23.8259 125.41 28.3719C124.997 30.3462 123.552 31.6972 121.853 32.6883C118.203 34.4076 113.101 34.0512 109.077 34.0477L100.4 34.035C100.273 24.5441 100.309 14.3502 100.415 4.85626L105.952 4.83771ZM117.006 21.2889C113.363 20.8703 109.056 21.0788 105.362 21.0936L105.347 29.9969C108.784 29.9883 117.056 30.571 119.551 28.6854C122.007 25.9129 120.579 21.6995 117.006 21.2889ZM118.515 10.3592C115.96 8.13877 108.619 8.87954 105.37 8.91095C105.338 11.6594 105.33 14.4085 105.346 17.157C108.839 17.171 115.422 17.7958 118.204 15.9549C119.701 14.4449 120.062 11.7029 118.515 10.3592Z" fill="#C01818"/>
                 <path d="M83.6111 4.84888C85.1111 7.85391 86.6779 11.55 88.0652 14.6418C90.9412 21.1175 93.859 27.5753 96.8181 34.0139C95.1224 34.0769 93.2139 34.0351 91.5027 34.0354C90.469 31.6958 89.4619 29.3449 88.4802 26.9827L83.1453 26.9729C79.9593 26.9526 76.7716 26.9639 73.5857 27.0061C72.9927 28.8382 71.4897 32.1678 70.7087 34.0266C69.0031 34.0417 67.2971 34.0391 65.5916 34.0168C68.4208 27.2694 71.6288 20.3565 74.6208 13.6633L77.2605 7.76685C77.6351 6.93087 78.0504 5.94599 78.4841 5.14185C78.6461 4.84283 78.7173 4.8962 79.0525 4.83423L83.6111 4.84888ZM80.9822 9.93091C79.2949 14.0658 77.2616 19.0353 75.3982 23.0745L81.6169 23.0813L86.6941 23.0686C86.1656 21.7167 81.3961 10.2687 80.9822 9.93091Z" fill="#C01818"/>
@@ -29,8 +29,8 @@
                 <path d="M43.868 4.84961L48.7608 4.85017L48.7631 29.8323L63.6779 29.8302L63.6859 34.0296L43.8418 34.0319L43.868 4.84961Z" fill="#C01818"/>
             </svg>
         </a>
-        <h2 class="text-2xl sm:text-3xl font-bold text-gray-900 mb-2">Daftar Akun SILABU</h2>
-        <p class="text-sm text-gray-500">Buat akun untuk mendapatkan akses penuh ke layanan SILABU</p>
+        <h2 class="text-2xl sm:text-3xl font-bold text-gray-900 mb-2">Daftar Akun SILABA</h2>
+        <p class="text-sm text-gray-500">Buat akun untuk mendapatkan akses penuh ke layanan SILABA</p>
     </div>
 
     {{-- ── Stepper ── --}}
@@ -513,7 +513,7 @@
         <p class="text-sm text-blue-700 leading-relaxed">
             <span class="font-semibold">Catatan:</span>
             Pastikan nomor WhatsApp Anda aktif dan terhubung dengan internet.
-            Periksa chat WhatsApp dari SILABU untuk mendapatkan kode OTP.
+            Periksa chat WhatsApp dari SILABA untuk mendapatkan kode OTP.
         </p>
     </div>
 

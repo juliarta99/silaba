@@ -47,7 +47,7 @@ $statusMap = [
     'Selesai'  => 'bg-green-100 text-green-700',
     'Ditolak'  => 'bg-red-100   text-red-700',
 ];
-$badgeClass = $statusMap[$status] ?? 'bg-gray-50 text-gray-600';
+$badgeClass = $statusMap[$status] ?? 'bg-gray-10 text-gray-600';
 @endphp
 
 <a href="{{ $href }}"

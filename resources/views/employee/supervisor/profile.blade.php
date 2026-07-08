@@ -1,6 +1,6 @@
 @extends('layouts.app')
 
-@section('title', 'Profil Supervisor — SILABU')
+@section('title', 'Profil Supervisor — SILABA')
 
 @section('content')
 {{-- Data supervisor: nama, NIP, jabatan, OPD --}}

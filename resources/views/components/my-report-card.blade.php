@@ -61,7 +61,7 @@ $statusMap = [
     'Baru'                 => 'bg-blue-500 text-white',
     'Diproses'             => 'bg-yellow-500 text-white',
     'Menunggu Verifikasi'  => 'bg-orange-500 text-white',
-    'Ditutup'              => 'bg-gray-500 text-white',
+    'Ditutup'              => 'bg-gray-100 text-white',
     'Selesai'              => 'bg-success text-white',
 ];
 $statusBadgeClass = $statusMap[$status] ?? 'bg-gray-400 text-white';
@@ -204,7 +204,7 @@ $wrapperClass = $needsAction
                 </a>
                 <a href="{{ $rejectHref }}"
                    class="flex items-center justify-center px-4 py-2.5 rounded-lg border border-gray-200
-                          text-gray-700 text-sm font-semibold hover:bg-gray-50 transition-colors duration-150">
+                          text-gray-700 text-sm font-semibold hover:bg-gray-10 transition-colors duration-150">
                     Laporkan Belum Selesai
                 </a>
             @endif

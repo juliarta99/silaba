@@ -10,9 +10,14 @@ class Review extends Model
 {
     use HasFactory;
 
-    protected $fillable = ['report_id', 'rating', 'comment'];
+    protected $fillable = ['report_id', 'rating', 'comment', 'user_id'];
 
     public function report(): BelongsTo
+    {
+        return $this->belongsTo(Report::class);
+    }
+
+    public function user(): BelongsTo
     {
         return $this->belongsTo(Report::class);
     }
