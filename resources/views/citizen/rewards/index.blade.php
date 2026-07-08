@@ -1,5 +1,5 @@
 @extends('layouts.app')
-@section('title', 'Klaim Reward — SILABU')
+@section('title', 'Klaim Reward — SILABA')
 
 @section('content')
 

@@ -1,5 +1,5 @@
 @extends('layouts.app')
-@section('title', 'Dashboard Supervisor — SILABU')
+@section('title', 'Dashboard Supervisor — SILABA')
 
 @section('content')
 
@@ -41,7 +41,7 @@ $medals = [
     </div>
 </div>
 
-<div class="bg-gray-50 min-h-[calc(100vh-68px)] py-10">
+<div class="bg-gray-10 min-h-[calc(100vh-68px)] py-16">
     <div class="max-w-6xl mx-auto px-4 sm:px-6">
 
         {{-- ════ STAT CARDS ROW 1 ════ --}}
@@ -101,7 +101,7 @@ $medals = [
 
             {{-- Terlambat --}}
             <div class="bg-white rounded-2xl border {{ $terlambat > 0 ? 'border-red-100' : 'border-gray-100' }} shadow-sm p-4 sm:p-5">
-                <div class="w-9 h-9 rounded-xl {{ $terlambat > 0 ? 'bg-red-50 border-red-100' : 'bg-gray-50 border-gray-100' }}
+                <div class="w-9 h-9 rounded-xl {{ $terlambat > 0 ? 'bg-red-50 border-red-100' : 'bg-gray-10 border-gray-100' }}
                             border flex items-center justify-center mb-3">
                     <svg class="w-5 h-5 {{ $terlambat > 0 ? 'text-error' : 'text-gray-300' }}" fill="none" viewBox="0 0 24 24">
                         <path d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z"
@@ -211,7 +211,7 @@ $medals = [
 
                         <a href="{{ route('employee.supervisor.reports.index') }}?code={{ $report->code }}"
                            class="flex flex-col gap-2 py-3.5 first:pt-0 last:pb-0
-                                  hover:bg-gray-50 -mx-5 px-5 transition-colors">
+                                  hover:bg-gray-10 -mx-5 px-5 transition-colors">
 
                             {{-- Row 1: kode + SLA badge + duplikat badge + prioritas --}}
                             <div class="flex items-center gap-2 flex-wrap">
@@ -410,11 +410,11 @@ $medals = [
                     </p>
                     <p class="text-xs text-gray-400 text-center mb-4">Periode aktif</p>
                     <div class="grid grid-cols-2 gap-3">
-                        <div class="text-center px-4 py-3 rounded-xl bg-gray-50 border border-gray-100">
+                        <div class="text-center px-4 py-3 rounded-xl bg-gray-10 border border-gray-100">
                             <p class="text-xs text-gray-400 mb-1">Bulan Ini</p>
                             <p class="text-xl font-bold text-gray-900 tabular-nums">{{ $periodeBulanIni }}</p>
                         </div>
-                        <div class="text-center px-4 py-3 rounded-xl bg-gray-50 border border-gray-100">
+                        <div class="text-center px-4 py-3 rounded-xl bg-gray-10 border border-gray-100">
                             <p class="text-xs text-gray-400 mb-1">Bulan Lalu</p>
                             <p class="text-xl font-bold text-gray-900 tabular-nums">{{ $periodeBulanLalu }}</p>
                         </div>

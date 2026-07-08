@@ -208,7 +208,7 @@ class AssignmentController extends Controller
             $name = $report->user?->name ?? $report->guest_name ?? 'Warga';
 
             $whatsapp->send($phone,
-                "🔔 *Update Laporan {$report->code} — SILABU*\n\n"
+                "🔔 *Update Laporan {$report->code} — SILABA*\n\n"
                 . "Halo {$name},\n\n"
                 . "📋 Tiket: *{$report->code}*\n"
                 . "📝 Update: {$request->title}\n"

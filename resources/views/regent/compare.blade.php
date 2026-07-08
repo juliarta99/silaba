@@ -18,7 +18,7 @@ $presets = [
 $currentPreset = $activePreset ?? '';
 @endphp
 
-<div class="bg-gray-50 min-h-[calc(100vh-68px)] pb-10"
+<div class="bg-gray-10 min-h-[calc(100vh-68px)] py-16"
      x-data="{ showCustomDate: {{ ($activePreset === 'custom' || ($dateFrom && !$activePreset)) ? 'true' : 'false' }} }">
     <div class="max-w-7xl mx-auto px-4 sm:px-6 pt-6">
 
@@ -51,14 +51,14 @@ $currentPreset = $activePreset ?? '';
         {{-- ── KPI Summary ── --}}
         <div class="grid grid-cols-2 sm:grid-cols-5 gap-2.5 mb-5">
             @foreach ([
-                ['label' => 'Total OPD',           'val' => $totalOPD,                                                          'clr' => 'text-gray-900',  'ibg' => 'bg-gray-50',   'icon' => 'M19 21V5a2 2 0 00-2-2H7a2 2 0 00-2 2v16m14 0h2m-2 0h-5m-9 0H3m2 0h5M9 7h1m-1 4h1m4-4h1m-1 4h1m-2 10v-5a1 1 0 011-1h2a1 1 0 011 1v5m-4 0h4'],
+                ['label' => 'Total OPD',           'val' => $totalOPD,                                                          'clr' => 'text-gray-900',  'ibg' => 'bg-gray-10',   'icon' => 'M19 21V5a2 2 0 00-2-2H7a2 2 0 00-2 2v16m14 0h2m-2 0h-5m-9 0H3m2 0h5M9 7h1m-1 4h1m4-4h1m-1 4h1m-2 10v-5a1 1 0 011-1h2a1 1 0 011 1v5m-4 0h4'],
                 ['label' => 'Rata-rata Completion', 'val' => ($avgCompletion ? number_format($avgCompletion, 1) : '—') . '%',    'clr' => 'text-blue-600',  'ibg' => 'bg-blue-50',   'icon' => 'M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z'],
                 ['label' => 'Rata-rata Waktu',      'val' => ($avgWaktu ? number_format($avgWaktu, 1) : '—') . ' hari',         'clr' => 'text-yellow-600','ibg' => 'bg-yellow-50', 'icon' => 'M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z'],
                 ['label' => 'Rata-rata Kepuasan',   'val' => ($avgKepuasan ? number_format($avgKepuasan, 1) : '—') . '%',       'clr' => 'text-success',   'ibg' => 'bg-green-50',  'icon' => 'M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z'],
                 ['label' => 'Perlu Perhatian',
                  'val'   => $perluPerhatian,
                  'clr'   => $perluPerhatian > 0 ? 'text-error' : 'text-gray-300',
-                 'ibg'   => $perluPerhatian > 0 ? 'bg-red-50'  : 'bg-gray-50',
+                 'ibg'   => $perluPerhatian > 0 ? 'bg-red-50'  : 'bg-gray-10',
                  'icon'  => 'M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z'],
             ] as $s)
             <div class="bg-white rounded-2xl border border-gray-100 shadow-sm p-3 sm:p-4 last:col-span-2 sm:last:col-span-1">
@@ -89,7 +89,7 @@ $currentPreset = $activePreset ?? '';
                     <div>
                         <label class="block text-xs font-medium text-gray-500 mb-1.5">Periode</label>
                         <select name="preset"
-                                class="w-full px-3 py-2.5 rounded-xl border border-gray-200 bg-gray-50 text-sm
+                                class="w-full px-3 py-2.5 rounded-xl border border-gray-200 bg-gray-10 text-sm
                                        text-gray-700 focus:bg-white focus:border-primary-500 focus:ring-1
                                        focus:ring-primary-500 outline-none transition-all"
                                 x-on:change="
@@ -105,7 +105,7 @@ $currentPreset = $activePreset ?? '';
                     <div>
                         <label class="block text-xs font-medium text-gray-500 mb-1.5">Urutkan Berdasarkan</label>
                         <select name="sort_by"
-                                class="w-full px-3 py-2.5 rounded-xl border border-gray-200 bg-gray-50 text-sm
+                                class="w-full px-3 py-2.5 rounded-xl border border-gray-200 bg-gray-10 text-sm
                                        text-gray-700 focus:bg-white focus:border-primary-500 focus:ring-1
                                        focus:ring-primary-500 outline-none transition-all"
                                 onchange="this.form.submit()">
@@ -127,7 +127,7 @@ $currentPreset = $activePreset ?? '';
                     <div>
                         <label class="block text-xs font-medium text-gray-500 mb-1.5">Urutan</label>
                         <select name="sort_dir"
-                                class="w-full px-3 py-2.5 rounded-xl border border-gray-200 bg-gray-50 text-sm
+                                class="w-full px-3 py-2.5 rounded-xl border border-gray-200 bg-gray-10 text-sm
                                        text-gray-700 focus:bg-white focus:border-primary-500 focus:ring-1
                                        focus:ring-primary-500 outline-none transition-all"
                                 onchange="this.form.submit()">
@@ -142,14 +142,14 @@ $currentPreset = $activePreset ?? '';
                         <div>
                             <label class="block text-xs font-medium text-gray-500 mb-1.5">Dari Tanggal</label>
                             <input type="date" name="date_from" value="{{ $dateFrom ?? '' }}" max="{{ date('Y-m-d') }}"
-                                   class="w-full px-3 py-2.5 rounded-xl border border-gray-200 bg-gray-50 text-sm
+                                   class="w-full px-3 py-2.5 rounded-xl border border-gray-200 bg-gray-10 text-sm
                                           text-gray-900 focus:bg-white focus:border-primary-500 focus:ring-1
                                           focus:ring-primary-500 outline-none transition-all">
                         </div>
                         <div>
                             <label class="block text-xs font-medium text-gray-500 mb-1.5">Sampai Tanggal</label>
                             <input type="date" name="date_to" value="{{ $dateTo ?? '' }}" max="{{ date('Y-m-d') }}"
-                                   class="w-full px-3 py-2.5 rounded-xl border border-gray-200 bg-gray-50 text-sm
+                                   class="w-full px-3 py-2.5 rounded-xl border border-gray-200 bg-gray-10 text-sm
                                           text-gray-900 focus:bg-white focus:border-primary-500 focus:ring-1
                                           focus:ring-primary-500 outline-none transition-all">
                         </div>
@@ -189,7 +189,7 @@ $currentPreset = $activePreset ?? '';
             <div class="overflow-x-auto">
                 <table class="w-full text-sm">
                     <thead>
-                        <tr class="border-b border-gray-100 bg-gray-50">
+                        <tr class="border-b border-gray-100 bg-gray-10">
                             <th class="text-left px-4 py-3.5 text-xs font-semibold text-gray-500 uppercase tracking-wide w-10">Rank</th>
                             <th class="text-left px-4 py-3.5 text-xs font-semibold text-gray-500 uppercase tracking-wide">Instansi</th>
                             <th class="text-center px-3 py-3.5 text-xs font-semibold text-gray-500 uppercase tracking-wide">Total</th>
@@ -213,7 +213,7 @@ $currentPreset = $activePreset ?? '';
                         $trendClr  = $d->trend === null ? 'text-gray-400' : ($d->trend > 0 ? 'text-success' : ($d->trend < 0 ? 'text-error' : 'text-gray-400'));
                         $trendIcon = $d->trend === null ? '•' : ($d->trend > 0 ? '↗' : ($d->trend < 0 ? '↘' : '→'));
                         @endphp
-                        <tr class="hover:bg-gray-50 transition-colors {{ $d->completionRate < 85 ? 'bg-red-50/40' : '' }}">
+                        <tr class="hover:bg-gray-10 transition-colors {{ $d->completionRate < 85 ? 'bg-red-50/40' : '' }}">
 
                             <td class="px-4 py-4 text-center">
                                 @if ($isTop3)

@@ -1,6 +1,6 @@
 @extends('layouts.app')
 
-@section('title', 'Rating Berhasil Dikirim — SILABU')
+@section('title', 'Rating Berhasil Dikirim — SILABA')
 
 @section('content')
 <div class="bg-gray-10 min-h-[calc(100vh-68px)] py-16">
@@ -54,7 +54,7 @@
                     <div>
                         <p class="text-sm font-semibold text-success">Rating Tersimpan</p>
                         <p class="text-xs text-gray-500 mt-0.5 leading-relaxed">
-                            Penilaian Anda akan membantu kami meningkatkan kualitas layanan SILABU
+                            Penilaian Anda akan membantu kami meningkatkan kualitas layanan SILABA
                         </p>
                     </div>
                 </div>
@@ -149,7 +149,7 @@
 
         {{-- Footer note --}}
         <p class="text-center text-sm text-gray-400 leading-relaxed">
-            Terima kasih telah menggunakan SILABU untuk melaporkan masalah di Kabupaten Badung.
+            Terima kasih telah menggunakan SILABA untuk melaporkan masalah di Kabupaten Badung.
             Partisipasi Anda sangat berarti bagi kami!
         </p>
 

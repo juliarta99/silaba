@@ -1,5 +1,5 @@
 @extends('layouts.app')
-@section('title', 'Profil Saya — SILABU')
+@section('title', 'Profil Saya — SILABA')
 
 @section('content')
 
@@ -9,7 +9,7 @@ $initials = strtoupper(substr(trim($name), 0, 2));
 $picture  = $user->picture ? asset('storage/' . $user->picture) : null;
 @endphp
 
-<div class="bg-gray-50 min-h-[calc(100vh-68px)] pb-10">
+<div class="bg-gray-10 min-h-[calc(100vh-68px)] py-16">
     <div class="max-w-2xl mx-auto px-4 sm:px-6 pt-6">
 
         {{-- Header --}}
@@ -100,7 +100,7 @@ $picture  = $user->picture ? asset('storage/' . $user->picture) : null;
                         </svg>
                         NIP
                     </label>
-                    <div class="w-full px-4 py-3 rounded-xl border border-gray-200 bg-gray-50 text-sm text-gray-700 font-mono">
+                    <div class="w-full px-4 py-3 rounded-xl border border-gray-200 bg-gray-10 text-sm text-gray-700 font-mono">
                         {{ $regent->nip }}
                     </div>
                 </div>
@@ -113,7 +113,7 @@ $picture  = $user->picture ? asset('storage/' . $user->picture) : null;
                         </svg>
                         Nama Lengkap
                     </label>
-                    <div class="w-full px-4 py-3 rounded-xl border border-gray-200 bg-gray-50 text-sm text-gray-700">
+                    <div class="w-full px-4 py-3 rounded-xl border border-gray-200 bg-gray-10 text-sm text-gray-700">
                         {{ $user->name }}
                     </div>
                 </div>
@@ -126,7 +126,7 @@ $picture  = $user->picture ? asset('storage/' . $user->picture) : null;
                         </svg>
                         Wilayah Tugas
                     </label>
-                    <div class="w-full px-4 py-3 rounded-xl border border-gray-200 bg-gray-50 text-sm text-gray-700">
+                    <div class="w-full px-4 py-3 rounded-xl border border-gray-200 bg-gray-10 text-sm text-gray-700">
                         Kabupaten Badung, Bali
                     </div>
                 </div>
@@ -134,13 +134,13 @@ $picture  = $user->picture ? asset('storage/' . $user->picture) : null;
                 <div class="grid grid-cols-2 gap-4">
                     <div>
                         <label class="text-xs font-semibold text-gray-500 mb-1.5 block">Mulai Menjabat</label>
-                        <div class="px-4 py-3 rounded-xl border border-gray-200 bg-gray-50 text-sm text-gray-700">
+                        <div class="px-4 py-3 rounded-xl border border-gray-200 bg-gray-10 text-sm text-gray-700">
                             {{ $regent->start_year }}
                         </div>
                     </div>
                     <div>
                         <label class="text-xs font-semibold text-gray-500 mb-1.5 block">Akhir Jabatan</label>
-                        <div class="px-4 py-3 rounded-xl border border-gray-200 bg-gray-50 text-sm text-gray-700">
+                        <div class="px-4 py-3 rounded-xl border border-gray-200 bg-gray-10 text-sm text-gray-700">
                             {{ $regent->end_year ?? 'Masih menjabat' }}
                         </div>
                     </div>
@@ -201,7 +201,7 @@ $picture  = $user->picture ? asset('storage/' . $user->picture) : null;
                         </label>
                         <input type="email" id="email" name="email"
                                value="{{ old('email', $regent->email) }}" required
-                               class="w-full px-4 py-3 rounded-xl border border-gray-200 bg-gray-50 text-sm
+                               class="w-full px-4 py-3 rounded-xl border border-gray-200 bg-gray-10 text-sm
                                       text-gray-900 focus:bg-white focus:border-primary-500 focus:ring-1
                                       focus:ring-primary-500 outline-none transition-all">
                         @error('email') <p class="text-xs text-error mt-1">{{ $message }}</p> @enderror
@@ -213,7 +213,7 @@ $picture  = $user->picture ? asset('storage/' . $user->picture) : null;
                         </label>
                         <input type="text" id="phone" name="phone"
                                value="{{ old('phone', $regent->phone) }}" required
-                               class="w-full px-4 py-3 rounded-xl border border-gray-200 bg-gray-50 text-sm
+                               class="w-full px-4 py-3 rounded-xl border border-gray-200 bg-gray-10 text-sm
                                       text-gray-900 focus:bg-white focus:border-primary-500 focus:ring-1
                                       focus:ring-primary-500 outline-none transition-all">
                         @error('phone') <p class="text-xs text-error mt-1">{{ $message }}</p> @enderror
@@ -222,7 +222,7 @@ $picture  = $user->picture ? asset('storage/' . $user->picture) : null;
                     <div class="flex flex-col-reverse sm:flex-row gap-3 pt-3 border-t border-gray-100">
                         <button type="button" @@click="editing = false"
                                 class="w-full sm:w-auto px-5 py-3 rounded-xl border border-gray-200
-                                       text-gray-700 text-sm font-semibold hover:bg-gray-50 transition-colors text-center">
+                                       text-gray-700 text-sm font-semibold hover:bg-gray-10 transition-colors text-center">
                             Batal
                         </button>
                         <button type="submit"
@@ -273,7 +273,7 @@ $picture  = $user->picture ? asset('storage/' . $user->picture) : null;
                                    id="{{ $f['id'] }}" name="{{ $f['name'] }}"
                                    placeholder="{{ $f['placeholder'] }}" required
                                    {{ $f['name'] === 'password' ? 'minlength=8' : '' }}
-                                   class="w-full px-4 py-3 pr-11 rounded-xl border border-gray-200 bg-gray-50
+                                   class="w-full px-4 py-3 pr-11 rounded-xl border border-gray-200 bg-gray-10
                                           text-sm text-gray-900 placeholder-gray-400 focus:bg-white
                                           focus:border-primary-500 focus:ring-1 focus:ring-primary-500
                                           outline-none transition-all">
@@ -296,7 +296,7 @@ $picture  = $user->picture ? asset('storage/' . $user->picture) : null;
                     <div class="flex flex-col-reverse sm:flex-row gap-3 pt-3">
                         <button type="button" @@click="changingPassword = false"
                                 class="w-full sm:w-auto px-5 py-3 rounded-xl border border-gray-200
-                                       text-gray-700 text-sm font-semibold hover:bg-gray-50 transition-colors text-center">
+                                       text-gray-700 text-sm font-semibold hover:bg-gray-10 transition-colors text-center">
                             Batal
                         </button>
                         <button type="submit"

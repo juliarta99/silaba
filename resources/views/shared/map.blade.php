@@ -1,5 +1,5 @@
 @extends('layouts.app')
-@section('title', 'Peta Sebaran Laporan — SILABU')
+@section('title', 'Peta Sebaran Laporan — SILABA')
 
 @section('content')
 
@@ -30,10 +30,10 @@ $isFieldOfficer = ($role === 'employee' && $position === 'field_officer');
 <style>
 #map { height: 500px; z-index: 1; }
 @media (max-width:640px) { #map { height: 360px; } }
-.silabu-popup .leaflet-popup-content-wrapper {
+.silaba-popup .leaflet-popup-content-wrapper {
     border-radius:14px; padding:10px; box-shadow:0 4px 24px rgba(0,0,0,.15);
 }
-.silabu-popup .leaflet-popup-tip { background:white; }
+.silaba-popup .leaflet-popup-tip { background:white; }
 .fullscreen-map {
     position:fixed !important; top:68px !important; left:0 !important;
     right:0 !important; bottom:0 !important; z-index:999 !important;
@@ -571,7 +571,7 @@ $isFieldOfficer = ($role === 'employee' && $position === 'field_officer');
                 </div>`;
 
             const mk = L.marker([m.lat, m.lng], { icon });
-            mk.bindPopup(popup, { maxWidth: 290, className: 'silabu-popup' });
+            mk.bindPopup(popup, { maxWidth: 290, className: 'silaba-popup' });
             cluster.addLayer(mk);
         });
 

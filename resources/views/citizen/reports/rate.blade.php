@@ -1,6 +1,6 @@
 @extends('layouts.app')
 
-@section('title', 'Beri Rating — SILABU')
+@section('title', 'Beri Rating — SILABA')
 
 @section('content')
 
@@ -48,7 +48,7 @@
                 </div>
                 <div>
                     <p class="text-base font-bold text-gray-900">Laporan Telah Diselesaikan</p>
-                    <p class="text-sm text-gray-500">Terima kasih telah menggunakan layanan SILABU</p>
+                    <p class="text-sm text-gray-500">Terima kasih telah menggunakan layanan SILABA</p>
                 </div>
             </div>
 
@@ -129,7 +129,7 @@
                     </label>
                     <textarea
                         id="comment" name="comment" rows="4"
-                        placeholder="Ceritakan pengalaman Anda menggunakan layanan SILABU..."
+                        placeholder="Ceritakan pengalaman Anda menggunakan layanan SILABA..."
                         class="w-full px-4 py-3 rounded-xl border border-gray-200 bg-gray-10
                                text-gray-900 placeholder-gray-400 resize-none focus:bg-white
                                focus:ring-2 focus:ring-primary-500 focus:border-primary-500

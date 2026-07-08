@@ -256,7 +256,7 @@ class CreateReportWizard extends Component
                 // WA ke pelapor baru
                 if ($reporterPhone !== '') {
                     $whatsapp->send($reporterPhone,
-                        "📋 *Laporan Diterima — SILABU*\n\n"
+                        "📋 *Laporan Diterima — SILABA*\n\n"
                         . "Halo {$reporterName}!\n\n"
                         . "📌 Nomor Tiket: *{$code}*\n"
                         . "📍 Lokasi: {$this->location}\n\n"
@@ -282,7 +282,7 @@ class CreateReportWizard extends Component
                         : '';
 
                     $whatsapp->send($parentPhone,
-                        "🔔 *Update Laporan {$parentReport->code} — SILABU*\n\n"
+                        "🔔 *Update Laporan {$parentReport->code} — SILABA*\n\n"
                         . "Halo {$parentName}, ada warga lain yang melaporkan masalah serupa. "
                         . "Prioritas penanganan dinaikkan ke *" . ucfirst($priority) . "*.\n\n"
                         . "🗓 Target penyelesaian: {$slaFormatted}\n\n"
@@ -294,7 +294,7 @@ class CreateReportWizard extends Component
                 // WA ke petugas
                 if ($officerPhone !== null) {
                     $whatsapp->send($officerPhone,
-                        "🔔 *Penugasan Diperbarui — SILABU*\n\n"
+                        "🔔 *Penugasan Diperbarui — SILABA*\n\n"
                         . "Laporan *{$parentReport->code}* mendapat laporan duplikat baru. "
                         . "Prioritas dinaikkan ke *" . ucfirst($priority) . "*.\n\n"
                         . "📋 Judul: {$parentReport->title}\n"
@@ -309,7 +309,7 @@ class CreateReportWizard extends Component
                 // WA ke pelapor (bukan duplikat)
                 if ($reporterPhone !== '') {
                     $whatsapp->send($reporterPhone,
-                        "✅ *Laporan Diterima — SILABU*\n\n"
+                        "✅ *Laporan Diterima — SILABA*\n\n"
                         . "Halo {$reporterName}!\n\n"
                         . "📋 Nomor Tiket: *{$code}*\n"
                         . "📝 Judul: {$this->title}\n"
@@ -324,14 +324,14 @@ class CreateReportWizard extends Component
                 // WA ke petugas
                 if ($officerPhone !== null) {
                     $whatsapp->send($officerPhone,
-                        "🔔 *Penugasan Baru — SILABU*\n\n"
+                        "🔔 *Penugasan Baru — SILABA*\n\n"
                         . "Anda mendapat penugasan laporan baru:\n\n"
                         . "📋 Tiket: *{$code}*\n"
                         . "📝 Judul: {$this->title}\n"
                         . "📍 Lokasi: {$this->location}\n"
                         . "⚡ Prioritas: " . ucfirst($priority) . "\n"
                         . "🗓 Batas SLA: {$slaFormatted}\n\n"
-                        . "Segera tindaklanjuti laporan ini di aplikasi SILABU."
+                        . "Segera tindaklanjuti laporan ini di aplikasi SILABA."
                     );
                 }
             }

@@ -89,12 +89,12 @@ $editUser = session('edit_user_id') ? $users->firstWhere('id', session('edit_use
                     </svg>
                     <input type="text" name="search" value="{{ request('search') }}"
                            placeholder="Cari nama, email, atau NIP..."
-                           class="w-full pl-10 pr-4 py-2.5 rounded-xl border border-gray-200 bg-gray-50 text-sm
+                           class="w-full pl-10 pr-4 py-2.5 rounded-xl border border-gray-200 bg-gray-10 text-sm
                                   placeholder-gray-400 focus:bg-white focus:border-primary-500 focus:ring-1
                                   focus:ring-primary-500 outline-none transition-all">
                 </div>
                 <select name="role" onchange="this.form.submit()"
-                        class="px-3 py-2.5 rounded-xl border border-gray-200 bg-gray-50 text-sm text-gray-700
+                        class="px-3 py-2.5 rounded-xl border border-gray-200 bg-gray-10 text-sm text-gray-700
                                focus:bg-white focus:border-primary-500 focus:ring-1 focus:ring-primary-500 outline-none">
                     <option value="">Semua Role</option>
                     <option value="citizen"            {{ request('role') === 'citizen'            ? 'selected' : '' }}>Warga</option>
@@ -109,7 +109,7 @@ $editUser = session('edit_user_id') ? $users->firstWhere('id', session('edit_use
                     @endif
                 </select>
                 <select name="status" onchange="this.form.submit()"
-                        class="px-3 py-2.5 rounded-xl border border-gray-200 bg-gray-50 text-sm text-gray-700
+                        class="px-3 py-2.5 rounded-xl border border-gray-200 bg-gray-10 text-sm text-gray-700
                                focus:bg-white focus:border-primary-500 focus:ring-1 focus:ring-primary-500 outline-none">
                     <option value="">Semua Status</option>
                     <option value="active"   {{ request('status') === 'active'   ? 'selected' : '' }}>Aktif</option>
@@ -119,7 +119,7 @@ $editUser = session('edit_user_id') ? $users->firstWhere('id', session('edit_use
                 <button type="submit" class="px-4 py-2.5 rounded-xl bg-gray-900 hover:bg-gray-700 text-white text-sm font-semibold">Cari</button>
                 @if (request()->hasAny(['search','role','status']))
                 <a href="{{ route('admin.users.index') }}"
-                   class="px-4 py-2.5 rounded-xl border border-gray-200 text-gray-600 text-sm font-semibold hover:bg-gray-50">Reset</a>
+                   class="px-4 py-2.5 rounded-xl border border-gray-200 text-gray-600 text-sm font-semibold hover:bg-gray-10">Reset</a>
                 @endif
             </div>
             <p class="text-xs text-gray-400 mt-3">
@@ -133,7 +133,7 @@ $editUser = session('edit_user_id') ? $users->firstWhere('id', session('edit_use
         <div class="overflow-x-auto">
             <table class="w-full text-sm">
                 <thead>
-                    <tr class="border-b border-gray-100 bg-gray-50">
+                    <tr class="border-b border-gray-100 bg-gray-10">
                         <th class="text-left px-5 py-3.5 text-xs font-semibold text-gray-500 uppercase tracking-wide">Nama & Kontak</th>
                         <th class="text-left px-4 py-3.5 text-xs font-semibold text-gray-500 uppercase tracking-wide">Role</th>
                         <th class="text-left px-4 py-3.5 text-xs font-semibold text-gray-500 uppercase tracking-wide">NIP / NIK</th>
@@ -174,7 +174,7 @@ $editUser = session('edit_user_id') ? $users->firstWhere('id', session('edit_use
                         'status'        => $statusKey ?? '',
                     ]);
                     @endphp
-                    <tr class="hover:bg-gray-50/80 transition-colors">
+                    <tr class="hover:bg-gray-10/80 transition-colors">
                         <td class="px-5 py-4">
                             <div class="flex items-center gap-3">
                                 <div class="w-9 h-9 rounded-full shrink-0 overflow-hidden bg-primary-100
@@ -443,7 +443,7 @@ $editUser = session('edit_user_id') ? $users->firstWhere('id', session('edit_use
 
                     <div class="px-6 py-4 border-t border-gray-100 flex gap-3">
                         <button type="button" @@click="close()"
-                                class="px-5 py-2.5 rounded-xl border border-gray-200 text-gray-700 text-sm font-semibold hover:bg-gray-50">Batal</button>
+                                class="px-5 py-2.5 rounded-xl border border-gray-200 text-gray-700 text-sm font-semibold hover:bg-gray-10">Batal</button>
                         <button type="submit"
                                 class="flex-1 py-2.5 rounded-xl bg-primary-500 hover:bg-primary-700 text-white text-sm font-semibold">
                             Tambah Pengguna
@@ -572,7 +572,7 @@ $editUser = session('edit_user_id') ? $users->firstWhere('id', session('edit_use
 
                         <div class="px-6 py-4 border-t border-gray-100 flex gap-3">
                             <button type="button" @@click="close()"
-                                    class="px-5 py-2.5 rounded-xl border border-gray-200 text-gray-700 text-sm font-semibold hover:bg-gray-50">Batal</button>
+                                    class="px-5 py-2.5 rounded-xl border border-gray-200 text-gray-700 text-sm font-semibold hover:bg-gray-10">Batal</button>
                             <button type="submit"
                                     class="flex-1 py-2.5 rounded-xl bg-primary-500 hover:bg-primary-700 text-white text-sm font-semibold">
                                 Simpan Perubahan

@@ -20,7 +20,7 @@ $priorityConfig = [
 ];
 @endphp
 
-<div class="bg-gray-50 min-h-[calc(100vh-68px)] pb-10">
+<div class="bg-gray-10 min-h-[calc(100vh-68px)] py-16">
     <div class="max-w-5xl mx-auto px-4 sm:px-6 pt-6">
 
         {{-- ── Header ── --}}
@@ -53,13 +53,13 @@ $priorityConfig = [
         {{-- ── Stat Cards ── --}}
         <div class="grid grid-cols-2 sm:grid-cols-5 gap-2 mb-5">
             @foreach ([
-                ['label' => 'Total Laporan',    'val' => $stats['total'],      'clr' => 'text-gray-500',  'ibg' => 'bg-gray-50',   'icon' => 'M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2'],
-                ['label' => 'Belum Ditugaskan', 'val' => $stats['unassigned'], 'clr' => 'text-gray-400',  'ibg' => 'bg-gray-50',   'icon' => 'M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z'],
+                ['label' => 'Total Laporan',    'val' => $stats['total'],      'clr' => 'text-gray-500',  'ibg' => 'bg-gray-10',   'icon' => 'M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2'],
+                ['label' => 'Belum Ditugaskan', 'val' => $stats['unassigned'], 'clr' => 'text-gray-400',  'ibg' => 'bg-gray-10',   'icon' => 'M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z'],
                 ['label' => 'Diproses',         'val' => $stats['inProgress'], 'clr' => 'text-yellow-500','ibg' => 'bg-yellow-50', 'icon' => 'M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z'],
                 ['label' => 'Selesai',          'val' => $stats['completed'],  'clr' => 'text-success',   'ibg' => 'bg-green-50',  'icon' => 'M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z'],
                 ['label' => 'Terlambat',        'val' => $stats['overdue'],
                  'clr' => $stats['overdue'] > 0 ? 'text-error' : 'text-gray-300',
-                 'ibg' => $stats['overdue'] > 0 ? 'bg-red-50'  : 'bg-gray-50',
+                 'ibg' => $stats['overdue'] > 0 ? 'bg-red-50'  : 'bg-gray-10',
                  'icon' => 'M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z'],
             ] as $stat)
             <div class="bg-white rounded-2xl border border-gray-100 shadow-sm p-3 sm:p-4 last:col-span-2 sm:last:col-span-1">
@@ -92,13 +92,13 @@ $priorityConfig = [
                     <input type="text" name="search" value="{{ request('search') }}"
                            placeholder="Cari laporan..."
                            class="col-span-2 sm:col-span-1 px-3 py-2.5 rounded-xl border border-gray-200
-                                  bg-gray-50 text-sm placeholder-gray-400 focus:bg-white
+                                  bg-gray-10 text-sm placeholder-gray-400 focus:bg-white
                                   focus:border-primary-500 focus:ring-1 focus:ring-primary-500
                                   outline-none transition-all">
 
                     {{-- Status --}}
                     <select name="status"
-                            class="px-3 py-2.5 rounded-xl border border-gray-200 bg-gray-50 text-sm
+                            class="px-3 py-2.5 rounded-xl border border-gray-200 bg-gray-10 text-sm
                                    text-gray-700 focus:bg-white focus:border-primary-500 focus:ring-1
                                    focus:ring-primary-500 outline-none transition-all"
                             onchange="this.form.submit()">
@@ -114,7 +114,7 @@ $priorityConfig = [
 
                     {{-- Prioritas --}}
                     <select name="priority"
-                            class="px-3 py-2.5 rounded-xl border border-gray-200 bg-gray-50 text-sm
+                            class="px-3 py-2.5 rounded-xl border border-gray-200 bg-gray-10 text-sm
                                    text-gray-700 focus:bg-white focus:border-primary-500 focus:ring-1
                                    focus:ring-primary-500 outline-none transition-all"
                             onchange="this.form.submit()">
@@ -126,7 +126,7 @@ $priorityConfig = [
 
                     {{-- Kecamatan — tambahan untuk Bupati --}}
                     <select name="district"
-                            class="px-3 py-2.5 rounded-xl border border-gray-200 bg-gray-50 text-sm
+                            class="px-3 py-2.5 rounded-xl border border-gray-200 bg-gray-10 text-sm
                                    text-gray-700 focus:bg-white focus:border-primary-500 focus:ring-1
                                    focus:ring-primary-500 outline-none transition-all"
                             onchange="this.form.submit()">
@@ -138,7 +138,7 @@ $priorityConfig = [
 
                     {{-- Kategori --}}
                     <select name="category"
-                            class="px-3 py-2.5 rounded-xl border border-gray-200 bg-gray-50 text-sm
+                            class="px-3 py-2.5 rounded-xl border border-gray-200 bg-gray-10 text-sm
                                    text-gray-700 focus:bg-white focus:border-primary-500 focus:ring-1
                                    focus:ring-primary-500 outline-none transition-all"
                             onchange="this.form.submit()">
@@ -234,7 +234,7 @@ $priorityConfig = [
                             @endif
                             @if ($report->district)
                             <span class="text-xs px-2 py-0.5 rounded-full bg-blue-50 text-blue-600">
-                                📍 {{ $report->district->name }}
+                                {{ $report->district->name }}
                             </span>
                             @endif
                             @if ($slaBadgeText)
@@ -282,7 +282,7 @@ $priorityConfig = [
                                 @if ($officerCount > 0)
                                     @foreach ($report->assignments->take(3) as $assign)
                                     <span class="inline-flex items-center gap-1 text-xs px-2 py-0.5 rounded-full
-                                                 bg-gray-50 border border-gray-200 text-gray-600">
+                                                 bg-gray-10 border border-gray-200 text-gray-600">
                                         <svg class="w-2.5 h-2.5 text-gray-400" fill="none" viewBox="0 0 12 12">
                                             <circle cx="6" cy="4" r="2" stroke="currentColor" stroke-width="1.1"/>
                                             <path d="M2 11c0-2.21 1.79-4 4-4s4 1.79 4 4" stroke="currentColor" stroke-width="1.1" stroke-linecap="round"/>

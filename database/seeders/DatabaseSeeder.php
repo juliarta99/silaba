@@ -6,6 +6,8 @@ use Carbon\Carbon;
 use Illuminate\Database\Seeder;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Hash;
+use Illuminate\Support\Facades\Storage;
+use Illuminate\Support\Facades\File;
 use Illuminate\Support\Str;
 use Faker\Factory as Faker;
 
@@ -18,6 +20,20 @@ class DatabaseSeeder extends Seeder
         $pass  = Hash::make('password');
 
         $this->command->info('Memulai seeding...');
+
+        // ══════════════════════════════════════════════════════
+        // PERSIAPAN FILE EVIDENCE
+        // ══════════════════════════════════════════════════════
+        $sourceImagePath = public_path('assets/images/laporan.jpg');
+        $hasSourceImage  = File::exists($sourceImagePath);
+        
+        if ($hasSourceImage) {
+            // Pastikan folder evidences ada di storage/app/public/evidences
+            Storage::disk('public')->makeDirectory('evidences');
+            $this->command->info('File laporan.jpg ditemukan, menyiapkan duplikasi evidence...');
+        } else {
+            $this->command->warn('File public/assets/images/laporan.jpg TIDAK DITEMUKAN. Menggunakan path dummy.');
+        }
 
         // ══════════════════════════════════════════════════════
         // 1. DEPARTMENTS
@@ -114,7 +130,7 @@ class DatabaseSeeder extends Seeder
             ['name' => 'Super Administrator', 'identifier' => 'admin_pusat',
              'identifier_type' => 'username', 'password' => $pass, 'role' => 'super_admin',
              'created_at' => $now, 'updated_at' => $now],
-            ['name' => 'Admin SILABU', 'identifier' => 'admin_silabu',
+            ['name' => 'Admin SILABA', 'identifier' => 'admin_silaba',
              'identifier_type' => 'username', 'password' => $pass, 'role' => 'admin',
              'created_at' => $now, 'updated_at' => $now],
         ]);
@@ -238,7 +254,7 @@ class DatabaseSeeder extends Seeder
             ],
             [
                 'name' => 'Voucher Kopi Rp 25.000', 'type' => 'F&B', 'pts' => 50,
-                'desc' => 'Berlaku di kedai kopi lokal Bali partner SILABU. Tunjukkan QR atau kode kepada barista.',
+                'desc' => 'Berlaku di kedai kopi lokal Bali partner SILABA. Tunjukkan QR atau kode kepada barista.',
                 'voucher_prefix' => 'FNB', 'voucher_format' => 'XXXX-XXXX', 'voucher_count' => 40,
                 'valid_months' => 3,
             ],
@@ -249,14 +265,14 @@ class DatabaseSeeder extends Seeder
                 'valid_months' => 6,
             ],
             [
-                'name' => 'Merchandise SILABU', 'type' => 'Merchandise', 'pts' => 75,
-                'desc' => 'Kaos, topi, atau tote bag eksklusif SILABU. Ambil di kantor SILABU (Gedung Pemkab Badung Lt. 2) Senin–Jumat 08.00–16.00 WITA.',
+                'name' => 'Merchandise SILABA', 'type' => 'Merchandise', 'pts' => 75,
+                'desc' => 'Kaos, topi, atau tote bag eksklusif SILABA. Ambil di kantor SILABA (Gedung Pemkab Badung Lt. 2) Senin–Jumat 08.00–16.00 WITA.',
                 'voucher_prefix' => 'MRC', 'voucher_format' => 'XXX-XXX', 'voucher_count' => 25,
                 'valid_months' => 1,
             ],
             [
                 'name' => 'Voucher Makan Rp 100.000', 'type' => 'F&B', 'pts' => 200,
-                'desc' => 'Berlaku di warung dan restoran lokal Bali partner SILABU. Tunjukkan kode kepada kasir.',
+                'desc' => 'Berlaku di warung dan restoran lokal Bali partner SILABA. Tunjukkan kode kepada kasir.',
                 'voucher_prefix' => 'FNB', 'voucher_format' => 'XXXX-XXXX', 'voucher_count' => 20,
                 'valid_months' => 3,
             ],
@@ -326,11 +342,10 @@ class DatabaseSeeder extends Seeder
                 if ($r['voucher_format'] === 'XXXX/SLB/YYYY') {
                     $code = substr($raw, 0, 4) . '/SLB/' . $now->year;
                 } else {
-                    $parts    = explode('-', $r['voucher_format']);
+                    $parts     = explode('-', $r['voucher_format']);
                     $codeParts = [];
                     $pos = 0;
                     foreach ($parts as $part) {
-                        $len        = strlen(str_replace('X', '', $part)) === 0 ? strlen($part) : strlen($part);
                         $codeParts[]= substr($raw, $pos, strlen($part));
                         $pos       += strlen($part);
                     }
@@ -363,7 +378,7 @@ class DatabaseSeeder extends Seeder
         $this->command->info('✓ Rewards (12) + Voucher pool');
 
         // ══════════════════════════════════════════════════════
-        // 11. REPORTS (200)
+        // 11. REPORTS (200) + DUPLIKASI GAMBAR EVIDENCE
         // ══════════════════════════════════════════════════════
         $statuses   = ['pending', 'pending', 'in_progress', 'in_progress', 'completed',
                        'completed', 'completed', 'rejected', 'under_review', 'waiting_for_materials'];
@@ -433,22 +448,44 @@ class DatabaseSeeder extends Seeder
             // Tags (2-4)
             foreach ($faker->randomElements($tagIds, rand(2, 4)) as $tId) {
                 DB::table('report_tags')->insert([
-                    'report_id' => $reportId, 'tag_id' => $tId,
-                    'created_at' => $reportDate, 'updated_at' => $reportDate,
+                    'report_id'  => $reportId, 
+                    'tag_id'     => $tId,
+                    'created_at' => $reportDate, 
+                    'updated_at' => $reportDate,
                 ]);
             }
 
-            // Evidence (1-3)
-            for ($e = 0; $e < rand(1, 3); $e++) {
+            // ====================================================================
+            // EVIDENCE (DUPLIKASI GAMBAR: 1, 2, atau 3 kali)
+            // ====================================================================
+            $evidenceCount = rand(1, 3);
+            for ($e = 0; $e < $evidenceCount; $e++) {
+                $dbFilePath = 'evidences/dummy/sample_' . rand(1, 10) . '.jpg'; // Fallback jika gagal baca source
+                $fileType   = 'photo';
+
+                if ($hasSourceImage) {
+                    // Buat penamaan unik: evidences/RPT_1_8h29k1_169000.jpg
+                    $fileName = 'evidences/RPT_' . $reportId . '_' . Str::random(6) . '_' . time() . '.jpg';
+                    
+                    // Baca isi gambar dari folder public, lalu simpan ke folder storage public
+                    $imageContent = file_get_contents($sourceImagePath);
+                    Storage::disk('public')->put($fileName, $imageContent);
+                    
+                    $dbFilePath = $fileName;
+                } else {
+                    $fileType = $faker->randomElement(['photo', 'photo', 'video']);
+                }
+
                 DB::table('report_evidence')->insert([
-                    'report_id' => $reportId,
-                    'file_path' => 'evidences/dummy/sample_' . rand(1, 10) . '.jpg',
-                    'file_type' => $faker->randomElement(['photo', 'photo', 'video']),
-                    'created_at' => $reportDate, 'updated_at' => $reportDate,
+                    'report_id'  => $reportId,
+                    'file_path'  => $dbFilePath,
+                    'file_type'  => $fileType,
+                    'created_at' => $reportDate, 
+                    'updated_at' => $reportDate,
                 ]);
             }
         }
-        $this->command->info('✓ Reports (200)');
+        $this->command->info('✓ Reports (200) + Evidences Dibuat');
 
         // ══════════════════════════════════════════════════════
         // 12. ASSIGNMENTS + PROGRESS + NOTIFICATIONS
@@ -457,7 +494,7 @@ class DatabaseSeeder extends Seeder
         foreach ($reportCodes as $r) {
             if (! in_array($r['status'], $activeStatuses)) continue;
 
-            $deptId  = $categoryDeptMap[$r['cat_id']] ?? null;
+            $deptId   = $categoryDeptMap[$r['cat_id']] ?? null;
             $officers = array_filter($employeeData,
                 fn ($e) => $e['dept_id'] == $deptId && $e['position'] === 'field_officer'
             );
@@ -468,39 +505,51 @@ class DatabaseSeeder extends Seeder
             $assignedAt = $r['date']->copy()->addHours(rand(1, 4));
 
             DB::table('assignments')->insert([
-                'report_id' => $r['id'], 'employee_id' => $officer['id'],
-                'created_at' => $assignedAt, 'updated_at' => $assignedAt,
+                'report_id'   => $r['id'], 
+                'employee_id' => $officer['id'],
+                'created_at'  => $assignedAt, 
+                'updated_at'  => $assignedAt,
             ]);
 
             DB::table('report_progress')->insert([
-                'report_id' => $r['id'], 'employee_id' => $officer['id'],
-                'title' => 'Petugas Ditugaskan',
+                'report_id'   => $r['id'], 
+                'employee_id' => $officer['id'],
+                'title'       => 'Petugas Ditugaskan',
                 'description' => 'Laporan telah diteruskan ke petugas lapangan.',
-                'status' => 'in_progress',
-                'created_at' => $assignedAt, 'updated_at' => $assignedAt,
+                'status'      => 'in_progress',
+                'created_at'  => $assignedAt, 
+                'updated_at'  => $assignedAt,
             ]);
 
             DB::table('notifications')->insert([
-                'report_id' => $r['id'], 'phone' => $r['phone'],
-                'message' => "✅ Laporan #{$r['code']} sedang diproses oleh petugas.",
-                'is_sent' => 1, 'sent_at' => $assignedAt,
-                'created_at' => $assignedAt, 'updated_at' => $assignedAt,
+                'report_id'  => $r['id'], 
+                'phone'      => $r['phone'],
+                'message'    => "✅ Laporan #{$r['code']} sedang diproses oleh petugas.",
+                'is_sent'    => 1, 
+                'sent_at'    => $assignedAt,
+                'created_at' => $assignedAt, 
+                'updated_at' => $assignedAt,
             ]);
 
             if (in_array($r['status'], ['completed', 'under_review'])) {
                 $doneAt = $assignedAt->copy()->addHours(rand(3, 12));
                 DB::table('report_progress')->insert([
-                    'report_id' => $r['id'], 'employee_id' => $officer['id'],
-                    'title' => 'Masalah Diselesaikan',
+                    'report_id'   => $r['id'], 
+                    'employee_id' => $officer['id'],
+                    'title'       => 'Masalah Diselesaikan',
                     'description' => 'Masalah telah ditangani oleh tim lapangan.',
-                    'status' => 'completed',
-                    'created_at' => $doneAt, 'updated_at' => $doneAt,
+                    'status'      => 'completed',
+                    'created_at'  => $doneAt, 
+                    'updated_at'  => $doneAt,
                 ]);
                 DB::table('notifications')->insert([
-                    'report_id' => $r['id'], 'phone' => $r['phone'],
-                    'message' => "🎉 Laporan #{$r['code']} telah diselesaikan. Mohon konfirmasi.",
-                    'is_sent' => 1, 'sent_at' => $doneAt,
-                    'created_at' => $doneAt, 'updated_at' => $doneAt,
+                    'report_id'  => $r['id'], 
+                    'phone'      => $r['phone'],
+                    'message'    => "🎉 Laporan #{$r['code']} telah diselesaikan. Mohon konfirmasi.",
+                    'is_sent'    => 1, 
+                    'sent_at'    => $doneAt,
+                    'created_at' => $doneAt, 
+                    'updated_at' => $doneAt,
                 ]);
             }
         }
@@ -512,7 +561,7 @@ class DatabaseSeeder extends Seeder
         $reviewComments = [
             'Petugas sangat responsif dan cepat menangani masalah.',
             'Pelayanan memuaskan, laporan ditangani dengan baik.',
-            'Terima kasih SILABU, masalah di lingkungan kami sudah teratasi!',
+            'Terima kasih SILABA, masalah di lingkungan kami sudah teratasi!',
             'Cukup bagus, semoga bisa lebih cepat lagi ke depannya.',
             'Petugas ramah dan profesional.',
             null,
@@ -546,12 +595,12 @@ class DatabaseSeeder extends Seeder
             if ($voucher) {
                 DB::table('reward_vouchers')->where('id', $voucher->id)->update(['is_claimed' => true]);
                 DB::table('reward_claims')->insert([
-                    'user_id'            => $demoUserId,
-                    'reward_id'          => $rewardIds[$ri],
-                    'reward_voucher_id'  => $voucher->id,
-                    'points_used'        => $rewardsData[$ri]['pts'],
-                    'created_at'         => $now->copy()->subDays(rand(3, 10)),
-                    'updated_at'         => $now->copy()->subDays(rand(3, 10)),
+                    'user_id'           => $demoUserId,
+                    'reward_id'         => $rewardIds[$ri],
+                    'reward_voucher_id' => $voucher->id,
+                    'points_used'       => $rewardsData[$ri]['pts'],
+                    'created_at'        => $now->copy()->subDays(rand(3, 10)),
+                    'updated_at'        => $now->copy()->subDays(rand(3, 10)),
                 ]);
                 $claimCount++;
             }
@@ -592,9 +641,11 @@ class DatabaseSeeder extends Seeder
                 ['districts',        count($districtNames)],
                 ['categories',       count($cats)],
                 ['tags',             count($tagNames)],
+                ['users',            count($citizenData) + count($employeeData) + count($districtNames) + 3], // Admin + Regent
                 ['employees',        count($employeeData)],
                 ['citizens',         count($citizenData)],
                 ['reports',          200],
+                ['report_evidence',  '± 400 (Files duplicated)'],
                 ['rewards',          12],
                 ['reward_vouchers',  '~380 kode'],
                 ['reward_claims',    $claimCount],

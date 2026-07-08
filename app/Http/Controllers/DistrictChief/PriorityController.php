@@ -252,7 +252,7 @@ class PriorityController extends Controller
             fputcsv($h, ['REKOMENDASI UTAMA'], ';');
             fputcsv($h, [$insights['rekomendasi_utama'] ?? '—'], ';');
             fputcsv($h, [''], ';');
-            fputcsv($h, ["Laporan ini dibuat otomatis oleh sistem SILABU menggunakan AI."], ';');
+            fputcsv($h, ["Laporan ini dibuat otomatis oleh sistem SILABA menggunakan AI."], ';');
             fclose($h);
         }, "{$filename}.csv", ['Content-Type' => 'text/csv; charset=UTF-8']);
     }

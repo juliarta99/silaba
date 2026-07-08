@@ -1,6 +1,6 @@
 @extends('layouts.app')
 
-@section('title', 'Laporan Saya — SILABU')
+@section('title', 'Laporan Saya — SILABA')
 
 @section('content')
 
@@ -146,7 +146,7 @@
                 @elseif ($needsRating)
                 <div class="flex items-center gap-2.5 px-5 py-3 bg-orange-50 border-b border-orange-100">
                     <span class="w-5 h-5 rounded-full bg-orange-500 text-white flex items-center justify-center shrink-0 text-xs font-bold">!</span>
-                    <p class="text-sm font-medium text-orange-700">Beri Rating: Bantu kami meningkatkan layanan dengan memberikan penilaian</p>
+                    <p class="text-sm font-medium text-orange-700">Beri Rating & Dapatan Poin: Bantu kami meningkatkan layanan dengan memberikan penilaian</p>
                 </div>
                 @endif
 

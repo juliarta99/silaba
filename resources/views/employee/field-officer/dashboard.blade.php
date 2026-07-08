@@ -1,5 +1,5 @@
 @extends('layouts.app')
-@section('title', 'Dashboard Petugas — SILABU')
+@section('title', 'Dashboard Petugas — SILABA')
 
 @section('content')
 

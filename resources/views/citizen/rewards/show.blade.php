@@ -1,5 +1,5 @@
 @extends('layouts.app')
-@section('title', 'Tiket Reward — SILABU')
+@section('title', 'Tiket Reward — SILABA')
 
 @section('content')
 <div class="bg-gray-10 min-h-[calc(100vh-68px)] py-16">
@@ -162,7 +162,7 @@
                     'Tidak dapat ditukarkan dengan uang tunai',
                     'Tidak dapat digabungkan dengan promo lain',
                     'Tunjukkan kode atau QR sebelum bertransaksi',
-                    'SILABU tidak bertanggung jawab atas kode yang hilang atau disalahgunakan',
+                    'SILABA tidak bertanggung jawab atas kode yang hilang atau disalahgunakan',
                 ] as $item)
                 <li class="flex items-start gap-2 text-xs text-gray-500">
                     <span class="w-1.5 h-1.5 rounded-full bg-primary-400 shrink-0 mt-1.5"></span>

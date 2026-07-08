@@ -12,7 +12,7 @@ $insightTypeConfig = [
 $barColor = fn ($pct) => $pct >= 90 ? 'bg-success' : ($pct >= 75 ? 'bg-yellow-400' : 'bg-error');
 @endphp
 
-<div class="bg-gray-50 min-h-[calc(100vh-68px)] pb-10">
+<div class="bg-gray-10 min-h-[calc(100vh-68px)] py-16">
 
     {{-- ── Hero Header ── --}}
     <div class="bg-primary-500 text-white">
@@ -137,12 +137,6 @@ $barColor = fn ($pct) => $pct >= 90 ? 'bg-success' : ($pct >= 75 ? 'bg-yellow-40
                 {{-- Metadata --}}
                 <div class="flex items-center justify-between pt-2 border-t border-gray-100 text-xs text-gray-400">
                     <span>Dibuat: {{ $insights['generated_at'] ?? '—' }}</span>
-                    <span class="flex items-center gap-1">
-                        Sumber:
-                        <span class="font-semibold {{ ($insights['source'] ?? '') === 'gemini' ? 'text-blue-500' : 'text-gray-500' }}">
-                            {{ ($insights['source'] ?? '') === 'gemini' ? 'Gemini AI' : 'Fallback (API tidak tersedia)' }}
-                        </span>
-                    </span>
                 </div>
             </div>
         </div>

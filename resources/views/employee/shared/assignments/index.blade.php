@@ -1,5 +1,5 @@
 @extends('layouts.app')
-@section('title', 'Penugasan Petugas — SILABU')
+@section('title', 'Penugasan Petugas — SILABA')
 
 @section('content')
 
@@ -295,7 +295,7 @@ $preselectedReportId = request('report_id');
                          class="flex items-center justify-between mt-4 pt-3 border-t border-gray-50">
                         <button type="button" @@click="reportPrevPage()" :disabled="reportPage === 1"
                                 class="text-xs font-semibold px-3 py-1.5 rounded-lg border border-gray-200
-                                       text-gray-600 disabled:opacity-40 disabled:cursor-not-allowed hover:bg-gray-50">
+                                       text-gray-600 disabled:opacity-40 disabled:cursor-not-allowed hover:bg-gray-10">
                             ‹ Sebelumnya
                         </button>
                         <span class="text-xs text-gray-400">
@@ -304,7 +304,7 @@ $preselectedReportId = request('report_id');
                         </span>
                         <button type="button" @@click="reportNextPage()" :disabled="reportPage === reportTotalPages"
                                 class="text-xs font-semibold px-3 py-1.5 rounded-lg border border-gray-200
-                                       text-gray-600 disabled:opacity-40 disabled:cursor-not-allowed hover:bg-gray-50">
+                                       text-gray-600 disabled:opacity-40 disabled:cursor-not-allowed hover:bg-gray-10">
                             Selanjutnya ›
                         </button>
                     </div>
@@ -411,7 +411,7 @@ $preselectedReportId = request('report_id');
                          class="flex items-center justify-between mt-4 pt-3 border-t border-gray-50">
                         <button type="button" @@click="officerPrevPage()" :disabled="officerPage === 1"
                                 class="text-xs font-semibold px-3 py-1.5 rounded-lg border border-gray-200
-                                       text-gray-600 disabled:opacity-40 disabled:cursor-not-allowed hover:bg-gray-50">
+                                       text-gray-600 disabled:opacity-40 disabled:cursor-not-allowed hover:bg-gray-10">
                             ‹ Sebelumnya
                         </button>
                         <span class="text-xs text-gray-400">
@@ -420,7 +420,7 @@ $preselectedReportId = request('report_id');
                         </span>
                         <button type="button" @@click="officerNextPage()" :disabled="officerPage === officerTotalPages"
                                 class="text-xs font-semibold px-3 py-1.5 rounded-lg border border-gray-200
-                                       text-gray-600 disabled:opacity-40 disabled:cursor-not-allowed hover:bg-gray-50">
+                                       text-gray-600 disabled:opacity-40 disabled:cursor-not-allowed hover:bg-gray-10">
                             Selanjutnya ›
                         </button>
                     </div>

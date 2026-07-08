@@ -1,6 +1,6 @@
 @extends('layouts.app')
 
-@section('title', 'Profil Kepala Dinas — SILABU')
+@section('title', 'Profil Kepala Dinas — SILABA')
 
 @section('content')
 {{-- Data kepala dinas: nama, NIP, jabatan, OPD --}}

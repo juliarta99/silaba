@@ -1,6 +1,6 @@
 @extends('layouts.app')
 
-@section('title', 'Dashboard Saya — SILABU')
+@section('title', 'Dashboard Saya — SILABA')
 
 @section('content')
 
@@ -132,7 +132,7 @@ $sisaPoin    = max(0, $nextRewardThreshold - $poinReward);
                 </div>
                 <a href="{{ route('citizen.profile') }}"
                    class="shrink-0 lg:w-full px-4 py-2 rounded-xl border border-gray-200
-                          text-gray-700 text-xs font-semibold hover:bg-gray-50 transition-colors
+                          text-gray-700 text-xs font-semibold hover:bg-gray-10 transition-colors
                           text-center whitespace-nowrap">
                     Edit Profile
                 </a>
@@ -286,7 +286,7 @@ $sisaPoin    = max(0, $nextRewardThreshold - $poinReward);
                                     <div class="flex flex-wrap gap-1.5 mb-1.5">
                                         @foreach ($tags as $tag)
                                         <span class="text-xs font-medium px-2 py-0.5 rounded-full
-                                                     border border-gray-200 text-gray-500 bg-gray-50">
+                                                     border border-gray-200 text-gray-500 bg-gray-10">
                                             {{ $tag->name }}
                                         </span>
                                         @endforeach

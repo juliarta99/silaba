@@ -1,5 +1,5 @@
 @extends('layouts.app')
-@section('title', 'Dashboard Eksekutif — SILABU')
+@section('title', 'Dashboard Eksekutif — SILABA')
 
 @section('content')
 
@@ -31,13 +31,13 @@ $periodLabel = $dateFrom && $dateTo
         <div class="flex items-start justify-between gap-4">
             <div>
                 <h1 class="text-xl sm:text-2xl font-bold flex items-center gap-2.5">
-                    <svg class="w-6 h-6 text-yellow-300 shrink-0" fill="none" viewBox="0 0 24 24">
+                    <svg class="w-6 h-6 text-white shrink-0" fill="none" viewBox="0 0 24 24">
                         <path d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2"
                               stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"/>
                     </svg>
                     Dashboard Eksekutif
                 </h1>
-                <p class="text-sm text-primary-200 mt-0.5">Kabupaten Badung — SILABU Analytics</p>
+                <p class="text-sm text-primary-200 mt-0.5">Kabupaten Badung — SILABA Analytics</p>
             </div>
             {{-- Profil Bupati --}}
             <div class="shrink-0 text-right bg-white/15 border border-white/25 rounded-2xl px-4 py-3">
@@ -51,19 +51,19 @@ $periodLabel = $dateFrom && $dateTo
     </div>
 </div>
 
-<div class="bg-gray-50 min-h-[calc(100vh-68px)] pb-10"
+<div class="bg-gray-10 min-h-[calc(100vh-68px)] py-10"
      x-data="{ showCustomDate: {{ ($activePreset === 'custom' || ($dateFrom && !$activePreset)) ? 'true' : 'false' }} }">
     <div class="max-w-6xl mx-auto px-4 sm:px-6">
 
         {{-- ════ Filter Periode ════ --}}
-        <div class="bg-white rounded-2xl border border-gray-100 shadow-sm p-4 -mt-3 mb-4 relative z-10">
+        <div class="bg-white rounded-2xl border border-gray-100 shadow-sm p-4 -mt-3 mb-8 relative z-10">
             <form method="GET" action="{{ route('regent.dashboard') }}" class="flex flex-wrap items-end gap-3">
 
                 {{-- Preset --}}
                 <div class="flex-1 min-w-[160px]">
                     <label class="block text-xs font-medium text-gray-500 mb-1.5">Periode</label>
                     <select name="preset"
-                            class="w-full px-3 py-2.5 rounded-xl border border-gray-200 bg-gray-50 text-sm
+                            class="w-full px-3 py-2.5 rounded-xl border border-gray-200 bg-gray-10 text-sm
                                    text-gray-700 focus:bg-white focus:border-primary-500 focus:ring-1
                                    focus:ring-primary-500 outline-none transition-all"
                             x-on:change="
@@ -81,14 +81,14 @@ $periodLabel = $dateFrom && $dateTo
                     <div>
                         <label class="block text-xs font-medium text-gray-500 mb-1.5">Dari</label>
                         <input type="date" name="date_from" value="{{ $dateFrom ?? '' }}" max="{{ date('Y-m-d') }}"
-                               class="px-3 py-2.5 rounded-xl border border-gray-200 bg-gray-50 text-sm
+                               class="px-3 py-2.5 rounded-xl border border-gray-200 bg-gray-10 text-sm
                                       text-gray-900 focus:bg-white focus:border-primary-500 focus:ring-1
                                       focus:ring-primary-500 outline-none transition-all">
                     </div>
                     <div>
                         <label class="block text-xs font-medium text-gray-500 mb-1.5">Sampai</label>
                         <input type="date" name="date_to" value="{{ $dateTo ?? '' }}" max="{{ date('Y-m-d') }}"
-                               class="px-3 py-2.5 rounded-xl border border-gray-200 bg-gray-50 text-sm
+                               class="px-3 py-2.5 rounded-xl border border-gray-200 bg-gray-10 text-sm
                                       text-gray-900 focus:bg-white focus:border-primary-500 focus:ring-1
                                       focus:ring-primary-500 outline-none transition-all">
                     </div>
@@ -402,7 +402,7 @@ $periodLabel = $dateFrom && $dateTo
                 <div>
                     <p class="text-sm text-blue-100">Total OPD Terdaftar</p>
                     <p class="text-4xl font-bold tabular-nums mt-0.5">{{ $totalOPD }}</p>
-                    <p class="text-xs text-blue-200 mt-1">Seluruh instansi terintegrasi dengan SILABU</p>
+                    <p class="text-xs text-blue-200 mt-1">Seluruh instansi terintegrasi dengan SILABA</p>
                 </div>
             </div>
             <div class="bg-success rounded-2xl p-6 text-white flex items-center gap-4">

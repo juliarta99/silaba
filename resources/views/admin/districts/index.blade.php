@@ -99,7 +99,7 @@
             </button>
             @if (request('search'))
             <a href="{{ route('admin.districts.index') }}"
-               class="px-4 py-2.5 rounded-xl border border-gray-200 text-gray-600 text-sm font-semibold hover:bg-gray-50 transition-colors">
+               class="px-4 py-2.5 rounded-xl border border-gray-200 text-gray-600 text-sm font-semibold hover:bg-gray-10 transition-colors">
                 Reset
             </a>
             @endif
@@ -278,7 +278,7 @@
 
                 <div class="px-6 py-4 border-t border-gray-100 flex gap-3">
                     <button type="button" @@click="close()"
-                            class="px-5 py-2.5 rounded-xl border border-gray-200 text-gray-700 text-sm font-semibold hover:bg-gray-50 transition-colors">
+                            class="px-5 py-2.5 rounded-xl border border-gray-200 text-gray-700 text-sm font-semibold hover:bg-gray-10 transition-colors">
                         Batal
                     </button>
                     <button type="submit"
@@ -350,7 +350,7 @@
 
                     <div class="px-6 py-4 border-t border-gray-100 flex gap-3">
                         <button type="button" @@click="close()"
-                                class="px-5 py-2.5 rounded-xl border border-gray-200 text-gray-700 text-sm font-semibold hover:bg-gray-50 transition-colors">
+                                class="px-5 py-2.5 rounded-xl border border-gray-200 text-gray-700 text-sm font-semibold hover:bg-gray-10 transition-colors">
                             Batal
                         </button>
                         <button type="submit"
@@ -407,7 +407,7 @@
 
             <div class="px-6 pb-6 flex gap-3">
                 <button type="button" @@click="close()"
-                        class="flex-1 py-2.5 rounded-xl border border-gray-200 text-gray-700 text-sm font-semibold hover:bg-gray-50 transition-colors">
+                        class="flex-1 py-2.5 rounded-xl border border-gray-200 text-gray-700 text-sm font-semibold hover:bg-gray-10 transition-colors">
                     Batal
                 </button>
 

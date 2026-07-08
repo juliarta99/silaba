@@ -13,7 +13,7 @@ $barColor = fn ($pct) => $pct >= 90 ? 'bg-success' : ($pct >= 75 ? 'bg-yellow-40
 $rateClr  = fn ($pct) => $pct >= 90 ? 'text-success' : ($pct >= 75 ? 'text-yellow-600' : 'text-error');
 @endphp
 
-<div class="bg-gray-50 min-h-[calc(100vh-68px)] pb-10">
+<div class="bg-gray-10 min-h-[calc(100vh-68px)] py-10">
 
     {{-- ── Hero ── --}}
     <div class="bg-primary-500 text-white">
@@ -28,7 +28,7 @@ $rateClr  = fn ($pct) => $pct >= 90 ? 'text-success' : ($pct >= 75 ? 'text-yello
                         Kembali ke Dashboard
                     </a>
                     <h1 class="text-xl sm:text-2xl font-bold flex items-center gap-2.5">
-                        <svg class="w-6 h-6 text-yellow-300 shrink-0" fill="none" viewBox="0 0 24 24">
+                        <svg class="w-6 h-6 text-white shrink-0" fill="none" viewBox="0 0 24 24">
                             <path d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z"
                                   stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"/>
                         </svg>
@@ -73,7 +73,7 @@ $rateClr  = fn ($pct) => $pct >= 90 ? 'text-success' : ($pct >= 75 ? 'text-yello
         <div class="bg-white rounded-2xl border border-gray-100 shadow-sm overflow-hidden">
             <div class="flex items-center justify-between px-5 pt-5 pb-3 border-b border-gray-50">
                 <h2 class="text-base font-bold text-gray-900 flex items-center gap-2">
-                    <span class="text-lg">✨</span> Key Insights
+                    <span class="text-lg"></span> Key Insights
                     <span class="text-xs font-normal text-gray-400 ml-1">powered by Gemini AI</span>
                 </h2>
                 <div class="flex items-center gap-3 text-xs text-gray-400">
@@ -146,11 +146,6 @@ $rateClr  = fn ($pct) => $pct >= 90 ? 'text-success' : ($pct >= 75 ? 'text-yello
 
                 <div class="flex items-center justify-between pt-2 border-t border-gray-100 text-xs text-gray-400">
                     <span>Dibuat: {{ $insights['generated_at'] ?? '—' }}</span>
-                    <span>Sumber:
-                        <span class="font-semibold {{ ($insights['source'] ?? '') === 'gemini' ? 'text-blue-500' : 'text-gray-500' }}">
-                            {{ ($insights['source'] ?? '') === 'gemini' ? '✨ Gemini AI' : 'Fallback (API tidak tersedia)' }}
-                        </span>
-                    </span>
                 </div>
             </div>
         </div>

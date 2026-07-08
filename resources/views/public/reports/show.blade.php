@@ -1,6 +1,6 @@
 @extends('layouts.app')
 
-@section('title', $report->code . ' — Detail Laporan SILABU')
+@section('title', $report->code . ' — Detail Laporan SILABA')
 
 @section('content')
 

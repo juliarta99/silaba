@@ -1,6 +1,6 @@
 @extends('layouts.app')
 
-@section('title', 'Laporan Berhasil Dikirim — SILABU')
+@section('title', 'Laporan Berhasil Dikirim — SILABA')
 
 @section('content')
 <div class="bg-gray-10 min-h-[calc(100vh-68px)] py-16 px-4 sm:px-6">
@@ -43,7 +43,7 @@
                 <div>
                     <p class="text-sm font-semibold text-gray-900">Laporan Diterima</p>
                     <p class="text-xs text-gray-500 mt-0.5 leading-relaxed">
-                        Laporan Anda telah masuk ke sistem SILABU dan akan segera diproses
+                        Laporan Anda telah masuk ke sistem SILABA dan akan segera diproses
                         oleh petugas terkait.
                     </p>
                 </div>
@@ -129,7 +129,7 @@
             <a href="https://wa.me/6236130" target="_blank"
                class="font-medium text-success hover:underline">WhatsApp</a>
             atau
-            <a href="mailto:silabu@badungkab.go.id"
+            <a href="mailto:silaba@badungkab.go.id"
                class="font-medium text-primary-500 hover:underline">Email</a>
         </p>
 

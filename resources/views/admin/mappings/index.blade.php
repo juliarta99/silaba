@@ -47,7 +47,7 @@
             ['label' => 'Kategori Terpetakan',     'val' => $stats['mapped'],   'clr' => 'text-success',    'ibg' => 'bg-green-50',  'icon' => 'M4 6h16M4 10h16M4 14h16M4 18h16'],
             ['label' => 'Kategori Belum Dipetakan','val' => $stats['unmapped'],
              'clr' => $stats['unmapped'] > 0 ? 'text-orange-600' : 'text-gray-300',
-             'ibg' => $stats['unmapped'] > 0 ? 'bg-orange-50'   : 'bg-gray-50',
+             'ibg' => $stats['unmapped'] > 0 ? 'bg-orange-50'   : 'bg-gray-10',
              'icon' => 'M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z'],
         ] as $s)
         <div class="bg-white rounded-2xl border border-gray-100 shadow-sm p-5 flex items-center gap-4">
@@ -81,7 +81,7 @@
                     class="px-4 py-2.5 rounded-xl bg-gray-900 hover:bg-gray-700 text-white text-sm font-semibold">Cari</button>
             @if ($search)
             <a href="{{ route('admin.mappings.index') }}"
-               class="px-4 py-2.5 rounded-xl border border-gray-200 text-gray-600 text-sm font-semibold hover:bg-gray-50">Reset</a>
+               class="px-4 py-2.5 rounded-xl border border-gray-200 text-gray-600 text-sm font-semibold hover:bg-gray-10">Reset</a>
             @endif
         </div>
     </form>
@@ -144,7 +144,7 @@
 
         <div class="bg-white rounded-2xl border border-gray-100 shadow-sm overflow-hidden">
             {{-- OPD Header --}}
-            <div class="flex items-center justify-between px-5 py-4 border-b border-gray-100 bg-gray-50/60">
+            <div class="flex items-center justify-between px-5 py-4 border-b border-gray-100 bg-gray-10/60">
                 <div class="flex items-center gap-3">
                     <div class="w-9 h-9 rounded-xl bg-blue-50 flex items-center justify-center shrink-0">
                         <svg class="w-5 h-5 text-blue-500" fill="none" viewBox="0 0 24 24">
@@ -303,7 +303,7 @@
 
                 <div class="px-6 py-4 border-t border-gray-100 flex gap-3">
                     <button type="button" @@click="close()"
-                            class="px-5 py-2.5 rounded-xl border border-gray-200 text-gray-700 text-sm font-semibold hover:bg-gray-50">Batal</button>
+                            class="px-5 py-2.5 rounded-xl border border-gray-200 text-gray-700 text-sm font-semibold hover:bg-gray-10">Batal</button>
                     <button type="submit"
                             class="flex-1 py-2.5 rounded-xl bg-primary-500 hover:bg-primary-700 text-white text-sm font-semibold">
                         Simpan Pemetaan
@@ -361,7 +361,7 @@
 
             <div class="px-6 pb-6 flex gap-3">
                 <button type="button" @@click="close()"
-                        class="flex-1 py-2.5 rounded-xl border border-gray-200 text-gray-700 text-sm font-semibold hover:bg-gray-50">
+                        class="flex-1 py-2.5 rounded-xl border border-gray-200 text-gray-700 text-sm font-semibold hover:bg-gray-10">
                     <span x-text="removeData?.hasActive ? 'Tutup' : 'Batal'"></span>
                 </button>
                 <template x-if="removeData && !removeData.hasActive">

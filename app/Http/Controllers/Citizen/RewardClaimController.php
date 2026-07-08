@@ -70,7 +70,7 @@ class RewardClaimController extends Controller
             return back()->with('error', 'Stok reward sudah habis. Silakan pilih reward lain.');
         }
 
-        return redirect()->route('reward-claims.success', $claim->id);
+        return redirect()->route('citizen.reward-claims.success', $claim->id);
     }
 
     public function success(RewardClaim $rewardClaim)

@@ -95,7 +95,7 @@
                                 <span class="font-bold text-gray-900">{{ $role['label'] }}</span>
                                 <span class="text-gray-500">{{ number_format($role['count']) }} ({{ $role['percentage'] }}%)</span>
                             </div>
-                            <div class="w-full bg-gray-50 rounded-full h-2">
+                            <div class="w-full bg-gray-10 rounded-full h-2">
                                 <div class="{{ $role['color'] }} h-2 rounded-full" style="width: {{ $role['percentage'] }}%"></div>
                             </div>
                         </div>

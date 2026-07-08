@@ -30,7 +30,7 @@
             <p class="text-sm text-gray-500 mt-1">Kelola katalog hadiah dan ketersediaan voucher sistem.</p>
         </div>
         <div class="flex gap-3">
-            <a href="{{ route('admin.rewards.history') }}" class="bg-white border border-gray-200 text-gray-700 hover:bg-gray-50 px-4 py-2.5 rounded-xl text-sm font-semibold transition flex items-center gap-2">
+            <a href="{{ route('admin.rewards.history') }}" class="bg-white border border-gray-200 text-gray-700 hover:bg-gray-10 px-4 py-2.5 rounded-xl text-sm font-semibold transition flex items-center gap-2">
                 <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" /></svg>
                 Riwayat Klaim
             </a>
@@ -64,7 +64,7 @@
         <div class="overflow-x-auto">
             <table class="w-full text-left border-collapse text-sm text-gray-600">
                 <thead>
-                    <tr class="bg-gray-50 border-b border-gray-100 text-xs font-bold text-gray-500 uppercase">
+                    <tr class="bg-gray-10 border-b border-gray-100 text-xs font-bold text-gray-500 uppercase">
                         <th class="p-4">Info Reward</th>
                         <th class="p-4">Tipe</th>
                         <th class="p-4 text-center">Poin Harga</th>
@@ -75,7 +75,7 @@
                 </thead>
                 <tbody class="divide-y divide-gray-50">
                     @forelse($rewards as $reward)
-                    <tr class="hover:bg-gray-50/50">
+                    <tr class="hover:bg-gray-10/50">
                         <td class="p-4">
                             <div class="flex items-center gap-3">
                                 <div class="w-10 h-10 rounded-lg bg-gray-100 border border-gray-200 overflow-hidden flex-shrink-0">
@@ -137,13 +137,13 @@
             </table>
         </div>
         @if($rewards->hasPages())
-            <div class="p-4 border-t border-gray-100 bg-gray-50/30">{{ $rewards->links() }}</div>
+            <div class="p-4 border-t border-gray-100 bg-gray-10/30">{{ $rewards->links() }}</div>
         @endif
     </div>
 
     <div x-show="showRewardModal" style="display: none;" class="fixed inset-0 z-[60] flex items-center justify-center p-4 bg-gray-900/60 backdrop-blur-sm">
         <div @click.away="showRewardModal = false" class="bg-white rounded-2xl shadow-xl w-full max-w-lg overflow-hidden">
-            <div class="p-4 border-b border-gray-100 flex justify-between items-center bg-gray-50/50">
+            <div class="p-4 border-b border-gray-100 flex justify-between items-center bg-gray-10/50">
                 <h3 class="font-bold text-gray-900">Tambah Reward Baru</h3>
                 <button @click="showRewardModal = false" class="text-gray-400 hover:text-red-500"><svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"/></svg></button>
             </div>
@@ -185,7 +185,7 @@
 
     <div x-show="showEditModal" style="display: none;" class="fixed inset-0 z-[60] flex items-center justify-center p-4 bg-gray-900/60 backdrop-blur-sm">
         <div @click.away="showEditModal = false" class="bg-white rounded-2xl shadow-xl w-full max-w-lg overflow-hidden">
-            <div class="p-4 border-b border-gray-100 flex justify-between items-center bg-gray-50/50">
+            <div class="p-4 border-b border-gray-100 flex justify-between items-center bg-gray-10/50">
                 <h3 class="font-bold text-gray-900">Ubah Data Reward</h3>
                 <button @click="showEditModal = false" class="text-gray-400 hover:text-red-500"><svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"/></svg></button>
             </div>

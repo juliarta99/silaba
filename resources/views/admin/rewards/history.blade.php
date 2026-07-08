@@ -16,7 +16,7 @@
     <div class="bg-white rounded-xl shadow-sm border border-gray-100 overflow-hidden">
         <table class="w-full text-left border-collapse text-sm text-gray-600">
             <thead>
-                <tr class="bg-gray-50 border-b border-gray-100 text-xs font-bold text-gray-500 uppercase">
+                <tr class="bg-gray-10 border-b border-gray-100 text-xs font-bold text-gray-500 uppercase">
                     <th class="p-4">Tanggal Klaim</th>
                     <th class="p-4">Nama Pengguna (Warga)</th>
                     <th class="p-4">Reward Ditebus</th>
@@ -26,7 +26,7 @@
             </thead>
             <tbody class="divide-y divide-gray-50">
                 @forelse($claims as $claim)
-                <tr class="hover:bg-gray-50/50">
+                <tr class="hover:bg-gray-10/50">
                     <td class="p-4">
                         <span class="font-bold text-gray-800">{{ $claim->created_at->format('d M Y') }}</span>
                         <span class="block text-xs text-gray-400 mt-0.5">{{ $claim->created_at->format('H:i') }} WITA</span>
@@ -60,7 +60,7 @@
             </tbody>
         </table>
         @if($claims->hasPages())
-            <div class="p-4 border-t border-gray-100 bg-gray-50/30">{{ $claims->links() }}</div>
+            <div class="p-4 border-t border-gray-100 bg-gray-10/30">{{ $claims->links() }}</div>
         @endif
     </div>
 

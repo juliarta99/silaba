@@ -50,7 +50,7 @@
         <div class="overflow-x-auto">
             <table class="w-full text-left border-collapse text-sm text-gray-600">
                 <thead>
-                    <tr class="bg-gray-50 border-b border-gray-100 text-xs font-bold text-gray-500 uppercase">
+                    <tr class="bg-gray-10 border-b border-gray-100 text-xs font-bold text-gray-500 uppercase">
                         <th class="p-4">Tanggal & Waktu</th>
                         <th class="p-4">Tujuan (No. HP)</th>
                         <th class="p-4">Terkait Laporan</th>
@@ -61,7 +61,7 @@
                 </thead>
                 <tbody class="divide-y divide-gray-50">
                     @forelse($notifications as $notif)
-                    <tr class="hover:bg-gray-50/50 transition">
+                    <tr class="hover:bg-gray-10/50 transition">
                         <td class="p-4">
                             <span class="font-bold text-gray-800">{{ $notif->created_at->format('d M Y') }}</span>
                             <span class="block text-xs text-gray-400 mt-0.5">{{ $notif->created_at->format('H:i') }} WITA</span>
@@ -126,7 +126,7 @@
         </div>
         
         @if($notifications->hasPages())
-            <div class="p-4 border-t border-gray-100 bg-gray-50/30">
+            <div class="p-4 border-t border-gray-100 bg-gray-10/30">
                 {{ $notifications->links() }}
             </div>
         @endif
@@ -135,7 +135,7 @@
     <div x-show="showModal" style="display: none;" class="fixed inset-0 z-[60] flex items-center justify-center p-4 bg-gray-900/60 backdrop-blur-sm">
         <div @click.away="showModal = false" class="bg-white rounded-2xl shadow-xl w-full max-w-md overflow-hidden flex flex-col">
             
-            <div class="p-4 border-b border-gray-100 flex justify-between items-center bg-gray-50/50">
+            <div class="p-4 border-b border-gray-100 flex justify-between items-center bg-gray-10/50">
                 <div>
                     <h3 class="font-bold text-gray-900">Detail Pesan Notifikasi</h3>
                     <p class="text-xs text-gray-500" x-text="detailDate"></p>
@@ -161,14 +161,14 @@
                     </div>
                 </div>
 
-                <div class="bg-gray-50 border border-gray-100 rounded-xl p-4">
+                <div class="bg-gray-10 border border-gray-100 rounded-xl p-4">
                     <span class="text-gray-400 block text-xs mb-2 uppercase font-bold tracking-wider">Isi Pesan:</span>
                     <p class="text-sm text-gray-700 whitespace-pre-wrap leading-relaxed" x-text="detailMessage"></p>
                 </div>
             </div>
             
-            <div class="p-4 border-t border-gray-100 bg-gray-50/30 flex justify-end">
-                <button @click="showModal = false" class="bg-white border border-gray-200 text-gray-700 hover:bg-gray-50 font-bold py-2 px-5 rounded-lg text-sm transition">
+            <div class="p-4 border-t border-gray-100 bg-gray-10/30 flex justify-end">
+                <button @click="showModal = false" class="bg-white border border-gray-200 text-gray-700 hover:bg-gray-10 font-bold py-2 px-5 rounded-lg text-sm transition">
                     Tutup
                 </button>
             </div>

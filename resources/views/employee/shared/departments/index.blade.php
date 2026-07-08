@@ -1,5 +1,5 @@
 @extends('layouts.app')
-@section('title', 'Kelola Instansi — SILABU')
+@section('title', 'Kelola Instansi — SILABA')
 
 @section('content')
 
@@ -487,7 +487,7 @@
 
                 <div class="flex gap-3 mt-6">
                     <button type="button" @click="infoModalOpen = false"
-                            class="flex-1 py-3 rounded-xl border border-gray-200 text-gray-600 text-sm font-bold hover:bg-gray-50 transition-colors">
+                            class="flex-1 py-3 rounded-xl border border-gray-200 text-gray-600 text-sm font-bold hover:bg-gray-10 transition-colors">
                         Batal
                     </button>
                     <button type="submit"
@@ -568,7 +568,7 @@
 
                 <div class="flex gap-3 mt-6">
                     <button type="button" @click="employeeModalOpen = false"
-                            class="flex-1 py-3 rounded-xl border border-gray-200 text-gray-600 text-sm font-bold hover:bg-gray-50 transition-colors">
+                            class="flex-1 py-3 rounded-xl border border-gray-200 text-gray-600 text-sm font-bold hover:bg-gray-10 transition-colors">
                         Batal
                     </button>
                     <button type="submit"
@@ -600,7 +600,7 @@
             </div>
             <div class="flex border-t border-gray-100">
                 <button type="button" @click="deleteModalOpen = false"
-                        class="flex-1 py-3 text-sm font-bold text-gray-600 hover:bg-gray-50 transition-colors">
+                        class="flex-1 py-3 text-sm font-bold text-gray-600 hover:bg-gray-10 transition-colors">
                     Batal
                 </button>
                 

@@ -54,7 +54,7 @@
             ['label' => 'Total OPD',        'val' => $stats['total'],         'clr' => 'text-blue-600',   'ibg' => 'bg-blue-50',   'icon' => 'M19 21V5a2 2 0 00-2-2H7a2 2 0 00-2 2v16m14 0h2m-2 0h-5m-9 0H3m2 0h5M9 7h1m-1 4h1m4-4h1m-1 4h1m-2 10v-5a1 1 0 011-1h2a1 1 0 011 1v5m-4 0h4'],
             ['label' => 'Total Petugas',    'val' => $stats['total_petugas'], 'clr' => 'text-success',    'ibg' => 'bg-green-50',  'icon' => 'M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0z'],
             ['label' => 'OPD Aktif',        'val' => $stats['aktif'],         'clr' => 'text-purple-600', 'ibg' => 'bg-purple-50', 'icon' => 'M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z'],
-            ['label' => 'Belum Ada Kadis',  'val' => $stats['belum_kadis'],   'clr' => $stats['belum_kadis'] > 0 ? 'text-orange-600' : 'text-gray-300', 'ibg' => $stats['belum_kadis'] > 0 ? 'bg-orange-50' : 'bg-gray-50', 'icon' => 'M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z'],
+            ['label' => 'Belum Ada Kadis',  'val' => $stats['belum_kadis'],   'clr' => $stats['belum_kadis'] > 0 ? 'text-orange-600' : 'text-gray-300', 'ibg' => $stats['belum_kadis'] > 0 ? 'bg-orange-50' : 'bg-gray-10', 'icon' => 'M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z'],
         ] as $s)
         <div class="bg-white rounded-2xl border border-gray-100 shadow-sm p-4 sm:p-5 flex items-center gap-3">
             <div class="w-11 h-11 rounded-xl {{ $s['ibg'] }} flex items-center justify-center shrink-0">
@@ -87,7 +87,7 @@
                     class="px-4 py-2.5 rounded-xl bg-gray-900 hover:bg-gray-700 text-white text-sm font-semibold">Cari</button>
             @if (request('search'))
             <a href="{{ route('admin.departments.index') }}"
-               class="px-4 py-2.5 rounded-xl border border-gray-200 text-gray-600 text-sm font-semibold hover:bg-gray-50">Reset</a>
+               class="px-4 py-2.5 rounded-xl border border-gray-200 text-gray-600 text-sm font-semibold hover:bg-gray-10">Reset</a>
             @endif
         </div>
     </form>
@@ -212,7 +212,7 @@
 
                 <button type="button" @@click="openEdit({{ $editData }})"
                         class="flex items-center justify-center gap-1.5 px-3 py-2 rounded-xl
-                               border border-gray-200 bg-gray-50 hover:bg-gray-100 text-gray-700
+                               border border-gray-200 bg-gray-10 hover:bg-gray-100 text-gray-700
                                text-sm font-semibold transition-colors">
                     <svg class="w-3.5 h-3.5" fill="none" viewBox="0 0 14 14">
                         <path d="M9.917 2.333a1.65 1.65 0 112.333 2.334L4.667 12.25H2.333V9.917L9.917 2.333z"
@@ -302,7 +302,7 @@
                     </div>
                 </div>
                 <div class="px-6 py-4 border-t border-gray-100 flex gap-3">
-                    <button type="button" @@click="close()" class="px-5 py-2.5 rounded-xl border border-gray-200 text-gray-700 text-sm font-semibold hover:bg-gray-50">Batal</button>
+                    <button type="button" @@click="close()" class="px-5 py-2.5 rounded-xl border border-gray-200 text-gray-700 text-sm font-semibold hover:bg-gray-10">Batal</button>
                     <button type="submit" class="flex-1 py-2.5 rounded-xl bg-primary-500 hover:bg-primary-700 text-white text-sm font-semibold">Simpan OPD</button>
                 </div>
             </form>
@@ -357,7 +357,7 @@
                         </div>
                     </div>
                     <div class="px-6 py-4 border-t border-gray-100 flex gap-3">
-                        <button type="button" @@click="close()" class="px-5 py-2.5 rounded-xl border border-gray-200 text-gray-700 text-sm font-semibold hover:bg-gray-50">Batal</button>
+                        <button type="button" @@click="close()" class="px-5 py-2.5 rounded-xl border border-gray-200 text-gray-700 text-sm font-semibold hover:bg-gray-10">Batal</button>
                         <button type="submit" class="flex-1 py-2.5 rounded-xl bg-primary-500 hover:bg-primary-700 text-white text-sm font-semibold">Simpan Perubahan</button>
                     </div>
                 </form>
@@ -397,7 +397,7 @@
 
                         {{-- Kadis saat ini --}}
                         <div x-show="headData.hasHead"
-                             class="flex items-center gap-3 px-4 py-3 rounded-xl bg-gray-50 border border-gray-200">
+                             class="flex items-center gap-3 px-4 py-3 rounded-xl bg-gray-10 border border-gray-200">
                             <div class="w-9 h-9 rounded-full bg-primary-100 flex items-center justify-center shrink-0">
                                 <svg class="w-4 h-4 text-primary-600" fill="none" viewBox="0 0 16 16">
                                     <circle cx="8" cy="5" r="2.5" stroke="currentColor" stroke-width="1.2"/>
@@ -476,7 +476,7 @@
                     </div>
 
                     <div class="px-6 py-4 border-t border-gray-100 flex gap-3">
-                        <button type="button" @@click="close()" class="px-5 py-2.5 rounded-xl border border-gray-200 text-gray-700 text-sm font-semibold hover:bg-gray-50">Batal</button>
+                        <button type="button" @@click="close()" class="px-5 py-2.5 rounded-xl border border-gray-200 text-gray-700 text-sm font-semibold hover:bg-gray-10">Batal</button>
                         <button type="submit" class="flex-1 py-2.5 rounded-xl bg-primary-500 hover:bg-primary-700 text-white text-sm font-semibold"
                                 x-text="headData?.hasHead ? 'Simpan Perubahan Kadis' : 'Tugaskan sebagai Kadis'"></button>
                     </div>
@@ -511,7 +511,7 @@
                 <p class="text-xs text-gray-400 mt-3">Semua kategori dan data terkait akan ikut terhapus. Tindakan ini tidak dapat dibatalkan.</p>
             </div>
             <div class="px-6 pb-6 flex gap-3">
-                <button type="button" @@click="close()" class="flex-1 py-2.5 rounded-xl border border-gray-200 text-gray-700 text-sm font-semibold hover:bg-gray-50">Batal</button>
+                <button type="button" @@click="close()" class="flex-1 py-2.5 rounded-xl border border-gray-200 text-gray-700 text-sm font-semibold hover:bg-gray-10">Batal</button>
                 <template x-if="deleteData">
                     <form :action="`{{ url('admin/opd') }}/${deleteData.id}`" method="POST" class="flex-1">
                         @csrf @method('DELETE')

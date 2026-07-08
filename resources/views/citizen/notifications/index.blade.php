@@ -1,5 +1,5 @@
 @extends('layouts.app')
-@section('title', 'Notifikasi — SILABU')
+@section('title', 'Notifikasi — SILABA')
 
 @section('content')
 <div class="bg-gray-10 min-h-[calc(100vh-68px)] py-16">
@@ -82,7 +82,7 @@
             $statusInfo = $statusMap[$report?->status ?? ''] ?? ['label' => '—', 'class' => 'bg-gray-100 text-gray-500'];
 
             // Parse pesan — tampilkan bersih tanpa emoji duplikat
-            $cleanMsg = trim(preg_replace('/^[^\w\s]+\s*\*[^*]+\*\s*—\s*SILABU\s*/u', '', $msg));
+            $cleanMsg = trim(preg_replace('/^[^\w\s]+\s*\*[^*]+\*\s*—\s*SILABA\s*/u', '', $msg));
             @endphp
 
             <div class="bg-white rounded-2xl border border-gray-100 shadow-sm overflow-hidden
@@ -137,7 +137,7 @@
                             $lines = explode("\n", $formatted);
                             // Skip baris pertama jika hanya berisi emoji + judul
                             if (count($lines) > 1) {
-                                array_shift($lines); // hapus baris "✅ *Laporan Diterima — SILABU*"
+                                array_shift($lines); // hapus baris "✅ *Laporan Diterima — SILABA*"
                                 if (trim($lines[0] ?? '') === '') array_shift($lines); // hapus baris kosong
                             }
                             $displayed = implode("\n", array_slice($lines, 0, 6));

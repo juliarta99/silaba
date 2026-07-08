@@ -1,5 +1,5 @@
 @extends('layouts.app')
-@section('title', 'Dashboard Kepala Dinas — SILABU')
+@section('title', 'Dashboard Kepala Dinas — SILABA')
 
 @section('content')
 
@@ -37,7 +37,7 @@ $medals = ['🥇','🥈','🥉'];
     </div>
 </div>
 
-<div class="bg-gray-50 min-h-[calc(100vh-68px)] pb-10">
+<div class="bg-gray-10 min-h-[calc(100vh-68px)] py-16">
     <div class="max-w-6xl mx-auto px-4 sm:px-6">
 
         {{-- ════ KPI ROW 1 ════ --}}
@@ -93,7 +93,7 @@ $medals = ['🥇','🥈','🥉'];
             </div>
             {{-- Terlambat --}}
             <div class="bg-white rounded-2xl border {{ $terlambat > 0 ? 'border-red-100' : 'border-gray-100' }} shadow-sm p-4 sm:p-5">
-                <div class="w-9 h-9 rounded-xl {{ $terlambat > 0 ? 'bg-red-50 border-red-100' : 'bg-gray-50 border-gray-100' }}
+                <div class="w-9 h-9 rounded-xl {{ $terlambat > 0 ? 'bg-red-50 border-red-100' : 'bg-gray-10 border-gray-100' }}
                             border flex items-center justify-center mb-3">
                     <svg class="w-5 h-5 {{ $terlambat > 0 ? 'text-error' : 'text-gray-300' }}" fill="none" viewBox="0 0 24 24">
                         <path d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z"
@@ -320,7 +320,7 @@ $medals = ['🥇','🥈','🥉'];
                             {{-- Lines --}}
                             <path d="{{ $toPath($lineTotal) }}" fill="none" stroke="#9CA3AF" stroke-width="1.5" stroke-dasharray="4 2"/>
                             <path d="{{ $toPath($lineSelesai) }}" fill="none" stroke="#22C55E" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/>
-                            <path d="{{ $toPath($lineKepuasan) }}" fill="none" stroke="#3B82F6" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                            {{-- <path d="{{ $toPath($lineKepuasan) }}" fill="none" stroke="#3B82F6" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/> --}}
 
                             {{-- Dots selesai --}}
                             @foreach ($lineSelesai as $p)
@@ -345,10 +345,10 @@ $medals = ['🥇','🥈','🥉'];
                             <div class="w-5 h-0.5 bg-[#22C55E] rounded"></div>
                             Selesai
                         </div>
-                        <div class="flex items-center gap-1.5">
+                        {{-- <div class="flex items-center gap-1.5">
                             <div class="w-5 h-0.5 bg-[#3B82F6] rounded"></div>
                             Kepuasan (%)
-                        </div>
+                        </div> --}}
                     </div>
                 </div>
 
@@ -396,7 +396,7 @@ $medals = ['🥇','🥈','🥉'];
                         $st = $statusConfig[$report->status]     ?? $statusConfig['pending'];
                         $noAssign = $report->assignments->count() === 0;
                         @endphp
-                        <a href="{{ route('employee.supervisor.reports.show', $report->code) }}"
+                        <a href="{{ route('reports.show', $report->code) }}"
                            class="block p-3.5 rounded-xl border border-gray-100 hover:border-gray-200
                                   hover:shadow-sm transition-all">
                             <p class="text-xs text-gray-400 font-mono mb-1">{{ $report->code }}</p>
@@ -472,7 +472,7 @@ $medals = ['🥇','🥈','🥉'];
                     <p class="text-xs text-gray-400 text-center mb-4">Periode aktif</p>
 
                     <div class="space-y-3">
-                        <div class="flex items-center justify-between px-4 py-3 rounded-xl bg-gray-50 border border-gray-100">
+                        <div class="flex items-center justify-between px-4 py-3 rounded-xl bg-gray-10 border border-gray-100">
                             <div>
                                 <p class="text-xs text-gray-400">Bulan Ini</p>
                                 <p class="text-lg font-bold text-gray-900 tabular-nums">{{ $periodeBulanIni }}</p>
@@ -481,7 +481,7 @@ $medals = ['🥇','🥈','🥉'];
                                 <path d="M13 7h8m0 0v8m0-8l-8 8-4-4-6 6" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"/>
                             </svg>
                         </div>
-                        <div class="flex items-center justify-between px-4 py-3 rounded-xl bg-gray-50 border border-gray-100">
+                        <div class="flex items-center justify-between px-4 py-3 rounded-xl bg-gray-10 border border-gray-100">
                             <div>
                                 <p class="text-xs text-gray-400">Bulan Lalu</p>
                                 <p class="text-lg font-bold text-gray-900 tabular-nums">{{ $periodeBulanLalu }}</p>

@@ -1,6 +1,5 @@
 <?php
 
-use App\Http\Controllers\Admin\AdminRewardController;
 use Illuminate\Support\Facades\Route;
 
 // ── Controllers ───────────────────────────────────────────────────────────────
@@ -67,31 +66,6 @@ Route::get('/laporan/buat',     fn() => view('public.reports.create'))->name('re
 Route::get('/laporan/berhasil', [ReportController::class, 'success'])->name('reports.success');
 Route::get('/laporan/{code}',   [ReportController::class, 'show'])->name('reports.show');
 Route::get('/departments/{department}', [DepartmentController::class, 'show'])->name('departments.show');
-Route::get('/dashboardadmin', function(){
-    return view("DashboardAdmin");
-});
-Route::get('/manajemenpetugas', function(){
-    return view("ManajemenPetugas");
-});
-
-
-
-Route::get('/manajemenKategoriAdmin', function() {
-return view('manajemenKategoriAdmin');
-})->name('manajemenKategoriAdmin.show');
-
-Route::get('/pemetaanKategoriOpd', function() {
-return view('pemetaanKategoriOpd');
-})->name('pemetaanKategoriOpd.show');
-
-Route::get('/manajemenKecamatanAdmin', function() {
-return view('manajemenKecamatanAdmin');
-})->name('manajemenKecamatanAdmin.show');
-
-Route::get('/manajemenOpdAdmin', function() {
-return view('manajemenOpdAdmin');
-})->name('manajemenOpdAdmin.show');
-
 
 /*
 |=============================================================================

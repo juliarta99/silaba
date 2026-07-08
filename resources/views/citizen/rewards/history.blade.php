@@ -1,5 +1,5 @@
 @extends('layouts.app')
-@section('title', 'Riwayat Reward — SILABU')
+@section('title', 'Riwayat Reward — SILABA')
 
 @section('content')
 <div class="bg-gray-10 min-h-[calc(100vh-68px)] py-16">

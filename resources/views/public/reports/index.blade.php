@@ -1,6 +1,6 @@
 @extends('layouts.app')
 
-@section('title', 'Semua Laporan — SILABU')
+@section('title', 'Semua Laporan — SILABA')
 
 @section('content')
 
@@ -148,25 +148,32 @@
         @if ($reports->count() > 0)
         <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
             @foreach ($reports as $report)
-            <x-report-card
-                id="{{ $report->code }}"
-                judul="{{ $report->title }}"
-                kategori="{{ $report->category->name ?? 'Tanpa Kategori' }}"
-                status="{{ match($report->status) {
-                    'pending'     => 'Baru',
-                    'in_progress' => 'Diproses',
-                    'under_review'=> 'Direview',
-                    'completed'   => 'Selesai',
-                    'rejected'    => 'Ditolak',
-                    default       => 'Baru',
-                } }}"
-                :tags="$report->tags->pluck('name')->toArray() ?? []"
-                lokasi="Kec. {{ $report->district->name ?? 'Tidak diketahui' }}"
-                tanggal="{{ $report->created_at->translatedFormat('j M Y') }}"
-                pelapor="{{ $report->user->name ?? $report->guest_name ?? 'Tamu' }}"
-                foto="{{ $report->evidences->first()->file_path ?? null }}"
-                href="{{ route('reports.show', $report->code) }}"
-            />
+
+                @php
+                    // Ambil foto pertama (jika ada), jika tidak gunakan fallback gambar default
+                    $fotoPath = $report->evidences->firstWhere('file_type', 'photo')?->file_path;
+                    $fotoUrl  = $fotoPath ? Storage::url($fotoPath) : 'https://images.unsplash.com/photo-1558618666-fcd25c85cd64?w=600&q=80';
+                @endphp
+
+                <x-report-card
+                    id="{{ $report->code }}"
+                    judul="{{ $report->title }}"
+                    kategori="{{ $report->category->name ?? 'Tanpa Kategori' }}"
+                    status="{{ match($report->status) {
+                        'pending'     => 'Baru',
+                        'in_progress' => 'Diproses',
+                        'under_review'=> 'Direview',
+                        'completed'   => 'Selesai',
+                        'rejected'    => 'Ditolak',
+                        default       => 'Baru',
+                    } }}"
+                    :tags="$report->tags->pluck('name')->toArray() ?? []"
+                    lokasi="Kec. {{ $report->district->name ?? 'Tidak diketahui' }}"
+                    tanggal="{{ $report->created_at->translatedFormat('j M Y') }}"
+                    pelapor="{{ $report->user->name ?? $report->guest_name ?? 'Tamu' }}"
+                    foto="{{ $fotoUrl }}"
+                    href="{{ route('reports.show', $report->code) }}"
+                />
             @endforeach
         </div>
 

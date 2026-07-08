@@ -161,7 +161,7 @@ class MapController extends Controller
                 => route('employee.field-officer.assignments.show', $code),
 
             $role === 'employee' && in_array($position, ['supervisor','head_of_department'])
-                => route('employee.supervisor.reports.show', $code),
+                => route('reports.show', $code),
 
             default => route('reports.show', $code),
         };
@@ -202,7 +202,7 @@ class MapController extends Controller
                 'Menampilkan laporan yang ditugaskan kepada Anda',
             ],
 
-            default => [route('home'), 'SILABU', 'Peta sebaran laporan'],
+            default => [route('home'), 'SILABA', 'Peta sebaran laporan'],
         };
     }
 }

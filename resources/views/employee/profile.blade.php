@@ -1,6 +1,6 @@
 @extends('layouts.app')
 
-@section('title', 'Profil Saya — SILABU')
+@section('title', 'Profil Saya — SILABA')
 
 @section('content')
 
@@ -23,8 +23,8 @@ $positionLabel = match($employee?->position) {
     <div class="max-w-2xl mx-auto px-4 sm:px-6">
 
         <div class="mb-6">
-            <a href="{{ route('employee.' . str_replace('_', '-', auth()->user()->employee->position) . '.dashboard') }}"
-               class="inline-flex items-center gap-1.5 text-sm text-gray-500 hover:text-gray-800 mb-3 transition-colors">
+            <a href="{{ route('employee.' . (auth()->user()->employee->position === 'head_of_department' ? 'head' : str_replace('_', '-', auth()->user()->employee->position)) . '.dashboard') }}"
+            class="inline-flex items-center gap-1.5 text-sm text-gray-500 hover:text-gray-800 mb-3 transition-colors">
                 <svg class="w-4 h-4" fill="none" viewBox="0 0 16 16">
                     <path d="M10 3L5 8l5 5" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
                 </svg>

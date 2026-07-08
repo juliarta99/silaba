@@ -10,7 +10,7 @@
 <section class="relative min-h-125 lg:min-h-145 flex items-center">
 
     <div class="absolute inset-0 bg-cover bg-center"
-         style="background-image: url('https://images.unsplash.com/photo-1558618666-fcd25c85cd64?w=1400&q=80')">
+         style="background-image: url('{{ asset('assets/images/bg.jpg') }}')">
     </div>
     <div class="absolute inset-0"
          style="background:linear-gradient(160deg,rgba(77,10,10,.82) 0%,rgba(154,19,19,.80) 40%,rgba(192,24,24,.88) 100%)">

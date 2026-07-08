@@ -175,7 +175,7 @@ class AssignmentController extends Controller
                 $officer = Employee::with('user')->find($empId);
                 if ($officer?->phone) {
                     $whatsapp->send($officer->phone,
-                        "🔔 *Penugasan Baru — SILABU*\n\n"
+                        "🔔 *Penugasan Baru — SILABA*\n\n"
                         . "Halo {$officer->user?->name},\n\n"
                         . "Anda mendapat penugasan laporan baru:\n"
                         . "📋 Tiket: *{$report->code}*\n"
@@ -192,7 +192,7 @@ class AssignmentController extends Controller
             if ($phone) {
                 $jumlah = count($request->employee_ids);
                 $whatsapp->send($phone,
-                    "✅ *Update Laporan {$report->code} — SILABU*\n\n"
+                    "✅ *Update Laporan {$report->code} — SILABA*\n\n"
                     . "{$jumlah} petugas telah ditugaskan untuk menangani laporan Anda.\n"
                     . "Kami akan mengirim update progress secara berkala."
                 );
