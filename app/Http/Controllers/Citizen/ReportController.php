@@ -8,6 +8,7 @@ use App\Models\Review;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Storage;
 
 class ReportController extends Controller
 {
@@ -182,5 +183,26 @@ class ReportController extends Controller
             ->where('user_id', Auth::user()->id)
             ->where('status', $status)
             ->firstOrFail();
+    }
+
+    public function destroy(string $code)
+    {
+        $report = Report::where('code', $code)
+            ->where('user_id', Auth::user()->id)
+            ->where('status', 'pending')          // hanya status baru
+            ->whereDoesntHave('progresses')        // belum ada progress
+            ->whereDoesntHave('childReports')      // belum ada laporan duplikat
+            ->firstOrFail();
+
+        // Hapus file bukti dari storage
+        $report->evidences()->each(function ($evidence) {
+            Storage::disk('public')->delete($evidence->file_path);
+        });
+
+        $report->delete();
+
+        return redirect()
+            ->route('citizen.reports.index')
+            ->with('success', 'Laporan berhasil dihapus.');
     }
 }

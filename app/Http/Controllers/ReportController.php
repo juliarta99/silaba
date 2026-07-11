@@ -154,10 +154,15 @@ class ReportController extends Controller
             if ($request->hasFile('evidence_files')) {
                 foreach ($request->file('evidence_files') as $file) {
                     $path = $file->store('evidences/' . $newReport->id, 'public');
+                    
+                    // Deteksi dari ekstensi path yang tersimpan
+                    $extension = strtolower(pathinfo($path, PATHINFO_EXTENSION));
+                    $fileType  = $extension == 'mp4' ? 'video' : 'photo';
+
                     ReportEvidence::create([
                         'report_id' => $newReport->id,
                         'file_path' => $path,
-                        'file_type' => str_starts_with($file->getMimeType(), 'video/') ? 'video' : 'photo',
+                        'file_type' => $fileType,
                     ]);
                 }
             }

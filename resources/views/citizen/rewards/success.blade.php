@@ -17,7 +17,7 @@
             <p class="text-sm text-gray-500">Kode Anda sudah siap digunakan sekarang</p>
         </div>
 
-        @php $voucher = $claim->voucher; @endphp
+        @php $voucher = $rewardClaim->voucher; @endphp
 
         {{-- Tiket --}}
         <div class="bg-white rounded-2xl border border-gray-100 shadow-sm overflow-hidden mb-5">
@@ -28,19 +28,19 @@
                     <div>
                         <p class="text-xs text-primary-200 font-medium tracking-wider uppercase">Nomor Tiket</p>
                         <p class="text-lg font-bold font-mono tracking-wider">
-                            RWD-{{ str_pad($claim->id, 4, '0', STR_PAD_LEFT) }}
+                            RWD-{{ str_pad($rewardClaim->id, 4, '0', STR_PAD_LEFT) }}
                         </p>
                     </div>
                     <span class="text-xs font-semibold px-2.5 py-1 rounded-full bg-white/20">
-                        {{ $claim->created_at->translatedFormat('j M Y') }}
+                        {{ $rewardClaim->created_at->translatedFormat('j M Y') }}
                     </span>
                 </div>
             </div>
 
             {{-- Reward name --}}
             <div class="px-6 py-4 border-b border-dashed border-gray-200">
-                <p class="text-base font-bold text-gray-900">{{ $claim->reward->name }}</p>
-                <p class="text-xs text-gray-400 mt-0.5">{{ $claim->reward->type }} • {{ $claim->points_used }} poin digunakan</p>
+                <p class="text-base font-bold text-gray-900">{{ $rewardClaim->reward->name }}</p>
+                <p class="text-xs text-gray-400 mt-0.5">{{ $rewardClaim->reward->type }} • {{ $rewardClaim->points_used }} poin digunakan</p>
             </div>
 
             {{-- QR + Kode --}}
@@ -86,21 +86,12 @@
                 <p class="text-xs text-gray-400">Tidak ada batas waktu</p>
                 @endif
             </div>
-
-            {{-- Sisa poin --}}
-            <div class="mx-5 mb-5 flex items-center gap-3 px-4 py-3 rounded-xl bg-yellow-50 border border-yellow-100">
-                <svg class="w-4 h-4 text-yellow-500 shrink-0" fill="none" viewBox="0 0 24 24">
-                    <path d="M12 8v13m0-13V6a4 4 0 00-4-4H5.45a1 1 0 00-.82 1.57L7 7h5zm0 0V5.5A2.5 2.5 0 0114.5 3H17a1 1 0 01.82 1.57L15 8h-3z" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"/>
-                    <path d="M5 8h14a1 1 0 011 1v3a8 8 0 01-16 0V9a1 1 0 011-1z" stroke="currentColor" stroke-width="1.75"/>
-                </svg>
-                <p class="text-sm text-yellow-700">Sisa poin Anda: <span class="font-bold">{{ $sisaPoin }} poin</span></p>
-            </div>
         </div>
 
         {{-- Cara penggunaan --}}
         <div class="bg-white rounded-2xl border border-gray-100 shadow-sm p-5 mb-5">
             <h3 class="text-sm font-bold text-gray-900 mb-2.5">Cara Menggunakan</h3>
-            <p class="text-sm text-gray-600 leading-relaxed">{{ $claim->reward->description }}</p>
+            <p class="text-sm text-gray-600 leading-relaxed">{{ $rewardClaim->reward->description }}</p>
         </div>
 
         {{-- Actions --}}
@@ -110,7 +101,7 @@
                       text-white text-sm font-semibold transition-colors text-center">
                 Klaim Lagi
             </a>
-            <a href="{{ route('citizen.reward-claims.show', $claim) }}"
+            <a href="{{ route('citizen.reward-claims.show', $rewardClaim) }}"
                class="flex items-center justify-center py-3 rounded-xl border border-gray-200
                       text-gray-700 text-sm font-semibold hover:bg-gray-10 transition-colors text-center">
                 Lihat Tiket

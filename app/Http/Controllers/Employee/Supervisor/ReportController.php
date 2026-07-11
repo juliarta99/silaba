@@ -167,4 +167,31 @@ class ReportController extends Controller
 
         return compact('text', 'percent', 'urgent', 'expired', 'total_hours') + ['total_hours' => $totalHours];
     }
+
+    // ── Hapus Laporan ─────────────────────────────────────────────────────
+    public function destroy(string $code)
+    {
+        $employee = Auth::user()->employee;
+        abort_if(! $employee, 403);
+
+        $report = Report::whereHas('category', fn ($q) =>
+            $q->where('department_id', $employee->department_id)
+        )
+        ->where('code', $code)
+        ->where('status', 'pending')
+        ->whereDoesntHave('progresses')
+        ->whereDoesntHave('childReports')
+        ->firstOrFail();
+
+        // Hapus file bukti dari storage
+        $report->evidences()->each(function ($evidence) {
+            \Illuminate\Support\Facades\Storage::disk('public')->delete($evidence->file_path);
+        });
+
+        $report->delete();
+
+        return redirect()
+            ->route('employee.supervisor.reports.index')
+            ->with('success', "Laporan {$code} berhasil dihapus.");
+    }
 }
