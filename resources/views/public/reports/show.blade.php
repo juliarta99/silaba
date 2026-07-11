@@ -274,7 +274,7 @@ $needsRating       = $isOwner && $report->status === 'completed' && !$report->re
                     <h2 class="text-base font-bold text-gray-900 mb-1">Detail Laporan</h2>
                     <h3 class="text-lg font-semibold text-gray-800 mb-4">{{ $report->title }}</h3>
 
-                    @if ($tags->count() > 0)
+                    {{-- @if ($tags->count() > 0)
                     <div class="mb-4">
                         <p class="text-xs font-medium text-gray-400 mb-2">AI Analysis Tags:</p>
                         <div class="flex flex-wrap gap-2">
@@ -286,7 +286,7 @@ $needsRating       = $isOwner && $report->status === 'completed' && !$report->re
                             @endforeach
                         </div>
                     </div>
-                    @endif
+                    @endif --}}
 
                     <p class="text-sm text-gray-700 leading-relaxed mb-5">
                         {{ $report->description }}
@@ -311,15 +311,29 @@ $needsRating       = $isOwner && $report->status === 'completed' && !$report->re
                                class="block aspect-video rounded-xl overflow-hidden bg-gray-100
                                       hover:opacity-90 transition-opacity">
                                 @if ($ev->file_type === 'photo')
-                                <img src="{{ Storage::url($ev->file_path) }}" alt="Bukti"
+                                    <img src="{{ Storage::url($ev->file_path) }}" alt="Bukti"
                                      loading="lazy" class="w-full h-full object-cover">
                                 @else
-                                <div class="w-full h-full flex items-center justify-center bg-gray-800">
-                                    <svg class="w-8 h-8 text-white" fill="currentColor"
-                                         viewBox="0 0 24 24" aria-hidden="true">
-                                        <path d="M8 5v14l11-7z"/>
-                                    </svg>
-                                </div>
+                                    {{-- Video thumbnail dengan play button overlay --}}
+                                    <div class="relative w-full h-full bg-gray-900 flex items-center justify-center group">
+                                        {{-- Frame pertama video sebagai thumbnail --}}
+                                        <video src="{{ Storage::url($ev->file_path) }}"
+                                            class="absolute inset-0 w-full h-full object-cover opacity-60"
+                                            muted preload="metadata">
+                                        </video>
+                                        {{-- Overlay gelap agar icon kontras --}}
+                                        <div class="absolute inset-0 bg-black/30"></div>
+                                        {{-- Play button --}}
+                                        <div class="relative z-10 w-12 h-12 rounded-full bg-white/90 flex items-center
+                                                    justify-center shadow-lg group-hover:bg-white transition-colors">
+                                            <svg class="w-5 h-5 text-gray-900 ml-0.5" fill="currentColor" viewBox="0 0 24 24">
+                                                <path d="M8 5v14l11-7z"/>
+                                            </svg>
+                                        </div>
+                                        {{-- Badge VIDEO --}}
+                                        <span class="absolute bottom-2 left-2 z-10 text-[10px] font-bold text-white
+                                                    bg-black/60 px-1.5 py-0.5 rounded">VIDEO</span>
+                                    </div>
                                 @endif
                             </a>
                             @endforeach

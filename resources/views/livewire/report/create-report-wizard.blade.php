@@ -654,7 +654,7 @@ window.reportMap = window.reportMap || function () {
                                   stroke-linejoin="round"/>
                         </svg>
                         <p class="text-sm text-gray-600 text-center">Klik untuk upload atau drag and drop</p>
-                        <p class="text-xs text-gray-400">PNG, JPG, MP4 (max. 10MB per file)</p>
+                        <p class="text-xs text-gray-400">PNG, JPG, MP4 (max. 5MB per file)</p>
                         <span class="mt-1 px-4 py-2 rounded-lg bg-gray-10 text-gray-700 text-sm font-medium">
                             Pilih File
                         </span>

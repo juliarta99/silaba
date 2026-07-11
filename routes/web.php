@@ -109,6 +109,7 @@ Route::middleware(['auth', 'role:citizen'])
     Route::get('/laporan/{code}/rating',             [CitizenReport::class, 'rateForm'])->name('reports.rate');
     Route::post('/laporan/{code}/rating',            [CitizenReport::class, 'storeRating'])->name('reports.rate.store');
     Route::get('/laporan/{code}/rating/berhasil',    [CitizenReport::class, 'rateSuccess'])->name('reports.rate.success');
+    Route::delete('/laporan/{code}', [CitizenReport::class, 'destroy'])->name('reports.destroy');
 
 
     // Reward & Klaim
@@ -173,6 +174,7 @@ Route::middleware(['auth', 'role:employee', 'employee.position:supervisor'])
 
     // Daftar Laporan
     Route::get('/laporan',         [SupReport::class, 'index']) ->name('reports.index');
+    Route::delete('/laporan/{code}', [SupReport::class, 'destroy'])->name('reports.destroy');
     Route::get('/laporan/export',  [SupReport::class, 'export'])->name('reports.export');
     Route::post('/laporan/{code}/tambah-petugas',  [SupReport::class, 'addOfficer'])   ->name('reports.add-officer');
     Route::post('/laporan/{code}/hapus-petugas',   [SupReport::class, 'removeOfficer'])->name('reports.remove-officer');

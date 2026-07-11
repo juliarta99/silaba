@@ -10,7 +10,7 @@ class ReportEvidence extends Model
 {
     use HasFactory;
 
-    protected $fillable = ['report_id', 'file_path'];
+    protected $fillable = ['report_id', 'file_path', 'file_type'];
 
     public function report(): BelongsTo
     {

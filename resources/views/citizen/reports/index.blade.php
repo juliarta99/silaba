@@ -1,6 +1,6 @@
 @extends('layouts.app')
 
-@section('title', 'Laporan Saya — SILABA')
+@section('title', 'Laporan Saya — SILABU')
 
 @section('content')
 
@@ -237,6 +237,75 @@
                                   hover:bg-primary-700 text-white text-sm font-semibold transition-colors">
                             Lihat Detail
                         </a>
+
+                        @php
+                            $canDelete = $report->status === 'pending'
+                                && $report->progresses->isEmpty()
+                                && $report->childReports->isEmpty() ?? true;
+                        @endphp
+
+                        @if ($canDelete)
+                        <div x-data="{ openDelete: false }">
+                            <button type="button" x-on:click="openDelete = true"
+                                    class="flex items-center justify-center gap-1.5 px-4 py-2.5 w-full rounded-lg
+                                        border border-red-200 text-error text-sm font-semibold
+                                        hover:bg-red-50 transition-colors">
+                                <svg class="w-4 h-4" fill="none" viewBox="0 0 16 16">
+                                    <path d="M2 4h12M5.333 4V2.667h5.334V4M6.667 7.333v4M9.333 7.333v4M3.333 4l.667 9.333h8L12.667 4"
+                                        stroke="currentColor" stroke-width="1.3" stroke-linecap="round" stroke-linejoin="round"/>
+                                </svg>
+                                Hapus Laporan
+                            </button>
+
+                            <template x-teleport="body">
+                                <div x-show="openDelete" style="display:none;"
+                                    class="fixed inset-0 z-50 flex items-center justify-center p-4 bg-gray-900/50 backdrop-blur-sm"
+                                    x-transition:enter="transition ease-out duration-300"
+                                    x-transition:enter-start="opacity-0" x-transition:enter-end="opacity-100"
+                                    x-transition:leave="transition ease-in duration-200"
+                                    x-transition:leave-start="opacity-100" x-transition:leave-end="opacity-0">
+
+                                    <div x-show="openDelete" x-on:click.away="openDelete = false"
+                                        class="bg-white rounded-2xl shadow-xl w-full max-w-sm p-6"
+                                        x-transition:enter="transition ease-out duration-300"
+                                        x-transition:enter-start="opacity-0 scale-95"
+                                        x-transition:enter-end="opacity-100 scale-100">
+
+                                        <div class="w-12 h-12 rounded-full bg-red-100 flex items-center justify-center mx-auto mb-4">
+                                            <svg class="w-6 h-6 text-error" fill="none" viewBox="0 0 24 24">
+                                                <path d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z"
+                                                    stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"/>
+                                            </svg>
+                                        </div>
+                                        <h3 class="text-lg font-bold text-gray-900 text-center mb-2">Hapus Laporan?</h3>
+                                        <p class="text-sm text-gray-500 text-center mb-6">
+                                            Laporan <span class="font-semibold text-gray-900">{{ $report->code }}</span>
+                                            akan dihapus permanen beserta semua bukti foto/video.
+                                            Tindakan ini tidak dapat dibatalkan.
+                                        </p>
+
+                                        <div class="flex flex-col-reverse sm:flex-row gap-3">
+                                            <button type="button" x-on:click="openDelete = false"
+                                                    class="px-4 py-2.5 text-sm font-semibold text-gray-700 bg-gray-100
+                                                        hover:bg-gray-200 rounded-lg transition-colors w-full">
+                                                Batal
+                                            </button>
+                                            <form method="POST"
+                                                action="{{ route('citizen.reports.destroy', $report->code) }}"
+                                                class="w-full">
+                                                @csrf @method('DELETE')
+                                                <button type="submit"
+                                                        class="px-4 py-2.5 text-sm font-semibold text-white bg-error
+                                                            hover:opacity-90 rounded-lg transition-opacity w-full">
+                                                    Ya, Hapus
+                                                </button>
+                                            </form>
+                                        </div>
+                                    </div>
+                                </div>
+                            </template>
+                        </div>
+                        @endif
 
                         @if ($needsVerification)
                             <div x-data="{ openConfirm: false, openReject: false }" class="flex flex-col gap-2.5 w-full">

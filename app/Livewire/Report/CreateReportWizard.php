@@ -57,7 +57,7 @@ class CreateReportWizard extends Component
     public ?string $longitude = null;
 
     // File upload via Livewire WithFileUploads
-    #[Validate(['evidenceFiles.*' => 'file|mimes:png,jpg,jpeg,mp4|max:10240'])]
+    #[Validate(['evidenceFiles.*' => 'file|mimes:png,jpg,jpeg,mp4|max:5120'])]
     public array $evidenceFiles = [];
 
     // ── Submission state ──────────────────────────────────────────────────
@@ -113,10 +113,10 @@ class CreateReportWizard extends Component
         // Foto wajib untuk auth, opsional untuk tamu
         if (Auth::check()) {
             $rules['evidenceFiles']   = 'required|array|min:1|max:5';
-            $rules['evidenceFiles.*'] = 'file|mimes:png,jpg,jpeg,mp4|max:10240';
+            $rules['evidenceFiles.*'] = 'file|mimes:png,jpg,jpeg,mp4|max:5120';
         } else {
             $rules['evidenceFiles']   = 'nullable|array|max:5';
-            $rules['evidenceFiles.*'] = 'file|mimes:png,jpg,jpeg,mp4|max:10240';
+            $rules['evidenceFiles.*'] = 'file|mimes:png,jpg,jpeg,mp4|max:5120';
         }
 
         $this->validate($rules, [
@@ -128,7 +128,7 @@ class CreateReportWizard extends Component
             'latitude.required'     => 'Silakan tentukan titik lokasi pada peta.',
             'evidenceFiles.required'=> 'Minimal 1 foto/video bukti wajib dilampirkan.',
             'evidenceFiles.*.mimes' => 'Format file harus PNG, JPG, atau MP4.',
-            'evidenceFiles.*.max'   => 'Ukuran file maksimal 10MB.',
+            'evidenceFiles.*.max'   => 'Ukuran file maksimal 5MB.',
             'evidenceFiles.max'     => 'Maksimal 5 file gambar/video yang diizinkan.',
         ]);
 
@@ -223,10 +223,15 @@ class CreateReportWizard extends Component
             // ── 6. Simpan bukti foto/video ─────────────────────────────────
             foreach ($this->evidenceFiles as $file) {
                 $path = $file->store('evidences/' . $newReport->id, 'public');
+                
+                // Deteksi dari ekstensi path yang tersimpan
+                $extension = strtolower(pathinfo($path, PATHINFO_EXTENSION));
+                $fileType  = $extension == 'mp4' ? 'video' : 'photo';
+
                 ReportEvidence::create([
                     'report_id' => $newReport->id,
                     'file_path' => $path,
-                    'file_type' => str_starts_with($file->getMimeType(), 'video/') ? 'video' : 'photo',
+                    'file_type' => $fileType,
                 ]);
             }
 
@@ -359,11 +364,11 @@ class CreateReportWizard extends Component
     {
         $this->validate([
             'evidenceFiles'   => 'max:5',
-            'evidenceFiles.*' => 'file|mimes:png,jpg,jpeg,mp4|max:10240',
+            'evidenceFiles.*' => 'file|mimes:png,jpg,jpeg,mp4|max:5120',
         ], [
             'evidenceFiles.max'       => 'Maksimal 5 file gambar/video yang diizinkan.',
             'evidenceFiles.*.mimes'   => 'Format file harus PNG, JPG, atau MP4.',
-            'evidenceFiles.*.max'     => 'Ukuran masing-masing file maksimal 10MB.',
+            'evidenceFiles.*.max'     => 'Ukuran masing-masing file maksimal 5MB.',
         ]);
     }
 
