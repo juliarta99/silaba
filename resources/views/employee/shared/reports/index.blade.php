@@ -1,5 +1,5 @@
 @extends('layouts.app')
-@section('title', 'Daftar Laporan — SILABA')
+@section('title', 'Daftar Laporan — SILABU')
 
 @section('content')
 
@@ -217,19 +217,87 @@ $priorityConfig = [
                                 </a>
                                 <p class="text-xs text-gray-400 font-mono mt-0.5">ID: {{ $report->code }}</p>
                             </div>
-                            @if ($noAssign)
-                            <a href="{{ route('employee.supervisor.assignments.index') }}?report_id={{ $report->id }}"
-                               class="shrink-0 flex items-center gap-1.5 px-3 py-1.5 rounded-xl
-                                      bg-primary-500 hover:bg-primary-700 text-white text-xs font-semibold
-                                      transition-colors whitespace-nowrap">
-                                <svg class="w-3.5 h-3.5" fill="none" viewBox="0 0 14 14">
-                                    <circle cx="7" cy="5" r="2.5" stroke="currentColor" stroke-width="1.1"/>
-                                    <path d="M1.5 13c0-3.038 2.462-5.5 5.5-5.5s5.5 2.462 5.5 5.5" stroke="currentColor" stroke-width="1.1" stroke-linecap="round"/>
-                                    <path d="M11 9.5v3M9.5 11h3" stroke="currentColor" stroke-width="1.1" stroke-linecap="round"/>
-                                </svg>
-                                Tugaskan Petugas
-                            </a>
-                            @endif
+                            <div class="flex items-center gap-2">
+                                @if ($noAssign)
+                                <a href="{{ route('employee.supervisor.assignments.index') }}?report_id={{ $report->id }}"
+                                   class="shrink-0 flex items-center gap-1.5 px-3 py-1.5 rounded-xl
+                                          bg-primary-500 hover:bg-primary-700 text-white text-xs font-semibold
+                                          transition-colors whitespace-nowrap">
+                                    <svg class="w-3.5 h-3.5" fill="none" viewBox="0 0 14 14">
+                                        <circle cx="7" cy="5" r="2.5" stroke="currentColor" stroke-width="1.1"/>
+                                        <path d="M1.5 13c0-3.038 2.462-5.5 5.5-5.5s5.5 2.462 5.5 5.5" stroke="currentColor" stroke-width="1.1" stroke-linecap="round"/>
+                                        <path d="M11 9.5v3M9.5 11h3" stroke="currentColor" stroke-width="1.1" stroke-linecap="round"/>
+                                    </svg>
+                                    Tugaskan Petugas
+                                </a>
+                                @endif
+
+                                {{-- Hapus laporan (hanya pending, belum ada progress & duplikat) --}}
+                                @if ($report->status === 'pending' && $report->assignments->count() === 0 && $report->childReports->count() === 0)
+                                <div x-data="{ openDelete: false }">
+                                    <button type="button" x-on:click="openDelete = true"
+                                            class="inline-flex items-center gap-1.5 text-xs font-semibold px-2.5 py-1 rounded-full
+                                                border border-red-200 text-error bg-red-50 hover:bg-red-100 transition-colors">
+                                        <svg class="w-3 h-3" fill="none" viewBox="0 0 12 12">
+                                            <path d="M1.5 3h9M4 3V2h4v1M5 5v4M7 5v4M2.5 3l.5 7h6l.5-7"
+                                                stroke="currentColor" stroke-width="1.1" stroke-linecap="round" stroke-linejoin="round"/>
+                                        </svg>
+                                        Hapus Laporan
+                                    </button>
+
+                                    <template x-teleport="body">
+                                        <div x-show="openDelete" style="display:none;"
+                                            class="fixed inset-0 z-50 flex items-center justify-center p-4 bg-gray-900/50 backdrop-blur-sm"
+                                            x-transition:enter="transition ease-out duration-200"
+                                            x-transition:enter-start="opacity-0" x-transition:enter-end="opacity-100"
+                                            x-transition:leave="transition ease-in duration-150"
+                                            x-transition:leave-start="opacity-100" x-transition:leave-end="opacity-0">
+
+                                            <div x-show="openDelete" x-on:click.away="openDelete = false"
+                                                class="bg-white rounded-2xl shadow-xl w-full max-w-sm p-6"
+                                                x-transition:enter="transition ease-out duration-200"
+                                                x-transition:enter-start="opacity-0 scale-95"
+                                                x-transition:enter-end="opacity-100 scale-100">
+
+                                                <div class="w-12 h-12 rounded-full bg-red-100 flex items-center justify-center mx-auto mb-4">
+                                                    <svg class="w-6 h-6 text-error" fill="none" viewBox="0 0 24 24">
+                                                        <path d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z"
+                                                            stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"/>
+                                                    </svg>
+                                                </div>
+
+                                                <h3 class="text-base font-bold text-gray-900 text-center mb-2">Hapus Laporan?</h3>
+                                                <p class="text-sm text-gray-500 text-center mb-1">
+                                                    Anda akan menghapus laporan
+                                                    <span class="font-semibold text-gray-900">{{ $report->code }}</span>.
+                                                </p>
+                                                <p class="text-xs text-gray-400 text-center mb-6">
+                                                    Semua bukti foto/video akan ikut terhapus permanen.
+                                                </p>
+
+                                                <div class="flex gap-3">
+                                                    <button type="button" x-on:click="openDelete = false"
+                                                            class="flex-1 px-4 py-2.5 text-sm font-semibold text-gray-700
+                                                                bg-gray-100 hover:bg-gray-200 rounded-xl transition-colors">
+                                                        Batal
+                                                    </button>
+                                                    <form method="POST"
+                                                        action="{{ route('employee.supervisor.reports.destroy', $report->code) }}"
+                                                        class="flex-1">
+                                                        @csrf @method('DELETE')
+                                                        <button type="submit"
+                                                                class="w-full px-4 py-2.5 text-sm font-semibold text-white
+                                                                    bg-error hover:opacity-90 rounded-xl transition-opacity">
+                                                            Ya, Hapus
+                                                        </button>
+                                                    </form>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </template>
+                                </div>
+                                @endif
+                            </div>
                         </div>
 
                         {{-- Baris 2: Badge tags --}}
