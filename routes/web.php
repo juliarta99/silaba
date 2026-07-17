@@ -39,6 +39,7 @@ use App\Http\Controllers\Admin\DashboardController;
 use App\Http\Controllers\Admin\DepartmentController as AdminDepartmentController;
 use App\Http\Controllers\Admin\RewardController;
 use App\Http\Controllers\Citizen\NotificationController as CitizenNotificationController;
+use App\Http\Controllers\Citizen\RewardClaimPdfController;
 use App\Http\Controllers\DepartmentController;
 use App\Http\Controllers\DistrictChief\CompareController;
 use App\Http\Controllers\DistrictChief\DashboardController as CamatDashboardController;
@@ -52,6 +53,7 @@ use App\Http\Controllers\Regent\DashboardController    as RegentDashboard;
 use App\Http\Controllers\Regent\PriorityController as RegentPriorityController;
 use App\Http\Controllers\Regent\ProfileController as RegentProfileController;
 use App\Http\Controllers\Regent\ReportController as RegentReportController;
+use App\Http\Controllers\ReportPdfController;
 use App\Http\Controllers\Shared\MapController;
 
 /*
@@ -99,6 +101,7 @@ Route::middleware(['auth', 'role:citizen'])
     Route::patch('/profil/foto',     [CitizenProfile::class, 'updatePhoto'])->name('profile.photo');
     Route::patch('/profil/password', [CitizenProfile::class, 'updatePassword'])->name('profile.password');
 
+    Route::get('/laporan/export', [CitizenReport::class, 'export'])->name('reports.export');
 
     // Laporan Saya
     Route::get('/laporan',                           [CitizenReport::class, 'index'])->name('reports.index');
@@ -111,6 +114,7 @@ Route::middleware(['auth', 'role:citizen'])
     Route::get('/laporan/{code}/rating/berhasil',    [CitizenReport::class, 'rateSuccess'])->name('reports.rate.success');
     Route::delete('/laporan/{code}', [CitizenReport::class, 'destroy'])->name('reports.destroy');
 
+    Route::get('/reward/klaim/{rewardClaim}/pdf', [RewardClaimPdfController::class, 'download'])->name('reward.claim.pdf');
 
     // Reward & Klaim
     Route::get('/reward', [CitizenRewardClaim::class, 'index'])->name('reward-claims.index');
@@ -290,6 +294,7 @@ Route::middleware(['auth', 'role:admin|super_admin'])
 
     // ── Manajemen Pengguna (semua user: warga, petugas, supervisor, dll) ──
     Route::get('/pengguna',          [UserController::class, 'index'])  ->name('users.index');
+    Route::get('/pengguna/export', [UserController::class, 'export'])->name('users.export');
     Route::get('/pengguna/tambah',   [UserController::class, 'create']) ->name('users.create');
     Route::post('/pengguna',         [UserController::class, 'store'])  ->name('users.store');
     Route::get('/pengguna/{user}/edit', [UserController::class, 'edit'])->name('users.edit');
@@ -299,18 +304,21 @@ Route::middleware(['auth', 'role:admin|super_admin'])
     // ── Manajemen Kecamatan ──
     Route::get('/kecamatan',           [DistrictController::class, 'index'])  ->name('districts.index');
     Route::post('/kecamatan',          [DistrictController::class, 'store'])  ->name('districts.store');
+    Route::get('/kecamatan/export', [DistrictController::class, 'export'])->name('districts.export');
     Route::put('/kecamatan/{district}',[DistrictController::class, 'update']) ->name('districts.update');
     Route::delete('/kecamatan/{district}',[DistrictController::class,'destroy'])->name('districts.destroy');
 
     // ── Manajemen Kategori ──
     Route::get('/kategori',             [CategoryController::class, 'index'])  ->name('categories.index');
     Route::post('/kategori',            [CategoryController::class, 'store'])  ->name('categories.store');
+    Route::get('/kategori/export', [CategoryController::class, 'export'])->name('categories.export');
     Route::put('/kategori/{category}',  [CategoryController::class, 'update']) ->name('categories.update');
     Route::delete('/kategori/{category}',[CategoryController::class,'destroy'])->name('categories.destroy');
 
     // ── Manajemen OPD (Department) ──
     Route::get('/opd',                    [AdminDepartmentController::class, 'index'])     ->name('departments.index');
     Route::post('/opd',                   [AdminDepartmentController::class, 'store'])     ->name('departments.store');
+    Route::get('/opd/export', [AdminDepartmentController::class, 'export'])->name('departments.export');
     Route::put('/opd/{department}',       [AdminDepartmentController::class, 'update'])    ->name('departments.update');
     Route::delete('/opd/{department}',    [AdminDepartmentController::class, 'destroy'])   ->name('departments.destroy');
     Route::post('/opd/{department}/kadis',[AdminDepartmentController::class, 'assignHead'])->name('departments.assign-head');
@@ -318,11 +326,13 @@ Route::middleware(['auth', 'role:admin|super_admin'])
     // ── Pemetaan Kategori OPD ──
     Route::get('/pemetaan',              [CategoryMappingController::class, 'index'])  ->name('mappings.index');
     Route::post('/pemetaan',             [CategoryMappingController::class, 'store'])  ->name('mappings.store');
+    Route::get('/pemetaan/export', [CategoryMappingController::class, 'export'])->name('mappings.export');
     Route::delete('/pemetaan/{category}',[CategoryMappingController::class, 'destroy'])->name('mappings.destroy');
 
     // ── Manajemen Reward ──
     Route::get('/reward', [RewardController::class, 'index'])->name('rewards.index');
     Route::post('/reward', [RewardController::class, 'store'])->name('rewards.store');
+    Route::get('/reward/export', [RewardController::class, 'export'])->name('rewards.export');
     Route::put('/reward/{reward}', [RewardController::class, 'update'])->name('rewards.update'); // Rute Edit Baru
     Route::post('/reward/voucher', [RewardController::class, 'storeVoucher'])->name('rewards.store_voucher');
     Route::get('/reward/history', [RewardController::class, 'history'])->name('rewards.history');
@@ -330,6 +340,7 @@ Route::middleware(['auth', 'role:admin|super_admin'])
     // ── Notifikasi ──
     Route::get('/notifikasi',            [NotificationController::class, 'index'])->name('notifications.index');
     Route::post('/notifikasi',           [NotificationController::class, 'store'])->name('notifications.store');
+    Route::get('/notifikasi/export', [NotificationController::class, 'export'])->name('notifications.export');
     Route::delete('/notifikasi/{notification}', [NotificationController::class, 'destroy'])->name('notifications.destroy');
 });
 
@@ -364,3 +375,8 @@ Route::middleware(['auth', 'role:regent'])
     Route::get('/prioritas',        [RegentPriorityController::class, 'index']) ->name('reports.priority');
     Route::get('/prioritas/export', [RegentPriorityController::class, 'export'])->name('reports.priority.export');
 });
+
+
+Route::middleware('auth')
+    ->get('/laporan/{code}/pdf', [ReportPdfController::class, 'download'])
+    ->name('reports.pdf.download');

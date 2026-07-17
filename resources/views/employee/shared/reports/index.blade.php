@@ -1,5 +1,5 @@
 @extends('layouts.app')
-@section('title', 'Daftar Laporan — SILABU')
+@section('title', 'Daftar Laporan — SILABA')
 
 @section('content')
 
@@ -36,14 +36,6 @@ $priorityConfig = [
                 <h1 class="text-2xl font-bold text-gray-900">Daftar Laporan</h1>
                 <p class="text-sm text-gray-500 mt-0.5">Monitoring semua laporan yang masuk</p>
             </div>
-            <a href="{{ route('employee.supervisor.reports.export') }}{{ request()->getQueryString() ? '?' . request()->getQueryString() : '' }}"
-               class="shrink-0 flex items-center gap-2 px-4 py-2.5 rounded-xl bg-primary-500 hover:bg-primary-700
-                      text-white text-sm font-semibold transition-colors">
-                <svg class="w-4 h-4" fill="none" viewBox="0 0 16 16">
-                    <path d="M8 2v8m0 0l-3-3m3 3l3-3M3 13h10" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
-                </svg>
-                Export Data
-            </a>
         </div>
 
         {{-- ── Stat Row ── --}}

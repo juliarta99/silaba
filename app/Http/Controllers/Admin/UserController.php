@@ -308,4 +308,111 @@ class UserController extends Controller
             return back()->withErrors(['general' => 'Gagal menghapus: ' . $e->getMessage()]);
         }
     }
+
+    public function export(Request $request)
+    {
+        $isSuperAdmin = Auth::user()->role === 'super_admin';
+
+        $query = User::with(['employee.department', 'districtChief.district', 'regent', 'citizen'])
+            ->when(! $isSuperAdmin, fn ($q) => $q->where('role', '!=', 'super_admin'));
+
+        // Filter yang sama dengan index
+        if ($request->filled('search')) {
+            $s = $request->search;
+            $query->where(fn ($q) =>
+                $q->where('name', 'like', "%{$s}%")
+                ->orWhere('identifier', 'like', "%{$s}%")
+                ->orWhereHas('employee', fn ($q) => $q->where('email', 'like', "%{$s}%"))
+            );
+        }
+        if ($request->filled('role')) {
+            $role = $request->role;
+            if (in_array($role, ['field_officer', 'supervisor', 'head_of_department'])) {
+                $query->where('role', 'employee')
+                    ->whereHas('employee', fn ($q) => $q->where('position', $role));
+            } else {
+                $query->where('role', $role);
+            }
+        }
+        if ($request->filled('status')) {
+            $status = $request->status;
+            $query->where(fn ($q) =>
+                $q->whereHas('employee',      fn ($q) => $q->where('status', $status))
+                ->orWhereHas('districtChief', fn ($q) => $q->where('status', $status))
+                ->orWhereHas('regent',        fn ($q) => $q->where('status', $status))
+            );
+        }
+
+        $users    = $query->orderBy('name')->get();
+        $filename = 'pengguna-silabu-' . now()->format('Ymd-His') . '.csv';
+
+        return response()->streamDownload(function () use ($users) {
+            $h = fopen('php://output', 'w');
+            fprintf($h, chr(0xEF) . chr(0xBB) . chr(0xBF)); // BOM UTF-8
+
+            fputcsv($h, [
+                'Nama',
+                'Role',
+                'Posisi',
+                'Identifier (NIP/NIK)',
+                'Email',
+                'No. HP',
+                'Instansi / Kecamatan',
+                'Status',
+                'Bergabung',
+            ], ';');
+
+            $roleLabel = [
+                'citizen'        => 'Warga',
+                'employee'       => 'Pegawai',
+                'district_chief' => 'Camat',
+                'regent'         => 'Bupati/Sekda',
+                'admin'          => 'Admin',
+                'super_admin'    => 'Super Admin',
+            ];
+            $posLabel = [
+                'field_officer'      => 'Petugas Lapangan',
+                'supervisor'         => 'Supervisor',
+                'head_of_department' => 'Kepala Dinas',
+            ];
+            $statusLabel = [
+                'active'   => 'Aktif',
+                'inactive' => 'Nonaktif',
+                'on_leave' => 'Cuti',
+            ];
+
+            foreach ($users as $u) {
+                $emp = $u->employee;
+                $dc  = $u->districtChief;
+                $reg = $u->regent;
+                $ci  = $u->citizen;
+
+                $email    = $emp?->email ?? $dc?->email ?? $reg?->email ?? '—';
+                $phone    = $emp?->phone ?? $dc?->phone ?? $reg?->phone ?? $ci?->phone ?? '—';
+                $nip      = $emp?->nip   ?? $dc?->nip   ?? $reg?->nip   ?? $u->identifier ?? '—';
+                $instansi = $emp ? ($emp->department?->name ?? '—')
+                                : ($dc  ? ($dc->district?->name ?? '—')
+                                : ($reg ? 'Kab. Badung' : '—'));
+                $posisi   = $emp ? ($posLabel[$emp->position] ?? $emp->position) : '—';
+                $status   = $statusLabel[$emp?->status ?? $dc?->status ?? $reg?->status ?? ''] ?? '—';
+
+                fputcsv($h, [
+                    $u->name,
+                    $roleLabel[$u->role] ?? $u->role,
+                    $posisi,
+                    $nip,
+                    $email,
+                    $phone,
+                    $instansi,
+                    $status,
+                    $u->created_at->format('d/m/Y'),
+                ], ';');
+            }
+
+            fclose($h);
+        }, $filename, [
+            'Content-Type'        => 'text/csv; charset=UTF-8',
+            'Content-Disposition' => "attachment; filename=\"{$filename}\"",
+        ]);
+    }
 }

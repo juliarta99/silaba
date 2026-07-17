@@ -1,6 +1,6 @@
 @extends('layouts.app')
 
-@section('title', 'Laporan Saya — SILABU')
+@section('title', 'Laporan Saya — SILABA')
 
 @section('content')
 
@@ -21,14 +21,26 @@
             <h1 class="text-2xl sm:text-3xl font-bold text-gray-900">Laporan Saya</h1>
             <p class="text-sm text-gray-500 mt-1.5">Kelola dan lacak semua laporan Anda</p>
         </div>
-        <a href="{{ route('reports.create') }}"
-           class="inline-flex items-center gap-2 px-5 py-3 rounded-xl bg-primary-500 hover:bg-primary-700
-                  text-white text-sm font-semibold transition-colors shadow-sm shrink-0">
-            <svg class="w-4 h-4" fill="none" viewBox="0 0 16 16" aria-hidden="true">
-                <path d="M8 2v12M2 8h12" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
-            </svg>
-            Buat Laporan Baru
-        </a>
+        <div class="flex flex-wrap items-center gap-2 shrink-0">
+            <a href="{{ route('citizen.reports.export', request()->query()) }}"
+            class="inline-flex items-center gap-2 px-5 py-3 rounded-xl border border-gray-200
+                    bg-white hover:bg-gray-50 text-gray-700 text-sm font-semibold transition-colors">
+                <svg class="w-4 h-4" fill="none" viewBox="0 0 16 16">
+                    <path d="M3 12.5h10M8 2v8m0 0-3-3m3 3 3-3"
+                        stroke="currentColor" stroke-width="1.3"
+                        stroke-linecap="round" stroke-linejoin="round"/>
+                </svg>
+                Export CSV
+            </a>
+            <a href="{{ route('reports.create') }}"
+            class="inline-flex items-center gap-2 px-5 py-3 rounded-xl bg-primary-500 hover:bg-primary-700
+                    text-white text-sm font-semibold transition-colors shadow-sm">
+                <svg class="w-4 h-4" fill="none" viewBox="0 0 16 16">
+                    <path d="M8 2v12M2 8h12" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+                </svg>
+                Buat Laporan Baru
+            </a>
+        </div>
     </div>
 </section>
 

@@ -102,7 +102,22 @@ $needsRating       = $isOwner && $report->status === 'completed' && !$report->re
                 </div>
 
                 {{-- Tombol aksi pemilik --}}
-                @if ($needsVerification || $needsRating)
+                @php
+                    $user = Auth::user();
+                    $canDownloadPdf = match (true) {
+                        $user->role === 'citizen'
+                            => $report->user_id === $user->id,
+                        in_array($user->role, ['employee', 'supervisor', 'head_of_department'])
+                            => $report->category?->department_id === $user->employee?->department_id,
+                        $user->role === 'district_chief'
+                            => $report->district_id === $user->districtChief?->district_id,
+                        in_array($user->role, ['regent', 'admin', 'super_admin'])
+                            => true,
+                        default => false,
+                    };
+                @endphp
+
+                @if ($needsVerification || $needsRating || $canDownloadPdf)
                 <div class="flex flex-col sm:flex-row gap-2 shrink-0">
                     @if ($needsVerification)
                     <form method="POST" action="{{ route('citizen.reports.confirm', $report->code) }}">
@@ -136,6 +151,21 @@ $needsRating       = $isOwner && $report->status === 'completed' && !$report->re
                         </svg>
                         Beri Rating
                     </a>
+                    @endif
+
+                    @if ($canDownloadPdf)
+                        <a href="{{ route('reports.pdf.download', $report->code) }}"
+                        target="_blank"
+                        class="inline-flex items-center gap-2 px-4 py-2.5 rounded-xl
+                                border border-gray-200 bg-white hover:bg-gray-50
+                                text-gray-700 text-sm font-semibold transition-colors">
+                            <svg class="w-4 h-4 text-gray-500" fill="none" viewBox="0 0 16 16">
+                                <path d="M3 12.5h10M8 2v8m0 0-3-3m3 3 3-3"
+                                    stroke="currentColor" stroke-width="1.3"
+                                    stroke-linecap="round" stroke-linejoin="round"/>
+                            </svg>
+                            Unduh PDF
+                        </a>
                     @endif
                 </div>
                 @endif

@@ -81,27 +81,42 @@
                     <p class="text-2xl sm:text-3xl font-bold font-mono tracking-widest text-primary-500 select-all break-all">
                         {{ $voucher->code }}
                     </p>
-                    <button
-                        type="button"
-                        @click="
-                            navigator.clipboard.writeText('{{ $voucher->code }}');
-                            copied = true;
-                            setTimeout(() => copied = false, 2500)
-                        "
-                        class="mt-3 inline-flex items-center gap-1.5 px-4 py-2 rounded-lg text-xs font-semibold transition-all"
-                        :class="copied
-                            ? 'bg-green-100 text-success'
-                            : 'bg-white border border-gray-200 text-gray-600 hover:border-primary-300 hover:text-primary-500'"
-                    >
-                        <svg x-show="!copied" class="w-3.5 h-3.5" fill="none" viewBox="0 0 16 16" aria-hidden="true">
-                            <rect x="5.5" y="5.5" width="9" height="9" rx="1.5" stroke="currentColor" stroke-width="1.3"/>
-                            <path d="M3.5 10.5H2a1 1 0 01-1-1V2a1 1 0 011-1h7.5a1 1 0 011 1v1.5" stroke="currentColor" stroke-width="1.3" stroke-linecap="round"/>
-                        </svg>
-                        <svg x-show="copied" class="w-3.5 h-3.5" fill="none" viewBox="0 0 16 16" aria-hidden="true">
-                            <path d="M3 8l3.5 3.5L13 5" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
-                        </svg>
-                        <span x-text="copied ? 'Berhasil Disalin!' : 'Salin Kode'"></span>
-                    </button>
+                    
+                    <div class="flex items-center justify-center gap-3">
+                        <button
+                            type="button"
+                            @click="
+                                navigator.clipboard.writeText('{{ $voucher->code }}');
+                                copied = true;
+                                setTimeout(() => copied = false, 2500)
+                            "
+                            class="inline-flex items-center gap-1.5 px-4 py-2 rounded-lg text-xs font-semibold transition-all"
+                            :class="copied
+                                ? 'bg-green-100 text-success'
+                                : 'bg-white border border-gray-200 text-gray-600 hover:border-primary-300 hover:text-primary-500'"
+                        >
+                            <svg x-show="!copied" class="w-3.5 h-3.5" fill="none" viewBox="0 0 16 16" aria-hidden="true">
+                                <rect x="5.5" y="5.5" width="9" height="9" rx="1.5" stroke="currentColor" stroke-width="1.3"/>
+                                <path d="M3.5 10.5H2a1 1 0 01-1-1V2a1 1 0 011-1h7.5a1 1 0 011 1v1.5" stroke="currentColor" stroke-width="1.3" stroke-linecap="round"/>
+                            </svg>
+                            <svg x-show="copied" class="w-3.5 h-3.5" fill="none" viewBox="0 0 16 16" aria-hidden="true">
+                                <path d="M3 8l3.5 3.5L13 5" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                            </svg>
+                            <span x-text="copied ? 'Berhasil Disalin!' : 'Salin Kode'"></span>
+                        </button>
+                        <a href="{{ route('citizen.reward.claim.pdf', $rewardClaim->id) }}"
+                            target="_blank"
+                            title="Unduh tiket PDF"
+                            class="inline-flex items-center gap-1.5 px-4 py-2 rounded-lg border border-gray-200
+                                bg-white hover:bg-gray-50 text-gray-700 text-xs font-semibold transition-colors">
+                            <svg class="w-3.5 h-3.5" fill="none" viewBox="0 0 14 14">
+                                <path d="M2.5 11h9M7 1.5v7m0 0L4.5 6M7 8.5L9.5 6"
+                                    stroke="currentColor" stroke-width="1.2"
+                                    stroke-linecap="round" stroke-linejoin="round"/>
+                            </svg>
+                            Unduh Tiket
+                        </a>
+                    </div>
                 </div>
 
                 {{-- Masa berlaku --}}

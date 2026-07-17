@@ -201,4 +201,144 @@ class DepartmentController extends Controller
                 ->with('modal_dept_id', $department->id);
         }
     }
+
+    public function export()
+    {
+        $departments = Department::with([
+            'employees.user',
+            'categories' => fn ($q) => $q->withCount('reports')->orderBy('name'),
+            'headOfDepartment.user',
+        ])
+        ->withCount([
+            'employees',
+            'employees as employees_active_count'   => fn ($q) => $q->where('status', 'active'),
+            'employees as employees_supervisor_count'=> fn ($q) => $q->where('position', 'supervisor'),
+            'categories',
+            'categories as reports_count' => fn ($q) => $q->join('reports', 'categories.id', '=', 'reports.category_id'),
+        ])
+        ->orderBy('name')
+        ->get();
+
+        // Hitung total laporan per dept via query terpisah (lebih akurat)
+        $reportCounts = \App\Models\Report::join('categories', 'reports.category_id', '=', 'categories.id')
+            ->whereNotNull('categories.department_id')
+            ->selectRaw('categories.department_id, COUNT(*) as total,
+                        SUM(CASE WHEN reports.status = "pending" THEN 1 ELSE 0 END) as pending,
+                        SUM(CASE WHEN reports.status IN ("in_progress","under_review","waiting_for_materials") THEN 1 ELSE 0 END) as progress,
+                        SUM(CASE WHEN reports.status = "completed" THEN 1 ELSE 0 END) as completed,
+                        SUM(CASE WHEN reports.status = "rejected" THEN 1 ELSE 0 END) as rejected')
+            ->groupBy('categories.department_id')
+            ->get()
+            ->keyBy('department_id');
+
+        $filename = 'data-opd-' . now()->format('Ymd-His') . '.csv';
+
+        return response()->streamDownload(function () use ($departments, $reportCounts) {
+            $h = fopen('php://output', 'w');
+            fprintf($h, chr(0xEF) . chr(0xBB) . chr(0xBF));
+
+            // ── SECTION 1: Ringkasan OPD ──────────────────────────────────────
+            fputcsv($h, ['══ RINGKASAN OPD ══'], ';');
+            fputcsv($h, [
+                'No', 'Nama OPD', 'Kode', 'Email', 'Telepon',
+                'Kepala Dinas',
+                'Total Pegawai', 'Pegawai Aktif', 'Supervisor',
+                'Jumlah Kategori',
+                'Total Laporan', 'Baru', 'Diproses', 'Selesai', 'Ditolak',
+            ], ';');
+
+            $no = 1;
+            foreach ($departments as $dept) {
+                $rc    = $reportCounts->get($dept->id);
+                $kepala = $dept->headOfDepartment?->user?->name ?? '(Belum ada)';
+
+                fputcsv($h, [
+                    $no++,
+                    $dept->name,
+                    $dept->code,
+                    $dept->email,
+                    $dept->phone,
+                    $kepala,
+                    $dept->employees_count,
+                    $dept->employees_active_count,
+                    $dept->employees_supervisor_count,
+                    $dept->categories_count,
+                    $rc?->total    ?? 0,
+                    $rc?->pending  ?? 0,
+                    $rc?->progress ?? 0,
+                    $rc?->completed?? 0,
+                    $rc?->rejected ?? 0,
+                ], ';');
+            }
+
+            // ── SECTION 2: Detail Pegawai per OPD ────────────────────────────
+            fputcsv($h, [], ';');
+            fputcsv($h, ['══ DETAIL PEGAWAI PER OPD ══'], ';');
+
+            $posLabel = [
+                'field_officer'      => 'Petugas Lapangan',
+                'supervisor'         => 'Supervisor',
+                'head_of_department' => 'Kepala Dinas',
+            ];
+            $statusLabel = [
+                'active'   => 'Aktif',
+                'inactive' => 'Nonaktif',
+                'on_leave' => 'Cuti',
+            ];
+
+            foreach ($departments as $dept) {
+                fputcsv($h, [], ';');
+                fputcsv($h, ["── {$dept->name} ({$dept->code}) ──"], ';');
+                fputcsv($h, ['No', 'Nama Pegawai', 'NIP', 'Posisi', 'Email', 'No. HP', 'Status'], ';');
+
+                if ($dept->employees->count() === 0) {
+                    fputcsv($h, ['', '(Belum ada pegawai)', '', '', '', '', ''], ';');
+                    continue;
+                }
+
+                $no = 1;
+                foreach ($dept->employees->sortBy('user.name') as $emp) {
+                    fputcsv($h, [
+                        $no++,
+                        $emp->user?->name ?? '—',
+                        $emp->nip,
+                        $posLabel[$emp->position] ?? $emp->position,
+                        $emp->email,
+                        $emp->phone,
+                        $statusLabel[$emp->status] ?? $emp->status,
+                    ], ';');
+                }
+            }
+
+            // ── SECTION 3: Kategori per OPD dengan jumlah laporan ────────────
+            fputcsv($h, [], ';');
+            fputcsv($h, ['══ KATEGORI PER OPD ══'], ';');
+
+            foreach ($departments as $dept) {
+                fputcsv($h, [], ';');
+                fputcsv($h, ["── {$dept->name} ──"], ';');
+                fputcsv($h, ['No', 'Nama Kategori', 'Slug', 'Total Laporan'], ';');
+
+                if ($dept->categories->count() === 0) {
+                    fputcsv($h, ['', '(Belum ada kategori)', '', ''], ';');
+                    continue;
+                }
+
+                $no = 1;
+                foreach ($dept->categories as $cat) {
+                    fputcsv($h, [
+                        $no++,
+                        $cat->name,
+                        $cat->slug,
+                        $cat->reports_count,
+                    ], ';');
+                }
+            }
+
+            fclose($h);
+        }, $filename, [
+            'Content-Type'        => 'text/csv; charset=UTF-8',
+            'Content-Disposition' => "attachment; filename=\"{$filename}\"",
+        ]);
+    }
 }

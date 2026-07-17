@@ -205,4 +205,102 @@ class ReportController extends Controller
             ->route('citizen.reports.index')
             ->with('success', 'Laporan berhasil dihapus.');
     }
+
+    public function export(Request $request)
+    {
+        $userId = Auth::user()->id;
+
+        $query = Report::where('user_id', $userId)
+            ->with(['category', 'district', 'assignments.employee.user', 'progresses'])
+            ->latest();
+
+        // Terapkan filter yang sama dengan index
+        if ($request->filled('status')) {
+            $query->where('status', $request->status);
+        }
+        if ($request->filled('period')) {
+            $query->where('created_at', '>=', now()->subDays((int) $request->period));
+        }
+
+        $reports  = $query->get();
+        $filename = 'laporan-saya-' . now()->format('Ymd-His') . '.csv';
+
+        return response()->streamDownload(function () use ($reports) {
+            $handle = fopen('php://output', 'w');
+
+            // BOM UTF-8 agar Excel bisa baca karakter Indonesia
+            fprintf($handle, chr(0xEF) . chr(0xBB) . chr(0xBF));
+
+            // Header kolom
+            fputcsv($handle, [
+                'Nomor Tiket',
+                'Judul Laporan',
+                'Status',
+                'Prioritas',
+                'Kategori',
+                'Kecamatan',
+                'Lokasi',
+                'Petugas Ditugaskan',
+                'Update Terakhir',
+                'Tanggal Laporan',
+                'Deadline SLA',
+                'Tanggal Selesai',
+            ], ';');
+
+            foreach ($reports as $r) {
+                $statusLabel = [
+                    'pending'               => 'Baru',
+                    'in_progress'           => 'Diproses',
+                    'under_review'          => 'Menunggu Verifikasi',
+                    'waiting_for_materials' => 'Menunggu Material',
+                    'completed'             => 'Selesai',
+                    'rejected'              => 'Ditolak',
+                ][$r->status] ?? $r->status;
+
+                $priorityLabel = [
+                    'low'      => 'Rendah',
+                    'medium'   => 'Sedang',
+                    'high'     => 'Tinggi',
+                    'critical' => 'Kritis',
+                ][$r->priority] ?? $r->priority;
+
+                $officers = $r->assignments
+                    ->map(fn ($a) => $a->employee?->user?->name)
+                    ->filter()
+                    ->implode(', ') ?: '—';
+
+                $latestProgress = $r->progresses->sortByDesc('created_at')->first();
+                $updateTerakhir = $latestProgress?->title ?? match ($r->status) {
+                    'pending'   => 'Menunggu penugasan petugas',
+                    'rejected'  => 'Laporan ditolak',
+                    'completed' => 'Laporan selesai',
+                    default     => 'Sedang diproses',
+                };
+
+                $completedAt = $r->status === 'completed'
+                    ? ($latestProgress?->created_at?->format('d/m/Y H:i') ?? '—')
+                    : '—';
+
+                fputcsv($handle, [
+                    $r->code,
+                    $r->title,
+                    $statusLabel,
+                    $priorityLabel,
+                    $r->category?->name ?? '—',
+                    $r->district?->name ?? '—',
+                    $r->location,
+                    $officers,
+                    $updateTerakhir,
+                    $r->created_at->format('d/m/Y H:i'),
+                    $r->sla_deadline ? \Carbon\Carbon::parse($r->sla_deadline)->format('d/m/Y H:i') : '—',
+                    $completedAt,
+                ], ';');
+            }
+
+            fclose($handle);
+        }, $filename, [
+            'Content-Type'        => 'text/csv; charset=UTF-8',
+            'Content-Disposition' => "attachment; filename=\"{$filename}\"",
+        ]);
+    }
 }

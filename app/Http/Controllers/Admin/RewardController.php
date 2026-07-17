@@ -129,4 +129,102 @@ class RewardController extends Controller
 
         return redirect()->route('admin.rewards.index')->with('success', 'Data Reward berhasil diperbarui.');
     }
+
+    public function export()
+    {
+        $rewards = Reward::with([
+            'vouchers' => fn ($q) => $q->with('claim.user')->orderBy('code'),
+        ])
+        ->withCount([
+            'vouchers',
+            'vouchers as vouchers_claimed_count' => fn ($q) => $q->where('is_claimed', true),
+            'vouchers as vouchers_available_count' => fn ($q) => $q->where('is_claimed', false),
+            'vouchers as vouchers_expired_count' => fn ($q) => $q->where('is_claimed', false)
+                                                                ->whereNotNull('valid_until')
+                                                                ->where('valid_until', '<', now()),
+        ])
+        ->orderBy('name')
+        ->get();
+
+        $filename = 'data-reward-' . now()->format('Ymd-His') . '.csv';
+
+        return response()->streamDownload(function () use ($rewards) {
+            $h = fopen('php://output', 'w');
+            fprintf($h, chr(0xEF) . chr(0xBB) . chr(0xBF));
+
+            // ── SECTION 1: Ringkasan Reward ───────────────────────────────────
+            fputcsv($h, ['══ RINGKASAN REWARD ══'], ';');
+            fputcsv($h, [
+                'No', 'Nama Reward', 'Tipe', 'Poin Diperlukan', 'Status',
+                'Total Voucher', 'Tersedia', 'Diklaim', 'Kadaluarsa',
+            ], ';');
+
+            $no = 1;
+            foreach ($rewards as $rw) {
+                fputcsv($h, [
+                    $no++,
+                    $rw->name,
+                    $rw->type,
+                    $rw->points_required,
+                    $rw->is_active ? 'Aktif' : 'Nonaktif',
+                    $rw->vouchers_count,
+                    $rw->vouchers_available_count,
+                    $rw->vouchers_claimed_count,
+                    $rw->vouchers_expired_count,
+                ], ';');
+            }
+
+            // ── SECTION 2: Detail Voucher per Reward ─────────────────────────
+            fputcsv($h, [], ';');
+            fputcsv($h, ['══ DETAIL VOUCHER PER REWARD ══'], ';');
+
+            foreach ($rewards as $rw) {
+                fputcsv($h, [], ';');
+                fputcsv($h, ["── {$rw->name} ({$rw->type}) | {$rw->points_required} Poin ──"], ';');
+                fputcsv($h, [
+                    'No', 'Kode Voucher',
+                    'Status', 'Berlaku Mulai', 'Berlaku Hingga',
+                    'Diklaim Oleh', 'Tanggal Klaim', 'Poin Digunakan',
+                ], ';');
+
+                if ($rw->vouchers->count() === 0) {
+                    fputcsv($h, ['', '(Belum ada voucher)', '', '', '', '', '', ''], ';');
+                    continue;
+                }
+
+                $no = 1;
+                foreach ($rw->vouchers as $v) {
+                    $isExpired = ! $v->is_claimed
+                        && $v->valid_until
+                        && \Carbon\Carbon::parse($v->valid_until)->isPast();
+
+                    $status = match (true) {
+                        (bool) $v->is_claimed => 'Diklaim',
+                        $isExpired            => 'Kadaluarsa',
+                        default               => 'Tersedia',
+                    };
+
+                    fputcsv($h, [
+                        $no++,
+                        $v->code,
+                        $status,
+                        $v->valid_from
+                            ? \Carbon\Carbon::parse($v->valid_from)->format('d/m/Y')
+                            : '—',
+                        $v->valid_until
+                            ? \Carbon\Carbon::parse($v->valid_until)->format('d/m/Y')
+                            : 'Tidak Kadaluarsa',
+                        $v->claim?->user?->name ?? '—',
+                        $v->claim?->created_at?->format('d/m/Y H:i') ?? '—',
+                        $v->claim?->points_used ?? '—',
+                    ], ';');
+                }
+            }
+
+            fclose($h);
+        }, $filename, [
+            'Content-Type'        => 'text/csv; charset=UTF-8',
+            'Content-Disposition' => "attachment; filename=\"{$filename}\"",
+        ]);
+    }
 }

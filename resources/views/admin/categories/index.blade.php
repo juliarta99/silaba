@@ -26,14 +26,26 @@ $dotColors = ['bg-red-400','bg-blue-400','bg-green-400','bg-purple-400','bg-oran
             <h1 class="text-2xl font-bold text-gray-900">Manajemen Kategori</h1>
             <p class="text-sm text-gray-500 mt-0.5">Kelola kategori laporan untuk sistem pelaporan</p>
         </div>
-        <button type="button" @@click="openCreate()"
-                class="flex items-center gap-2 px-4 py-2.5 rounded-xl bg-primary-500 hover:bg-primary-700
-                       text-white text-sm font-semibold transition-colors shrink-0">
-            <svg class="w-4 h-4" fill="none" viewBox="0 0 16 16">
-                <path d="M8 2v12M2 8h12" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
-            </svg>
-            Tambah Kategori
-        </button>
+        <div class="flex items-center gap-3">
+            <a href="{{ route('admin.categories.export') }}"
+            class="inline-flex items-center gap-2 px-4 py-2.5 rounded-xl border border-gray-200
+                    bg-white hover:bg-gray-50 text-gray-700 text-sm font-semibold transition-colors">
+                <svg class="w-4 h-4 text-gray-500" fill="none" viewBox="0 0 16 16">
+                    <path d="M3 12.5h10M8 2v8m0 0-3-3m3 3 3-3"
+                        stroke="currentColor" stroke-width="1.3"
+                        stroke-linecap="round" stroke-linejoin="round"/>
+                </svg>
+                Export CSV
+            </a>
+            <button type="button" @@click="openCreate()"
+                    class="flex items-center gap-2 px-4 py-2.5 rounded-xl bg-primary-500 hover:bg-primary-700
+                        text-white text-sm font-semibold transition-colors shrink-0">
+                <svg class="w-4 h-4" fill="none" viewBox="0 0 16 16">
+                    <path d="M8 2v12M2 8h12" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+                </svg>
+                Tambah Kategori
+            </button>
+        </div>
     </div>
 
     {{-- ── Flash / Error ── --}}

@@ -15,16 +15,27 @@
             <h1 class="text-2xl font-bold text-gray-900">Riwayat Notifikasi</h1>
             <p class="text-sm text-gray-500 mt-1">Pantau status pengiriman pesan sistem (WhatsApp/SMS) ke pengguna.</p>
         </div>
-        
-        <form action="{{ route('admin.notifications.index') }}" method="GET" class="relative w-full md:w-72">
-            <input type="text" name="search" value="{{ request('search') }}" placeholder="Cari nomor HP atau isi pesan..." 
-                class="w-full text-sm pl-10 pr-4 py-2.5 border border-gray-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition shadow-sm">
-            <div class="absolute left-3 top-3 text-gray-400">
-                <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"/>
+        <div class="flex gap-3">
+            <a href="{{ route('admin.notifications.export', request()->query()) }}"
+            class="inline-flex items-center gap-2 px-4 py-2.5 rounded-xl border border-gray-200
+                    bg-white hover:bg-gray-50 text-gray-700 text-sm font-semibold transition-colors">
+                <svg class="w-4 h-4 text-gray-500" fill="none" viewBox="0 0 16 16">
+                    <path d="M3 12.5h10M8 2v8m0 0-3-3m3 3 3-3"
+                        stroke="currentColor" stroke-width="1.3"
+                        stroke-linecap="round" stroke-linejoin="round"/>
                 </svg>
-            </div>
-        </form>
+                Export CSV
+            </a>
+            <form action="{{ route('admin.notifications.index') }}" method="GET" class="relative w-full md:w-72">
+                <input type="text" name="search" value="{{ request('search') }}" placeholder="Cari nomor HP atau isi pesan..." 
+                    class="w-full text-sm pl-10 pr-4 py-2.5 border border-gray-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition shadow-sm">
+                <div class="absolute left-3 top-3 text-gray-400">
+                    <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"/>
+                    </svg>
+                </div>
+            </form>
+        </div>
     </div>
 
     <div class="grid grid-cols-2 md:grid-cols-4 gap-4">

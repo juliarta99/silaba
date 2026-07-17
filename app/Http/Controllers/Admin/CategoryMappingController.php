@@ -93,4 +93,73 @@ class CategoryMappingController extends Controller
 
         return back()->with('success', "Pemetaan kategori {$name} berhasil dihapus.");
     }
+
+    public function export(Request $request)
+    {
+        $departments = Department::with([
+            'categories' => fn ($q) => $q->orderBy('name'),
+        ])
+        ->withCount('categories')
+        ->orderBy('name')
+        ->get();
+
+        $filename = 'pemetaan-kategori-opd-' . now()->format('Ymd-His') . '.csv';
+
+        return response()->streamDownload(function () use ($departments) {
+            $h = fopen('php://output', 'w');
+            fprintf($h, chr(0xEF) . chr(0xBB) . chr(0xBF));
+
+            fputcsv($h, [
+                'No',
+                'Nama OPD/Dinas',
+                'Kode OPD',
+                'Jumlah Kategori',
+                'Daftar Kategori',
+            ], ';');
+
+            $no = 1;
+            foreach ($departments as $dept) {
+                $kategori = $dept->categories->count() > 0
+                    ? $dept->categories->pluck('name')->implode(', ')
+                    : '(Belum ada kategori)';
+
+                fputcsv($h, [
+                    $no++,
+                    $dept->name,
+                    $dept->code,
+                    $dept->categories_count,
+                    $kategori,
+                ], ';');
+            }
+
+            // Baris kosong pemisah
+            fputcsv($h, [], ';');
+
+            // Kategori yang belum dipetakan
+            $unmapped = \App\Models\Category::whereNull('department_id')
+                ->orderBy('name')
+                ->get();
+
+            if ($unmapped->count() > 0) {
+                fputcsv($h, ['── KATEGORI BELUM DIPETAKAN ──', '', '', '', ''], ';');
+                fputcsv($h, ['No', 'Nama Kategori', 'Slug', '', ''], ';');
+
+                $no = 1;
+                foreach ($unmapped as $cat) {
+                    fputcsv($h, [
+                        $no++,
+                        $cat->name,
+                        $cat->slug,
+                        '',
+                        '',
+                    ], ';');
+                }
+            }
+
+            fclose($h);
+        }, $filename, [
+            'Content-Type'        => 'text/csv; charset=UTF-8',
+            'Content-Disposition' => "attachment; filename=\"{$filename}\"",
+        ]);
+    }
 }

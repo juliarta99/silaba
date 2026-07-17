@@ -95,4 +95,65 @@ class DistrictController extends Controller
 
         return back()->with('success', "Kecamatan {$name} berhasil dihapus.");
     }
+
+    public function export()
+    {
+        $districts = District::with([
+            'districtChiefs' => fn ($q) => $q->where('status', 'active')
+                                            ->with('user')
+                                            ->latest(),
+        ])
+        ->withCount([
+            'reports',
+            'reports as reports_pending_count'    => fn ($q) => $q->where('status', 'pending'),
+            'reports as reports_progress_count'   => fn ($q) => $q->whereIn('status', ['in_progress', 'under_review', 'waiting_for_materials']),
+            'reports as reports_completed_count'  => fn ($q) => $q->where('status', 'completed'),
+            'reports as reports_rejected_count'   => fn ($q) => $q->where('status', 'rejected'),
+        ])
+        ->orderBy('name')
+        ->get();
+
+        $filename = 'data-kecamatan-' . now()->format('Ymd-His') . '.csv';
+
+        return response()->streamDownload(function () use ($districts) {
+            $h = fopen('php://output', 'w');
+            fprintf($h, chr(0xEF) . chr(0xBB) . chr(0xBF));
+
+            fputcsv($h, [
+                'No',
+                'Nama Kecamatan',
+                'Email Kantor',
+                'Telepon',
+                'Camat Aktif',
+                'Total Laporan',
+                'Baru',
+                'Diproses',
+                'Selesai',
+                'Ditolak',
+            ], ';');
+
+            $no = 1;
+            foreach ($districts as $d) {
+                $camat = $d->districtChiefs->first()?->user?->name ?? '(Belum ada camat)';
+
+                fputcsv($h, [
+                    $no++,
+                    $d->name,
+                    $d->email,
+                    $d->phone,
+                    $camat,
+                    $d->reports_count,
+                    $d->reports_pending_count,
+                    $d->reports_progress_count,
+                    $d->reports_completed_count,
+                    $d->reports_rejected_count,
+                ], ';');
+            }
+
+            fclose($h);
+        }, $filename, [
+            'Content-Type'        => 'text/csv; charset=UTF-8',
+            'Content-Disposition' => "attachment; filename=\"{$filename}\"",
+        ]);
+    }
 }

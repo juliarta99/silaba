@@ -108,4 +108,59 @@ class CategoryController extends Controller
 
         return back()->with('success', "Kategori {$name} berhasil dihapus.");
     }
+
+    public function export()
+    {
+        $categories = Category::with(['department'])
+            ->withCount([
+                'reports',
+                'reports as reports_pending_count'   => fn ($q) => $q->where('status', 'pending'),
+                'reports as reports_progress_count'  => fn ($q) => $q->whereIn('status', ['in_progress', 'under_review', 'waiting_for_materials']),
+                'reports as reports_completed_count' => fn ($q) => $q->where('status', 'completed'),
+                'reports as reports_rejected_count'  => fn ($q) => $q->where('status', 'rejected'),
+            ])
+            ->orderBy('name')
+            ->get();
+
+        $filename = 'data-kategori-' . now()->format('Ymd-His') . '.csv';
+
+        return response()->streamDownload(function () use ($categories) {
+            $h = fopen('php://output', 'w');
+            fprintf($h, chr(0xEF) . chr(0xBB) . chr(0xBF));
+
+            fputcsv($h, [
+                'No',
+                'Nama Kategori',
+                'Slug',
+                'OPD Penanggung Jawab',
+                'Status Pemetaan',
+                'Total Laporan',
+                'Baru',
+                'Diproses',
+                'Selesai',
+                'Ditolak',
+            ], ';');
+
+            $no = 1;
+            foreach ($categories as $cat) {
+                fputcsv($h, [
+                    $no++,
+                    $cat->name,
+                    $cat->slug,
+                    $cat->department?->name ?? '(Belum dipetakan)',
+                    $cat->department_id ? 'Sudah Dipetakan' : 'Belum Dipetakan',
+                    $cat->reports_count,
+                    $cat->reports_pending_count,
+                    $cat->reports_progress_count,
+                    $cat->reports_completed_count,
+                    $cat->reports_rejected_count,
+                ], ';');
+            }
+
+            fclose($h);
+        }, $filename, [
+            'Content-Type'        => 'text/csv; charset=UTF-8',
+            'Content-Disposition' => "attachment; filename=\"{$filename}\"",
+        ]);
+    }
 }
